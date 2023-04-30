@@ -1,0 +1,23 @@
+<div *ngIf="service">
+    <div>
+        <label for="name">Name </label>
+        <input [(ngModel)]="service.name" type="text">
+    </div>
+    <div>
+        <label for="price">Price </label>
+        <input [(ngModel)]="service.price" type="text">
+    </div>
+
+    <div>
+        <label for="group">Group</label>
+        <select id="selectGroup" (change)="selectChanged($event.target)" [(ngModel)] = "service.groupId">
+            <option [value]="group.id" *ngFor="let group of groups">
+                {{ group.name }}
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <a (click)="updateService(service)">Save</a>
+    </div>
+</div>

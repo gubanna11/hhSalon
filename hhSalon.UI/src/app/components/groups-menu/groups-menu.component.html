@@ -1,0 +1,12 @@
+<!-- <ul *ngFor="let group of groups">    
+    <li>
+      <a [routerLink]="['/services', group.id, group.name]">{{ group.name }}</a>
+      
+    </li>
+  </ul> -->
+
+<ul>
+    <li class="menu__sub-link" *ngFor="let group of groups">
+      <a [routerLink]="['/services', group.id, group.name]">{{ group.name }}</a>
+    </li>
+</ul>

@@ -1,0 +1,11 @@
+
+<div class="container">
+   <div *ngFor="let group of groups">
+      <a [routerLink]="['/services', group.id, group.name]">
+         <img [src]="group.imgUrl" alt="img" height="100px">
+         <p>{{ group.name }}</p>
+      </a>
+      <input (click)="deleteGroup(group)" type="submit" value="Delete">
+      <input [routerLink]="['/groups/edit', group.id]" type="submit" value="Edit">
+   </div>
+</div>

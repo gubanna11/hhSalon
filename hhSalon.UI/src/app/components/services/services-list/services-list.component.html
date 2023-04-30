@@ -1,0 +1,14 @@
+<div class="container">
+    
+<p>{{groupName}}</p>
+<br>
+
+<!-- UPDATE -->
+<app-update-service (servicesUpdated)="updatedServicesList($event)" [service]="serviceToEdit"></app-update-service>
+
+<div *ngFor="let service of services">
+    <p>{{service.name}} <span style="padding:10px">-</span>  {{service.price}} </p>
+    <a (click)="updateService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Edit</a>
+    <a (click)="deleteService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Delete</a>
+</div>
+</div>

@@ -1,0 +1,234 @@
+@import "/src/sass/variables";
+  
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: #fff;
+  width: 100%;
+  -webkit-box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
+          box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);     
+}
+
+.header__container {
+  max-width: 1400px;
+  margin: 0px auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0px 30px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  min-height: 70px;  
+}
+
+.header__menu{
+  justify-content: space-between;
+}
+
+
+
+.menu__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 44px;
+}
+
+.menu__list > li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+  padding: 34px 0px;
+  font-weight: 500;
+}
+
+.menu__link a:hover {
+  color: $beigeColor;
+  
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.menu__link-name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.menu__sub-list{
+  overflow: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.8s ease;
+  transition: all 0.8s ease;
+  position: absolute;
+  top: 100%;
+  min-width: 220px;
+  padding: 20px 25px;
+  border: 1px solid #d8dede;
+  border-radius: 7px;
+  background-color: #fff;
+  pointer-events: none;
+}
+
+.menu__sub-link {
+  border-bottom: 1px solid #d8dede;
+  padding: 15px;
+}
+
+.menu__sub-link > a:hover {  
+  color: #e8d2b8;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.menu__sub-link:first-child {
+  padding-top: 0;
+}
+
+.menu__sub-link:last-child {
+  padding-bottom: 0;
+  border: none;
+}
+
+
+.menu__arrow {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0px 0px 0px 10px;
+  -webkit-transition: -webkit-transform 0.5s ease 0s;
+  transition: -webkit-transform 0.5s ease 0s;
+  transition: transform 0.5s ease 0s;
+  transition: transform 0.5s ease 0s, -webkit-transform 0.5s ease 0s;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid #000;
+}
+
+.menu__link:hover .menu__arrow {
+  -webkit-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+}
+
+.menu__link:hover .menu__link-name a,
+.menu__link-name:hover a{
+  transition: all 0.5s ease;
+  color: $beigeColor;
+}
+
+.menu__link:hover .menu__sub-list {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+
+
+
+
+
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+/*IDENTITY*/
+/*----------------------------------------------*/
+/*----------------------------------------------*/
+.sign-in:hover {
+  color: #000;
+}
+
+.sign-up:hover {
+  color: #000;
+}
+
+.sign-up {
+  padding: 16px 20px;
+  border: 2px #e8d2b8 solid;
+}
+
+
+.identity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 220px;
+
+  padding: 8px 0px;
+
+  font-weight: 500;
+
+  position: relative;
+}
+
+// .header-identity__img {
+//   height: 28px;
+// }
+
+.identity-sign-in {
+  padding: 26px 0px;
+}
+
+.identity-sign-out {
+  padding: 26px 0px;
+}
+
+// .identity-sign-in i {
+//   font-size: 26px;
+//   color: #333;
+// }
+
+// .identity-sign-out i {
+//   font-size: 26px;
+//   color: #333;
+// }
+
+.identity-sign-in {
+  position: relative;
+}
+
+.identity-sign-out {
+  overflow: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.8s ease;
+  transition: all 0.8s ease;
+  position: absolute;
+  top: 100%;
+  min-width: 220px;
+  padding: 20px 25px;
+  border: 1px solid #d8dede;
+  border-radius: 7px;
+  background-color: #fff;
+  pointer-events: none;
+}
+
+.identity-sign-in__info{
+  cursor: pointer;
+}
+
+.identity:hover .identity-sign-out{
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+}

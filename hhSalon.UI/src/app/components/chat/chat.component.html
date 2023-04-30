@@ -1,0 +1,36 @@
+<div style="display: flex; width: 1200px;">
+    <div style="height: 300px;">
+        <p>Messages</p>
+        <div style="cursor: pointer; margin-bottom: 16px" *ngFor="let chat of chatList" (click)="toUserChanged(chat)">
+            <span *ngIf="chat.userId === userId">
+                <p>{{chat.toUser.userName}}</p>
+                <span>you: </span>
+            </span>
+            <span *ngIf="chat.userId != userId">
+                <p>{{chat.user.userName}}</p>
+                <span>{{chat.user.userName}}: </span>
+            </span>
+                <!-- <p *ngIf="chat.userId === userId">{{chat.toUser.userName}}</p>
+                <p *ngIf="chat.userId != userId">{{chat.user.userName}}</p>
+                <span *ngIf="chat.userId != userId">{{chat.toUser.userName}}: </span>
+                <span *ngIf="chat.userId === userId">you: </span> -->
+            <span>{{chat.lastMessage}}</span>                
+        </div>
+    </div>
+
+    <div *ngIf="toUser != undefined" style="width: 60%; background-color: rgb(208, 248, 248);">
+        <div style="text-align: center;">{{toUser.userName}}</div>
+        <div style="height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <app-messages style="align-items: end;" [messages]="chatService.messages"></app-messages>
+            </div>
+            <div >
+                <app-chat-input (contentEmitter)="sendMessage($event)"></app-chat-input>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="toUser === undefined" style="height: 300px; width: 60%; background-color: rgb(208, 248, 248);">
+        <div style="text-align: center;padding-top: 20%;">Select a chat</div>
+    </div>
+</div>

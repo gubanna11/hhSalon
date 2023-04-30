@@ -1,0 +1,58 @@
+<div class="signup">
+    <div class="container">
+       <h3 class="form-title">Sign up</h3>
+       <div>
+            <form [formGroup]="signUpForm" class="form-auth">
+                <div class="input-field">
+                    <span class="fa fa-user"></span>
+                    <input formControlName="firstName" type="text" placeholder="First name">
+                    <p *ngIf="signUpForm.controls['firstName'].dirty && signUpForm.hasError('required', 'firstName')">
+                        *First Name is requiered
+                    </p>
+                </div>
+                <div class="input-field">
+                    <span class="fa fa-user"></span>
+                    <input formControlName="lastName" type="text" placeholder="Last name">
+                    <p *ngIf="signUpForm.controls['lastName'].dirty && signUpForm.hasError('required', 'lastName')">
+                        *Last Name is requiered
+                    </p>
+                </div>
+                <div class="input-field">
+                    <span class="fa fa-user"></span>
+                    <input formControlName="email" type="text" placeholder="Email">
+                    <p *ngIf="signUpForm.controls['email'].dirty && signUpForm.hasError('required', 'email')">
+                        *Email is requiered
+                    </p>
+                </div>
+                <div class="input-field">
+                    <span class="fa fa-user"></span>
+                    <input formControlName="userName" type="text" placeholder="User name">
+                    <p *ngIf="signUpForm.controls['userName'].dirty && signUpForm.hasError('required', 'userName')">
+                        *User Name is requiered
+                    </p>
+                </div>
+                <div class="input-field">
+                    <span class="fa fa-lock"></span>
+                    <input formControlName="password" [type]="type" placeholder="Password">
+                    <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                    <p *ngIf="signUpForm.controls['password'].dirty && signUpForm.hasError('required', 'password')">
+                        *Password is requiered
+                    </p>
+                </div>
+                <!-- <div class="input-field">
+                    <span class="fa fa-lock"></span>
+                    <input [type]="type" placeholder="Confirm Password">
+                    <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                </div> -->
+                <button (click)="onSingUp()" type="submit" class="btn-auth">Sign up</button>
+                <div>
+                    Already have an account?
+                    <a id="forget" routerLink="/login">Login</a>
+                </div>
+            </form>
+            <div>
+
+            </div>
+       </div>
+    </div>
+</div>

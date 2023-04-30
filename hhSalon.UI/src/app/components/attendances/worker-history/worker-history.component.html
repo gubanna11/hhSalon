@@ -1,0 +1,22 @@
+<p>Attendances History {{workerName}}</p>
+<div>
+    <table> 
+        <thead> 
+            <tr>
+                <th>Service</th>
+                <th>Group</th>
+                <th>Client</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let attendance of attendances">
+            <tr>
+                <td>{{attendance.service.name}}</td>
+                <td>{{attendance.group.name}}</td>
+                <td>{{attendance.client.firstName}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+

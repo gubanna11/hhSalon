@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>What</th>
+            <th>Edit</th>
+            <th>Delete</th>            
+        </tr>
+    </thead>
+    <tbody *ngFor="let worker of workers">
+        <tr>
+            <td>{{worker.user.firstName}}</td>
+            <td>{{worker.user.lastName}}</td>
+            <td *ngFor="let group of worker.workers_Groups">{{group.group.name}}</td>        
+            <td>
+                <i  [routerLink]="['/workers/edit', worker.id]" class="bi bi-pencil-fill"></i>
+            </td>
+            <td (click)="deleteWorker(worker.id)">
+                <i class="bi bi-trash"></i>
+            </td>
+        </tr>
+    </tbody>
+</table>

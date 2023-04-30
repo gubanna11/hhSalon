@@ -1,0 +1,14 @@
+<div style=" height: 280px;
+overflow-x: hidden;
+overflow-y: auto;
+direction:rtl;
+transform: rotate(180deg);
+text-align: left;">
+  <div style="  overflow: hidden;
+  transform: rotate(180deg);">
+    <div *ngFor="let message of messages">
+        <span>{{message.fromUser.userName}}: </span>
+        <span>{{message.content}}</span>
+    </div>
+  </div>
+</div>

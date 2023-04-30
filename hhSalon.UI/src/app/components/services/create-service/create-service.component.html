@@ -1,0 +1,24 @@
+<div *ngIf="service">
+    <!-- <p>{{selectedGroupName}}</p> -->
+    <div>
+        <label for="name">Name </label>
+        <input name="name" [(ngModel)]="service.name" type="text">
+    </div>
+    <div>
+        <label for="price">Price </label>
+        <input name="price" [(ngModel)]="service.price" type="text">
+    </div>
+
+    <div>
+        <label for="group">Group</label>
+        <select name="group" (change)="selectChanged($event.target)" [(ngModel)] = "service.groupId">
+            <option [value]="group.id" *ngFor="let group of groups" >
+                {{ group.name }}
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit" (click)="createService(service)">Create</button>
+    </div>
+</div>

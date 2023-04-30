@@ -1,0 +1,39 @@
+<div class="login">
+    <div class="container">
+       <h3 class="form-title">Login</h3>
+       <div>
+            <form [formGroup]="loginForm" class="form-auth">
+                <div class="input-field">
+                    <span class="fa fa-user"></span>
+                    <input formControlName="userName" type="text" placeholder="User name">
+                    <p *ngIf="loginForm.controls['userName'].dirty && loginForm.hasError('required', 'userName')">
+                        *User Name is requiered
+                    </p>
+                </div>
+                
+
+                <div class="input-field">
+                    <span class="fa fa-lock"></span>
+                    <input formControlName="password" [type]="type" placeholder="Password">
+                    <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                    <p *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')">
+                        *Password is requiered
+                    </p>
+                </div>
+                
+
+                <div class="forget">
+                    <a id="forget">Forget Passwrod?</a>
+                </div>
+                <button (click)="onLogin()" type="submit" class="btn-auth">Login</button>
+                <div class="have_account">
+                    Don't have an account?
+                    <a id="forget" routerLink="/sign-up">Sign Up</a>
+                </div>
+            </form>
+            <div>
+
+            </div>
+       </div>
+    </div>
+</div>

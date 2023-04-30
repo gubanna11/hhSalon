@@ -1,0 +1,9 @@
+@import '/src/sass/variables.scss';
+
+.btnTime{
+    background-color: aqua;
+}
+
+.btnTime.active{
+    background-color: $beigeColor;
+}
