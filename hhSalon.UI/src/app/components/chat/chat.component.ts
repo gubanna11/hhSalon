@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ChatItem } from 'src/app/models/chatItem';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,32 +17,35 @@ export class ChatComponent implements OnInit, OnDestroy{
 
   userId: string = '';
 
-  chatList: ChatItem[] = [];
+  //chatList: ChatItem[] = [];
 
-  tracker :any[] = []; 
+  chatSelected: ChatItem = new ChatItem();
+  public now:any = new Date();
   
   constructor(private route: ActivatedRoute,
     private auth: AuthService,
     private userStore: UserStoreService,
     public chatService: ChatService,
     private usersService: UsersService,
-    private router: Router
-    ){}
+    private router: Router,
+    ){
+    }
 
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.toUserId = params['toUser']; 
-      
-      if(this.toUserId != ''){
-        this.usersService.getUserById(this.toUserId).subscribe(
-          user => this.toUser = user
-         )         
-      }
-      else{
-        this.toUser = undefined;
-      }
-   })   
+      this.route.params.subscribe(params => {
+        this.toUserId = params['toUser']; 
+        
+        if(this.toUserId != ''){
+          this.usersService.getUserById(this.toUserId).subscribe(
+            user => this.toUser = user
+          )    
+          
+        }
+        else{
+          this.toUser = undefined;
+        }
+    })   
 
 
    this.userStore.getIdFromStore().subscribe(
@@ -51,36 +54,35 @@ export class ChatComponent implements OnInit, OnDestroy{
       this.userId = idValue || idFromToken;
 
       this.chatService.getChatList(this.userId).subscribe(
-        list => {this.chatList = list;
+        list => {
+          this.chatService.chatList = list;          
+          
           
            if(this.toUserId != ''){
-            //this.chatService.createChatConnection(this.userId);
-          //   if(
-          //     this.chatList.filter(c => {
-          //     c.userId == this.toUserId}).length == 0
-          //   ){
-          //     let item = new ChatItem();
-          //     item.userId = this.toUserId;
-          //     item.user = this.toUser;
-          //     item.lastMessage = '';
-          //     this.chatList.push(item);
-          //     console.log(this.chatList);
-              
-          //   }
+            this.chatService.getMessageOfUser(this.userId, this.toUserId).subscribe(
+              (messages) =>{
+                this.chatService.messages = messages;     
+              }
+             )
+
            }
         }
        )
    })    
 
+      this.chatService.getChatList(this.userId).subscribe(
+        list => {
+          this.chatService.chatList = list;
 
-   this.chatService.getMessageOfUser(this.userId, this.toUserId).subscribe(
-    (messages) =>{
-      this.chatService.messages = messages;     
-    }
-   )
+          if(this.toUserId != ''){
+            this.chatSelected = this.chatService.chatList.filter(l => 
+              l.toUserId === this.toUserId || l.userId === this.toUserId)[0];
+          }
+        }
+    )
 
    
-   
+    
   } 
 
   toUserChanged(chat: any){
@@ -91,58 +93,33 @@ export class ChatComponent implements OnInit, OnDestroy{
       this.toUserId = chat.userId;
     }
 
-    // this.usersService.getUserById(this.toUserId).subscribe(
-    //   user => this.toUser = user
-    //  )    
-     
-    
 
      this.chatService.getMessageOfUser(this.userId, this.toUserId).subscribe(
       (messages) =>{
-        this.chatService.messages = messages;     
+        this.chatService.messages = messages;   
+        this.chatService.updateMessages();    
       }
      )
 
-    // this.chatService.createPrivateChat(this.toUser);
-  
-     //this.chatService.createChatConnection(this.userId);
-     
-     //this.chatService.closePrivateChatMessage();
+     this.chatSelected = chat;
+
     this.router.navigate(['chat', this.toUserId]);
   }
 
 
   sendMessage(content: any){
-    this.tracker.push({
-      to: this.toUserId,
-    });
-    //this.chatService.createPrivateChat(this.toUser, content);
-
-    let count = this.tracker.filter(
-      t => t.to == this.toUserId
-    ).length;
-
-
-    // this.usersService.getUserById(this.userId).subscribe(
-    //   user => {
-    //     if(count === 1)
-    //     this.chatService.sendMessage(user, this.toUser, content, true);
-    //   else
-    //     this.chatService.sendMessage(user, this.toUser, content, false);
-    //   }
-    //)
-
+ 
+    let userThis:any;
     this.usersService.getUserById(this.userId).subscribe(
-      user => {
-        this.chatService.sendMessage(user, this.toUser, content);
+      userValue => {
+        userThis = userValue;
+        this.chatService.sendMessage(userThis, this.toUser, content);
       }
     )
+
    
   }
 
   ngOnDestroy(): void {
-    // this.chatService.closePrivateChatMessage();
-    //remove from group
-    //when someone wants to write us, then the group will be created again and we'll receive the message (maybe :) )
   }
 }

@@ -6,6 +6,7 @@
       <th>Last Name</th>
       <th>User Name</th>
       <th>Email</th>
+      <th>Message</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,7 @@
       <td>{{user.lastName}}</td>
       <td>{{user.userName}}</td>
       <td>{{user.email}}</td>
+      <td><a [routerLink]="['/chat', user.id]">Message</a></td>
     </tr>
   </tbody>
 </table>

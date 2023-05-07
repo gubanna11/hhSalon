@@ -1,26 +1,47 @@
-<div style="display: flex; width: 1200px;">
-    <div style="height: 300px;">
-        <p>Messages</p>
-        <div style="cursor: pointer; margin-bottom: 16px" *ngFor="let chat of chatList" (click)="toUserChanged(chat)">
-            <span *ngIf="chat.userId === userId">
-                <p>{{chat.toUser.userName}}</p>
-                <span>you: </span>
-            </span>
-            <span *ngIf="chat.userId != userId">
-                <p>{{chat.user.userName}}</p>
-                <span>{{chat.user.userName}}: </span>
-            </span>
-                <!-- <p *ngIf="chat.userId === userId">{{chat.toUser.userName}}</p>
-                <p *ngIf="chat.userId != userId">{{chat.user.userName}}</p>
-                <span *ngIf="chat.userId != userId">{{chat.toUser.userName}}: </span>
-                <span *ngIf="chat.userId === userId">you: </span> -->
-            <span>{{chat.lastMessage}}</span>                
+<div style="display: flex; width: 1200px; gap: 24px">
+    <div style="height: 440px;">
+        <p style="margin: 0 0 28px 0; font-weight: 500; font-size: 18px">Messages</p>
+        <div class="chat-item" *ngFor="let chat of chatService.chatList" (click)="toUserChanged(chat)" [class.selected]="chat.userId == chatSelected.toUserId || chat.toUserId == chatSelected.toUserId" >
+            <div>
+                <span *ngIf="chat.userId === userId">
+                    <p>{{chat.toUser.userName}}</p>
+                    <span>you: </span>
+                </span>
+                <span *ngIf="chat.userId != userId">
+                    <p>{{chat.user.userName}}</p>
+                    <span>{{chat.user.userName}}: </span>
+                </span>
+
+                <span style="display: inline-block; overflow: hidden;  width: 40px; "
+                    [ngClass]="{'large' : chat.lastMessage != undefined && chat.lastMessage.length > 10 }"
+                >{{chat.lastMessage}}</span>  
+
+                <span *ngIf="chat.toUserId != userId" style="margin-left: 12px">
+                    <i *ngIf="chat.isRead">
+                        <img src="assets/img/icons/check-all.svg" alt="read">
+                    </i>
+                    <i *ngIf="!chat.isRead">
+                        <img src="assets/img/icons/check.svg" alt="unread">
+                    </i>
+                </span>
+            </div>
+            
+               
+            <div class="display: flex; justify-content:column;">
+                <div style="font-size: 12px">
+                    {{chat.date | date}}
+                    {{chat.date | time}}
+                </div>
+                <div *ngIf="chat.toUserId === userId && chat.messageUnreadCount > 0" style="margin-left: 5px; font-weight:500;">
+                    {{ chat.messageUnreadCount}}
+                </div>
+            </div>
         </div>
     </div>
 
     <div *ngIf="toUser != undefined" style="width: 60%; background-color: rgb(208, 248, 248);">
-        <div style="text-align: center;">{{toUser.userName}}</div>
-        <div style="height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="text-align: center; font-weight: 500; font-size: 18px">{{toUser.userName}}</div>
+        <div style="height: 97%; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
                 <app-messages style="align-items: end;" [messages]="chatService.messages"></app-messages>
             </div>

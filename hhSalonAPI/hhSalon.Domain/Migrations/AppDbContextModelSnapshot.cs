@@ -72,10 +72,9 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.HasIndex("ClientId", "Date", "ServiceId")
-                        .IsUnique();
+                    b.HasIndex("WorkerId");
 
-                    b.HasIndex("WorkerId", "Date", "ServiceId")
+                    b.HasIndex("ClientId", "Date", "ServiceId")
                         .IsUnique();
 
                     b.ToTable("Attendances");
@@ -99,6 +98,10 @@ namespace hhSalon.Domain.Migrations
                     b.Property<string>("FromId")
                         .HasColumnType("varchar(255)")
                         .HasColumnName("from_id");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_read");
 
                     b.Property<string>("ToId")
                         .HasColumnType("varchar(255)")
@@ -243,7 +246,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Worker", b =>

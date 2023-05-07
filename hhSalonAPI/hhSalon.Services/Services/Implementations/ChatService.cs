@@ -35,13 +35,10 @@ namespace hhSalon.Services.Services.Implementations
 
 		public void AddUserConnectionId(User user, string connectionId)
 		{
-			//AddUserToList(user);
 			lock (Users)
 			{
-				//if (Users.ContainsKey(user))
 				if(Users.Where(u => u.Key.Id == user.Id).Count() != 0)
 				{
-					//Users[user] = connectionId;
 					var u = Users.Where(u => u.Key.Id == user.Id).FirstOrDefault();
 					Users[u.Key] = connectionId;
 				}
@@ -73,20 +70,8 @@ namespace hhSalon.Services.Services.Implementations
 				{
 					Users.Remove(Users.Where(x => x.Key.Id == user.Id).Select(x => x.Key).FirstOrDefault());
 				}
-				//if (Users.ContainsKey(user))
-				//{
-				//	Users.Remove(user);
-				//}
 			}
 		}
 
-		//public List<ChatItem> GetUserMessagesList(string userId)
-		//{
-		//	lock (Users)
-		//	{
-		//		return Users.OrderBy(x => x.Key).Select(x => x.Key).ToArray();
-				
-		//	}
-		//}
 	}
 }

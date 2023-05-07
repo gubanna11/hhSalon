@@ -7,6 +7,7 @@
                 <th>Group</th>
                 <th>Worker</th>
                 <th>Date</th>
+                <th>Message</th>
             </tr>
         </thead>
         <tbody *ngFor="let attendance of attendances">
@@ -14,6 +15,7 @@
                 <td>{{attendance.service.name}}</td>
                 <td>{{attendance.group.name}}</td>
                 <td>{{attendance.worker.user.firstName}}</td>
+                <td><a [routerLink]="['/chat', attendance.worker.id]">Message</a></td>
             </tr>
         </tbody>
     </table>

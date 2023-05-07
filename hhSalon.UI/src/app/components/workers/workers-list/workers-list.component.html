@@ -4,6 +4,7 @@
             <th>Name</th>
             <th>Surname</th>
             <th>What</th>
+            <th>Message</th>
             <th>Edit</th>
             <th>Delete</th>            
         </tr>
@@ -12,7 +13,8 @@
         <tr>
             <td>{{worker.user.firstName}}</td>
             <td>{{worker.user.lastName}}</td>
-            <td *ngFor="let group of worker.workers_Groups">{{group.group.name}}</td>        
+            <td *ngFor="let group of worker.workers_Groups">{{group.group.name}}</td>     
+            <td><a [routerLink]="['/chat', worker.id]">Message</a></td>   
             <td>
                 <i  [routerLink]="['/workers/edit', worker.id]" class="bi bi-pencil-fill"></i>
             </td>

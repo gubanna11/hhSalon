@@ -34,9 +34,7 @@ namespace hhSalonAPI.Controllers
 				if (ex.InnerException.Message.Contains("Dublicate"))
 					return BadRequest( new { Message = "You already have the appointment on the date"});
 				return BadRequest();
-			}
-
-			
+			}			
 		}
 
 		[HttpGet("my-not-rendered-not-paid-attendances/{userId}")]

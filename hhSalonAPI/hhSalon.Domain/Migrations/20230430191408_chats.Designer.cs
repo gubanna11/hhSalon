@@ -11,7 +11,7 @@ using hhSalonAPI.Domain.Concrete;
 namespace hhSalon.Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230425202232_chats")]
+    [Migration("20230430191408_chats")]
     partial class chats
     {
         /// <inheritdoc />
@@ -102,6 +102,10 @@ namespace hhSalon.Domain.Migrations
                     b.Property<string>("FromId")
                         .HasColumnType("varchar(255)")
                         .HasColumnName("from_id");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_read");
 
                     b.Property<string>("ToId")
                         .HasColumnType("varchar(255)")

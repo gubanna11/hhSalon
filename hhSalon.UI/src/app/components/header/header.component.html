@@ -52,6 +52,7 @@
 
           <li class="menu__link" *ngIf="isAuthorized">
             <a [routerLink]="['chat', '']">Chat</a>
+            <span *ngIf="chatService.unreadCount > 0" style="margin-left: 5px">{{ chatService.unreadCount }}</span>
           </li>
 
           <li class="menu__link" *ngIf="isAuthorized">
@@ -133,8 +134,12 @@
           {{ fullName }}
         </div>
       </div>
-
-        <div class="identity-sign-out">
+  
+        <div class="identity-sign-out"> 
+         <div *ngIf="role === 'Worker'">
+          <i  [routerLink]="['/workers/edit', id]" class="bi bi-pencil-fill"></i>
+          <a>Edit</a>
+        </div>
             <i class="bi bi-box-arrow-right"></i>
             <a (click)="signOut()" *ngIf="isAuthorized">Sign Out</a>
         </div>

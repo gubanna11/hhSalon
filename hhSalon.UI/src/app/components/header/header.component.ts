@@ -20,13 +20,14 @@ export class HeaderComponent {
 
   public fullName: string = "";
   public role!: string;
+  public id!: string;
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
               private router: Router,
               private auth: AuthService,
               private userStore: UserStoreService,
-              private chatService: ChatService,
+              public chatService: ChatService,
       ){}
  
   ngOnInit(): void {
@@ -48,13 +49,10 @@ export class HeaderComponent {
     })
 
 
-console.log('INIT');
-
-
     this.userStore.getIdFromStore().subscribe(value => {      
       const idFromToken = this.auth.getIdFromToken();      
       const id = value || idFromToken;
-
+      this.id = id;
       this.chatService.addUser(id).subscribe(
         () => {
           this.chatService.userId = id;

@@ -31,6 +31,10 @@ namespace hhSalon.Domain.Entities
 
 		[Column("date")]
 
-		public DateTime? Date { get; set; }
+		public DateTime Date { get; set; }
+
+
+		[Column("is_read")]
+		public bool IsRead { get; set; }
 	}
 }

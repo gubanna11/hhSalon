@@ -14,6 +14,9 @@ namespace hhSalon.Services.ViewModels
 		public int MessageUnreadCount { get; set; }
 		public string LastMessage { get; set; }
 
+		public bool IsRead { get; set; }
+		public DateTime Date { get; set; }
+
 
 		public string ToUserId { get; set; }
 		public User ToUser { get; set; }

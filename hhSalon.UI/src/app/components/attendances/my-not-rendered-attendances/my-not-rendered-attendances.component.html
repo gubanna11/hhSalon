@@ -19,7 +19,7 @@
                 <th>Worker</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th></th>
+                <th>Message</th>
             </tr>
         </thead>
         <tbody *ngFor="let attendance of attendances">
@@ -29,7 +29,7 @@
                 <td>{{attendance.worker.user.firstName}}</td>
                 <td>{{attendance.date | date}}</td>
                 <td>{{attendance.time}}</td>
-                <td><a routerLink="/">Edit</a></td>
+                <td><a [routerLink]="['/chat', attendance.worker.id]">Message</a></td>
             </tr>
         </tbody>
     </table>

@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
     //   this.toast.info({detail: "You are already logged in"});
     //   this.router.navigate(['/']);
     // }
-      console.log("login");
       
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
@@ -73,12 +72,18 @@ export class LoginComponent implements OnInit {
             
             
             this.chatService.addUser(tokenPayload.nameid).subscribe(
-              () => {
+              () => {                
                 this.chatService.userId = tokenPayload.nameid;
                 this.chatService.createChatConnection(tokenPayload.nameid);
               }              
             );
 
+            // this.chatService.getChatList(tokenPayload.nameid).subscribe(
+            //   list => {
+            //      this.chatService.chatList = list;
+            //      this.chatService.unreadCount  = list.filter(l => !l.isRead).length;                
+            //   }
+            // )
             
 
 

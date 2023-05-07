@@ -31,7 +31,7 @@ namespace hhSalon.Domain.Entities
 
 
 		[Column("date"), Required]
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
+		//[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
 		public DateTime Date { get; set; }
 
 		[Column("time")]

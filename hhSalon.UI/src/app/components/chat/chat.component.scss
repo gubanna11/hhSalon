@@ -1,0 +1,12 @@
+.chat-item{
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 28px; 
+    justify-content: space-between;
+    padding: 12px;
+}
+
+.chat-item.selected{
+    box-shadow: 1px 1px 5px #888888;
+}

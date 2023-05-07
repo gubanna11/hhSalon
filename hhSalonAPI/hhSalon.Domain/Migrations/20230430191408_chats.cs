@@ -24,7 +24,8 @@ namespace hhSalon.Domain.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     content = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    date = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    date = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    is_read = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,16 +43,7 @@ namespace hhSalon.Domain.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-          
-            migrationBuilder.CreateIndex(
-                name: "IX_Chats_from_id",
-                table: "Chats",
-                column: "from_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Chats_to_id",
-                table: "Chats",
-                column: "to_id");
+         
         }
 
         /// <inheritdoc />

@@ -1,0 +1,58 @@
+.messages{
+    overflow: hidden;
+    transform: rotate(180deg);  
+}
+
+.message{
+    color: #fff;
+    padding: 6px;
+    border-radius: 8%;
+    margin-bottom: 4px;
+
+    display:flex;
+    //flex-direction: row-reverse;
+    
+    justify-content: space-between;
+    
+}
+
+.message-user-content{
+    
+    overflow-wrap: break-word;
+
+}
+
+.message-content.large{
+//text-align: left;
+//word-wrap: break-word;
+width: 178px;
+
+}
+
+
+.message-time__is-read, .message-user-content{
+    display: flex;
+
+}
+
+.other-message{
+    background-color: rgb(140, 143, 146);
+    margin-right: 52%;
+    
+}
+
+.my-message{
+    background-color: rgb(110, 111, 112);
+    text-align: right;
+    margin-left: 52%;
+}
+
+
+.message-time{
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.message-content{
+    margin-left: 8px;
+}

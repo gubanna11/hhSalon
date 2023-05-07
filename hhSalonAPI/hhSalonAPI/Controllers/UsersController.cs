@@ -41,5 +41,7 @@ namespace hhSalonAPI.Controllers
 			return Ok(_usersService.GetUserById(userId));
 		}
 
+		
+
 	}
 }

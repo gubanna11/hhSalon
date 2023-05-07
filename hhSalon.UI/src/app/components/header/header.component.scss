@@ -31,15 +31,17 @@
   justify-content: space-between;
 }
 
-
+.header__logo{
+    font-size: 18px;
+}
 
 .menu__list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   gap: 44px;
 }
 
