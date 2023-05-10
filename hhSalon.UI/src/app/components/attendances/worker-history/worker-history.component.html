@@ -7,6 +7,7 @@
                 <th>Group</th>
                 <th>Client</th>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Message</th>
             </tr>
         </thead>
@@ -15,6 +16,8 @@
                 <td>{{attendance.service.name}}</td>
                 <td>{{attendance.group.name}}</td>
                 <td>{{attendance.client.firstName}}</td>
+                <td>{{attendance.date | date}}</td>
+                <td>{{attendance.time | timeString}}</td>
                 <td><a [routerLink]="['/chat', attendance.client.id]">Message</a></td>
             </tr>
         </tbody>

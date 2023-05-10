@@ -16,7 +16,7 @@ export class WorkersListComponent implements OnInit{
 
   ngOnInit(): void {
     this.workersService.getWorkers().subscribe(
-      result => {this.workers = result; console.log(result);
+      result => {this.workers = result;
       }
     )
   }

@@ -1,4 +1,5 @@
-﻿using hhSalon.Services.Services.Interfaces;
+﻿using hhSalon.Domain.Entities;
+using hhSalon.Services.Services.Interfaces;
 using hhSalon.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -95,6 +96,23 @@ namespace hhSalonAPI.Controllers
 			var slots = await _attendancesService.GetFreeTimeSlots(workerId, day);
 
 			return Ok(slots);
+		}
+
+
+		[HttpPut("update-attendances")]
+		public async Task<ActionResult> UpdateAttendances(List<Attendance> attendances)
+		{
+			await _attendancesService.UpdateAttendances(attendances);
+
+			return Ok();
+		}
+
+		[HttpPut]
+		public async Task<ActionResult> UpdateAttendance(Attendance attendance)
+		{
+			await _attendancesService.UpdateAttendance(attendance);
+
+			return Ok();
 		}
 	}
 }

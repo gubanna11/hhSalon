@@ -1,5 +1,5 @@
 <div class="signup">
-    <div class="container">
+   
        <h3 class="form-title">Sign up</h3>
        <div>
             <form [formGroup]="signUpForm" class="form-auth">
@@ -44,7 +44,7 @@
                     <input [type]="type" placeholder="Confirm Password">
                     <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
                 </div> -->
-                <button (click)="onSingUp()" type="submit" class="btn-auth">Sign up</button>
+                <button (click)="onSingUp()" type="submit" class="btn">Sign up</button>
                 <div>
                     Already have an account?
                     <a id="forget" routerLink="/login">Login</a>
@@ -54,5 +54,5 @@
 
             </div>
        </div>
-    </div>
+  
 </div>

@@ -9,9 +9,6 @@ namespace hhSalon.Services.Services.Interfaces
 
 		Task AddNewAttendanceAsync(NewAttendanceVM newAttendance);
 
-		//Task<Attendance> GetAttendanceById(int id);
-		//Task<IEnumerable<Attendance>> GetIsRenderedAttendances(); 
-		//Task<IEnumerable<Attendance>> GetNotRenderedAttendances();
 
 		// MY ATTENDANCES
 		Task<IEnumerable<Attendance>> MyIsRenderedAttendances(string userId); //
@@ -26,10 +23,8 @@ namespace hhSalon.Services.Services.Interfaces
 
 		Task<IEnumerable<TimeSpan>> GetFreeTimeSlots(string workerId, DateTime date);
 
-		//Task<IEnumerable<Attendance>> GeAllAttendances(string userId, string role);
 
-		//Task CompletePaymentAll(string userId);
-
-		//double GetTotal(string userId);
+		Task UpdateAttendances(List<Attendance> attendanceVM);
+		Task UpdateAttendance(Attendance attendanceVM);
 	}
 }

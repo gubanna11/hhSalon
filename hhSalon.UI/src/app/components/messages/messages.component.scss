@@ -18,14 +18,15 @@
 
 .message-user-content{
     
-    overflow-wrap: break-word;
+    
 
 }
 
 .message-content.large{
 //text-align: left;
 //word-wrap: break-word;
-width: 178px;
+overflow-wrap: break-word;
+width: 170px;
 
 }
 

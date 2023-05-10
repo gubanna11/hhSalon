@@ -8,6 +8,7 @@ import { Message } from '../models/message';
 import { NgToastService } from 'ng-angular-popup';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class ChatService {
 
 
   constructor(private http: HttpClient,
-    private toast: NgToastService,
+     private toast: NgToastService,
+    //private toast: ToastrService,
     private usersService:UsersService,
     private router: Router
     ) {   }
@@ -88,17 +90,19 @@ export class ChatService {
 
 
       this.chatConnection.on('NewPrivateMessage', (newMessage: Message) => {
-
+        
+        
           if(this.router.url != '/chat/' + newMessage.fromId){
               newMessage.isRead = false;
 
               let mess =  newMessage.fromUser.userName + ": " + newMessage.content;
-        
-              this.toast.info({detail: "New message!", summary: mess.toString(), duration: 15000});  
+
+              this.toast.info({detail: "New message!", summary: mess.toString()});          
 
               this.saveMessage(newMessage).subscribe(
                 () => { 
-                      
+                  //this.toast.info({detail: "New message!", summary: mess.toString(), duration: 15000});          
+                  
                 });
 
           }    
@@ -188,6 +192,8 @@ export class ChatService {
           })
             .catch(error => {
               //if not online
+              console.log('NOT ONLINE');
+              
               this.saveMessage(message).subscribe(
                 () => { 
                   

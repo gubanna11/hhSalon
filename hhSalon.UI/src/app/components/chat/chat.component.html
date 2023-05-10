@@ -1,7 +1,7 @@
-<div style="display: flex; width: 1200px; gap: 24px">
+<div style="display: flex; width: 1200px; gap: 24px" class="container">
     <div style="height: 440px;">
         <p style="margin: 0 0 28px 0; font-weight: 500; font-size: 18px">Messages</p>
-        <div class="chat-item" *ngFor="let chat of chatService.chatList" (click)="toUserChanged(chat)" [class.selected]="chat.userId == chatSelected.toUserId || chat.toUserId == chatSelected.toUserId" >
+        <div class="chat-item" *ngFor="let chat of chatService.chatList" (click)="toUserChanged(chat)" [class.selected]="chatSelected == chat" >
             <div>
                 <span *ngIf="chat.userId === userId">
                     <p>{{chat.toUser.userName}}</p>

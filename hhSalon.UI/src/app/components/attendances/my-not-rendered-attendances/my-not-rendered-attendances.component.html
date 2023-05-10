@@ -1,41 +1,59 @@
-<p>My Attendances {{name}}</p>
-<form name="filter">
-   <div>
-        <input (change)="filterNotPaid()" checked type="radio" name="attendance" id="not-paid">
-        <label for="not-paid">Not Paid</label>
-   </div>
-
-    <div>
-        <input (change)="filterIsPaid()" type="radio" name="attendance" id="is-paid">
-        <label for="is-paid">Is Paid</label>
+<div class="container">
+    
+    <div class="title-filter">
+        <p class="title">My Attendances
+            <!-- <span> {{name}}</span> -->
+        </p>
+        <form class="filter" name="filter">
+            <div>
+                    <input (change)="filterNotPaid()" checked type="radio" name="attendance" id="not-paid">
+                    <label for="not-paid">Not Paid</label>
+            </div>
+    
+            <div>
+                <input (change)="filterIsPaid()" type="radio" name="attendance" id="is-paid">
+                <label for="is-paid">Is Paid</label>
+            </div>
+        </form>
+        <p *ngIf="attendances.length === 0">Empty</p>
     </div>
-</form>
-<div>
-    <table> 
-        <thead> 
-            <tr>
-                <th>Service</th>
-                <th>Group</th>
-                <th>Worker</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Message</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let attendance of attendances">
-            <tr>
-                <td>{{attendance.service.name}}</td>
-                <td>{{attendance.group.name}}</td>
-                <td>{{attendance.worker.user.firstName}}</td>
-                <td>{{attendance.date | date}}</td>
-                <td>{{attendance.time}}</td>
-                <td><a [routerLink]="['/chat', attendance.worker.id]">Message</a></td>
-            </tr>
-        </tbody>
-    </table>
+    <div>      
+        <table class="attendances-table" *ngIf="attendances.length > 0"> 
+            <thead> 
+                <tr>
+                    <th>Service</th>
+                    <th>Group</th>
+                    <th>Worker</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Price</th>
+                    <th>Message</th>
+                    <th  [class.hide]="totalPrice == 0">Pay</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let attendance of attendances">
+                <tr class="attendance-item" [class.selected]="selectedAttendances.includes(attendance)">
+                    <td>{{attendance.service.name}}</td>
+                    <td>{{attendance.group.name}}</td>
+                    <td>{{attendance.worker.user.firstName}}</td>
+                    <td>{{attendance.date | date}}</td>
+                    <td>{{attendance.time | timeString}}</td>
+                    <td>{{attendance.price}}</td>
+                    <td><a [routerLink]="['/chat', attendance.worker.id]">Message</a></td>
+                    <td [class.hide]="totalPrice === 0" (click)="Pay(attendance)"><a>Pay</a></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div *ngIf="isShown">
-        <button>Pay</button>
+        <div class="total" [class.shown]="totalPrice > 0">
+            <div #paymentRef style="width: 200px;">
+                <!-- <button></button> -->
+            </div>
+            <div>
+                <p >{{totalPrice}}</p>
+            </div>
+        </div>
+
     </div>
+
 </div>
-

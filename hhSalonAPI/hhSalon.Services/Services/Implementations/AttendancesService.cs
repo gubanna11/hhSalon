@@ -132,5 +132,38 @@ namespace hhSalon.Services.Services.Implementations
 
 			return slots;
 		}
+
+		public async Task UpdateAttendances(List<Attendance> attendances)
+		{
+			foreach(var attendanceVM in attendances)
+			{
+				var attendance = _context.Attendances.Where(a => a.Id == attendanceVM.Id).FirstOrDefault();
+
+				attendance.Date = attendanceVM.Date;
+				attendance.Time = attendanceVM.Time;
+				attendance.IsRendered = attendanceVM.IsRendered;
+				attendance.IsPaid = attendanceVM.IsPaid;
+				attendance.ServiceId = attendanceVM.ServiceId;
+				attendance.GroupId = attendanceVM.GroupId;
+
+				await _context.SaveChangesAsync();
+			}
+		}
+
+
+		public async Task UpdateAttendance(Attendance attendanceVM)
+		{
+			var attendance = _context.Attendances.Where(a => a.Id == attendanceVM.Id).FirstOrDefault();
+
+			attendance.Date = attendanceVM.Date;
+			attendance.Time = attendanceVM.Time;
+			attendance.IsRendered = attendanceVM.IsRendered;
+			attendance.IsPaid = attendanceVM.IsPaid;
+			attendance.ServiceId = attendanceVM.ServiceId;
+			attendance.GroupId = attendanceVM.GroupId;
+
+			await _context.SaveChangesAsync();
+			
+		}
 	}
 }

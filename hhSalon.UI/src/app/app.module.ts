@@ -30,13 +30,15 @@ import { WorkerCreateComponent } from './components/workers/worker-create/worker
 
 
 import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
-import { TimePipe } from './pipes/time.pipe';
+import { TimeFromDatePipe } from './pipes/time.pipe';
 
 import { WorkersListComponent } from './components/workers/workers-list/workers-list.component';
 import { WorkerEditComponent } from './components/workers/worker-edit/worker-edit.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ChatInputComponent } from './components/chat-input/chat-input.component';
+import { UpdateAttendanceComponent } from './components/attendances/update-attendance/update-attendance.component';
+import { TimeStringPipe } from './pipes/time-string.pipe';
 
 @NgModule({
   declarations: [
@@ -62,13 +64,15 @@ import { ChatInputComponent } from './components/chat-input/chat-input.component
     WorkerScheduleComponent,
 
     EnumToArrayPipe,
-    TimePipe,
+    TimeFromDatePipe,
 
     WorkersListComponent,
     WorkerEditComponent,
     ChatComponent,
     MessagesComponent,
     ChatInputComponent,
+    UpdateAttendanceComponent,
+    TimeStringPipe,
   ],
   imports: [
     BrowserModule,
@@ -76,7 +80,7 @@ import { ChatInputComponent } from './components/chat-input/chat-input.component
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgToastModule,
+    NgToastModule
   ],
   providers: [SharedService, 
   {

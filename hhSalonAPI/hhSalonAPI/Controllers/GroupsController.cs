@@ -114,5 +114,18 @@ namespace hhSalonAPI.Controllers
 
 			return Ok(await _groupsService.GetAllAsync());
 		}
+
+
+		[HttpGet("worker/{workerId}")]
+		public async Task<ActionResult<GroupOfServices>> GetGroupsByWorkerId(string workerId)
+		{
+			var groups = await _groupsService.GetGroupsByWorkerId(workerId);
+
+
+			if (groups == null)
+				return BadRequest("Groups weren't found");
+
+			return Ok(groups);
+		}
 	}
 }

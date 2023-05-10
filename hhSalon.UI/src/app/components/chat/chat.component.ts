@@ -44,6 +44,7 @@ export class ChatComponent implements OnInit, OnDestroy{
         }
         else{
           this.toUser = undefined;
+          this.chatSelected = new ChatItem();
         }
     })   
 
@@ -55,8 +56,10 @@ export class ChatComponent implements OnInit, OnDestroy{
 
       this.chatService.getChatList(this.userId).subscribe(
         list => {
-          this.chatService.chatList = list;          
-          
+
+          this.chatService.chatList = list.sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));
+                  
+         
           
            if(this.toUserId != ''){
             this.chatService.getMessageOfUser(this.userId, this.toUserId).subscribe(
@@ -72,10 +75,8 @@ export class ChatComponent implements OnInit, OnDestroy{
 
       this.chatService.getChatList(this.userId).subscribe(
         list => {
-          this.chatService.chatList = list;
-
           if(this.toUserId != ''){
-            this.chatSelected = this.chatService.chatList.filter(l => 
+            this.chatSelected = list.filter(l => 
               l.toUserId === this.toUserId || l.userId === this.toUserId)[0];
           }
         }

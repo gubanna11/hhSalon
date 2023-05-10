@@ -7,6 +7,8 @@ namespace hhSalon.Services.ViewModels
 {
 	public class NewAttendanceVM
 	{
+		public int? Id { get; set; }	
+
 		public string ClientId { get; set; }
 		public int GroupId { get; set; }
 		public int ServiceId { get; set; }

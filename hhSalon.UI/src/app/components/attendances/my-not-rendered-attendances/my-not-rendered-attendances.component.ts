@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { LogLevel } from '@microsoft/signalr';
+import { NgToastService } from 'ng-angular-popup';
 import { AttendancesService } from 'src/app/services/attendances.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+
+//import {render} from 'creditcardpayments/creditCardPayments';
+
+
 
 @Component({
   selector: 'app-my-not-rendered-attendances',
@@ -15,14 +21,17 @@ export class MyNotRenderedAttendancesComponent implements OnInit{
   userId: string = "";
   name: string = "";
 
-  isShown:boolean = false;
+  totalPrice: number = 0;
+  @ViewChild('paymentRef') paymentRef!: ElementRef;
+isShown: boolean = false;
+  selectedAttendances: any[] = [];
 
   constructor(
     private attendanceService: AttendancesService,
      private userStore: UserStoreService,
      private auth: AuthService,
-  ){
-
+     private toast: NgToastService,
+  ){      
   }
 
   ngOnInit(): void {
@@ -41,29 +50,164 @@ export class MyNotRenderedAttendancesComponent implements OnInit{
         this.name = fullName || fullNameFromToken;
       })
 
+      
     this.attendanceService.MyNotRenderedNotPaidAttendances(this.userId).subscribe(
       result => {
         this.attendances = result;
-        console.log(this.attendances);
-        
-        if(this.attendances.length > 0)
+console.log(result);
+
+        if(result.length > 0)
           this.isShown = true;
+
+          this.calculateTotalPrice(result);
+        // result.map(r => {
+        //   this.totalPrice += r.price;
+        // })
+                
+        window.paypal.Buttons({
+          style: {
+            //  layout:'horizontal',
+            // color: 'blue',
+            // shape: 'rect',
+            // label: 'paypal'
+
+            size: 'small',
+            color: 'gold',
+            shape: 'pill'
+          },
+          createOrder: (data: any, actions: any) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: this.totalPrice.toString(),
+                    currency_code : 'USD'
+                  }
+                }
+              ]
+            })
+          },
+          onApprove: (data: any, actions: any) => {
+            return actions.order.capture().then((details:any) => {
+             
+             
+              if(this.selectedAttendances.length > 0){
+                
+                for(let att of this.selectedAttendances){
+                  att.isPaid = 'Yes';
+               }
+
+                this.attendanceService.updateAttendances(this.selectedAttendances).subscribe({
+                  next: () => {
+                    this.selectedAttendances = [];
+                    
+                    this.attendanceService.MyNotRenderedNotPaidAttendances(this.userId).subscribe(
+                      result => {
+                        this.attendances = result;
+                        this.calculateTotalPrice(result);
+                        this.toast.success({detail: 'SUCCESS'});
+                      }
+                    );
+                  },                  
+                  error: (error) => {
+                    console.log(error.error)}
+                })
+              }
+              else{
+                
+               for(let att of this.attendances){
+                  att.isPaid = 'Yes';
+               }
+                
+                this.attendanceService.updateAttendances(this.attendances).subscribe({
+                  next: () => {
+                    this.attendances = [];
+                    this.totalPrice = 0;
+                    this.toast.success({detail: 'SUCCESS'});    
+                  },                  
+                  error: (error) => console.log(error.error)
+                })
+              }
+              
+            })
+          },
+          onError: (error: any) => {
+            alert(error);
+          }
+        }).render(this.paymentRef.nativeElement);          
+        
       }
     )    
+
   }
+
 
   filterNotPaid(){
     this.attendanceService.MyNotRenderedNotPaidAttendances(this.userId).subscribe(
-      result => {this.attendances = result
-      console.log(this.attendances);}
+      result => {
+        this.attendances = result;
+        this.calculateTotalPrice(result);
+      }
     )   
+
   }
 
   filterIsPaid(){
+   
+    this.totalPrice = 0;
     this.attendanceService.MyNotRenderedIsPaidAttendances(this.userId).subscribe(
       result => this.attendances = result
-    )   
-    this.isShown = false;
+    )  
+    
   }
 
+
+  Pay(attendance: any){    
+    if(!this.selectedAttendances.includes(attendance)){
+      this.selectedAttendances.push(attendance);
+
+      this.calculateTotalPrice(this.selectedAttendances);
+    }
+      
+    else{
+      const index = this.selectedAttendances.indexOf(attendance);
+
+      if (index > -1) { 
+        this.selectedAttendances.splice(index, 1);
+        this.totalPrice -= attendance.price;
+      }
+      
+      
+      if(this.selectedAttendances.length === 0){      
+        this.attendances.map(
+          a => {
+            this.totalPrice += a.price;
+          }
+        )        
+      }
+
+      return;
+    }
+    
+    
+
+    // render(
+    //   {
+    //     id: "#myPayPalButtons",
+    //     currency: "USD",
+    //     value: price.toString(),
+    //     onApprove: (details) =>{
+    //         alert('Transaction Successfull');
+    //     }
+    //   }
+    // )
+  }
+
+
+  calculateTotalPrice(attendances:any[]){
+    this.totalPrice = 0;
+    attendances.map(a => {
+      this.totalPrice += a.price;
+    });
+  }
 }

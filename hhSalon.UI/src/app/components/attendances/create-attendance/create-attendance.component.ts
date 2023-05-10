@@ -1,6 +1,7 @@
 import { Time, getLocaleDateFormat } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { Attendance } from 'src/app/models/attendance';
 import { Group } from 'src/app/models/group';
 import { Service } from 'src/app/models/service';
@@ -39,6 +40,7 @@ export class CreateAttendanceComponent implements OnInit {
     private groupsService: GroupsService,
     private servicesService: ServicesService,
     private workersService:  WorkersService,
+    private toast: NgToastService,
   ) {
     this.attendance = new Attendance();
     this.attendance.groupId = 1;
@@ -59,24 +61,16 @@ export class CreateAttendanceComponent implements OnInit {
     this.workers = workers; 
     
         this.attendance.workerId = this.workers[0].id;
-        // this.attendance.date = new Date();
-
-        // this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date.toDateString()).subscribe(
-        //   result => {
-        //       this.slots = result
-        //   }
-        // );
-
-        console.log(this.attendance);
-        
     
-    });      
-
-    //this.attendance.date = new Date(); 
-    
+    }); 
   }
 
   timeSelected(slot:any){
+    if (this.activeSlot == slot){
+      this.activeSlot = undefined;
+      return;
+    }
+
     this.activeSlot = slot;
     
     if(this.attendance)
@@ -120,19 +114,26 @@ export class CreateAttendanceComponent implements OnInit {
     if(this.services && this.attendance)      
         for(let service of this.services)
           if(service.id == id)
-            this.attendance.price = service.price    
-
-            //console.log(this.attendance);
+            this.attendance.price = service.price;
   }
 
   updateTime(){
-    console.log(this.attendance);
-    
+   
     if(this.attendance.date != undefined)
     {
+      this.slots = [];
       this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date).subscribe(
         result => {
-            this.slots = result
+          if(result.length > 0){
+            result.map(
+              r => {
+                let time  = r.split(':');
+                
+                this.slots.push(time[0] + ':' + time[1]);
+              }
+            )
+          }
+
             if(this.slots.length == 0)
               this.slotsNull = 'There is no free time!';
             else
@@ -145,6 +146,13 @@ export class CreateAttendanceComponent implements OnInit {
 
 
   createAttendance(attendance: Attendance){
+
+  if(attendance.time == undefined){
+    this.toast.error({detail: 'Error', summary: 'Select the time!'})
+    return;
+  }
+  
+
     this.userStore.getIdFromStore().subscribe(
       idValue => {
         const idFromToken = this.auth.getIdFromToken();

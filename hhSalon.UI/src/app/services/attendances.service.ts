@@ -17,12 +17,8 @@ export class AttendancesService {
   //   return this.http.get<Service[]>(`${environment.apiUrl}/${this.url}/${groupId}`);
   // }
 
-  // public createAttendance(attendance: Attendance): Observable<Attendance[]>{
-  //  return this.http.post<Attendance[]>(`${environment.apiUrl}/${this.url}`, attendance);
-  // }
-
   public createAttendance(attendance: Attendance){
-    return this.http.post<Attendance[]>(`${environment.apiUrl}/${this.url}`, attendance);
+    return this.http.post<Attendance>(`${environment.apiUrl}/${this.url}`, attendance);
    }
 
 
@@ -59,13 +55,15 @@ export class AttendancesService {
   public getFreeTimeSlots(workerId: any, date: any){
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/time-slots/${workerId}/${date}`);
   }
+
   
+  
+  public updateAttendances(attendances: any[]){
+    return this.http.put(`${environment.apiUrl}/${this.url}/update-attendances`, attendances);
+  }
 
-  // public deleteService(service:Service): Observable<Service[]>{
-  //   return this.http.delete<Service[]>(`${environment.apiUrl}/${this.url}/${service.id}`);
-  // }
-
-  // public updateService(service:Service): Observable<Service[]>{
-  //   return this.http.put<Service[]>(`${environment.apiUrl}/${this.url}`, service);
-  // }
+  public updateAttendance(attendance: any){
+    return this.http.put(`${environment.apiUrl}/${this.url}`, attendance);
+  }
+  
 }
