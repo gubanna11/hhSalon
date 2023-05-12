@@ -1,3 +1,16 @@
+@import '/src/sass/variables.scss';
+
+.messages{
+    height: 490px;
+    border-left: 2px $border solid;
+    border-right: 2px $border solid;
+    border-radius: 8%;
+    padding: 16px;
+    //box-shadow: 3px 3px 10px $border;
+    //overflow-y: scroll;
+}
+
+
 .chat-item{
     cursor: pointer;
     margin-bottom: 16px;
@@ -8,5 +21,9 @@
 }
 
 .chat-item.selected{
-    box-shadow: 1px 1px 5px #888888;
+    box-shadow: 3px 3px 10px $border;
+
+    .user-name__with{
+        font-weight: 600;
+    }
 }

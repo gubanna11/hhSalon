@@ -114,5 +114,14 @@ namespace hhSalonAPI.Controllers
 
 			return Ok();
 		}
+
+
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> DeleteAttendance(int id)
+		{
+			await _attendancesService.DeleteAsync(id);
+
+			return Ok();
+		}
 	}
 }

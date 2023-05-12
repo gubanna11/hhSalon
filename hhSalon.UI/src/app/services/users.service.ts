@@ -19,4 +19,9 @@ export class UsersService {
   public getUserById(id: string){
     return this.http.get<any>(`${environment.apiUrl}/${this.url}/${id}`);
   }
+
+
+  public updateUser(user: any){
+    return this.http.put<any>(`${environment.apiUrl}/${this.url}`, user);
+  }
 }

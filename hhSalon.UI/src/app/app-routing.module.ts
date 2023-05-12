@@ -9,7 +9,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UpdateGroupComponent } from './components/groups/update-group/update-group.component';
 import { AuthGuard } from './guards/auth.guard';
 import { CreateAttendanceComponent } from './components/attendances/create-attendance/create-attendance.component';
-import { UsersComponent } from './components/users/users.component';
+
 import { AdminCreateComponent } from './components/admin-create/admin-create.component';
 import { WorkerCreateComponent } from './components/workers/worker-create/worker-create.component';
 import { MyNotRenderedAttendancesComponent } from './components/attendances/my-not-rendered-attendances/my-not-rendered-attendances.component';
@@ -20,6 +20,9 @@ import { WorkerScheduleComponent } from './components/workers/worker-schedule/wo
 import { WorkersListComponent } from './components/workers/workers-list/workers-list.component';
 import { WorkerEditComponent } from './components/workers/worker-edit/worker-edit.component';
 import { ChatComponent } from './components/chat/chat.component';
+//import { UsersListComponent } from './components/users/users-list.component';
+import { UsersListComponent } from './components/users/users-list/users-list.component';
+import { UserEditComponent } from './components/users/user-edit/user-edit.component';
 
 const routes: Routes = [];
 
@@ -40,13 +43,15 @@ const routes: Routes = [];
       {path: 'login', component: LoginComponent},
       {path: 'sign-up', component: SignUpComponent},
 
-      {path: 'users', component: UsersComponent, canActivate:[AuthGuard]},
+      {path: 'users', component: UsersListComponent, canActivate:[AuthGuard]},
 
       {path: 'admin-create', component: AdminCreateComponent},
       {path: 'worker-create', component: WorkerCreateComponent},
       {path:'worker-schedule-create/:workerId', component:WorkerScheduleComponent},
       {path: 'workers', component: WorkersListComponent},
       {path: 'workers/edit/:workerId', component: WorkerEditComponent},
+
+      {path: 'users/edit/:userId', component: UserEditComponent},
 
       {path: 'chat/:toUser', component: ChatComponent},
     ])

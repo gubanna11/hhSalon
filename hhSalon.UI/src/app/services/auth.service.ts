@@ -15,7 +15,6 @@ export class AuthService {
     private router: Router) {
       
       this.userPayload = this.decodedToken();
-      console.log(this.userPayload);
       
      }
 

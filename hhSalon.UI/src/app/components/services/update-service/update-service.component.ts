@@ -23,27 +23,20 @@ export class UpdateServiceComponent implements OnInit{
     private router: Router,
     private toast: NgToastService,
     ){
-      this.groupsService.getGroups().subscribe( (groups) => this.groups = groups );
-
-    //this.groupsService.getGroupById(1).subscribe( (group) =>  this.selectedGroupName = group.name);
       
   }
   ngOnInit(): void {
-    let select: any  = document.getElementById('selectGroup');
-    
-    if(select != null){
-      for(let opt of select.options)
-        if(opt.value == this.service?.groupId)
-          opt.selected = true;
-    }
-
+    this.groupsService.getGroups().subscribe( (groups) => this.groups = groups );
   }
 
-  selectChanged(group?:any){  
-    this.selectedGroupName = group.options[group.selectedIndex].textContent; 
-  }
 
   updateService(service: Service){
+    let select  = document.getElementById('selectGroup') as HTMLSelectElement;
+
+       if(select){
+        this.selectedGroupName = select[select.selectedIndex].textContent;        
+    }
+
     this.servicesService.updateService(service).subscribe({
       next:(services) => {
         
@@ -56,6 +49,6 @@ export class UpdateServiceComponent implements OnInit{
         this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
       }
   })
-  }
+   }
 
 }

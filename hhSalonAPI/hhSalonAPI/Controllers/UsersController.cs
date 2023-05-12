@@ -17,7 +17,7 @@ namespace hhSalonAPI.Controllers
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
-		
+
 		private readonly AppDbContext _context;
 		private readonly IUsersService _usersService;
 		public UsersController(AppDbContext context, IUsersService usersService)
@@ -34,14 +34,24 @@ namespace hhSalonAPI.Controllers
 		}
 
 
-		
+
 		[HttpGet("{userId}")]
 		public ActionResult<User> GetUserById(string userId)
 		{
 			return Ok(_usersService.GetUserById(userId));
 		}
 
-		
+
+		[HttpPut]
+		public async Task<ActionResult<User>> UpdateUser(User user)
+		{
+			await _usersService.UpdateUser(user);
+
+			return Ok(new
+			{
+				Message = "User's data was updated!",
+			});
+		}
 
 	}
 }

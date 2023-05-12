@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
      private sharedService: SharedService,
      private userStore: UserStoreService,
      private chatService: ChatService,
+     
      ){
 
   }
@@ -54,11 +56,12 @@ export class LoginComponent implements OnInit {
 
   onLogin(){
     if(this.loginForm.valid){
-      
+       
       //send the obj to db
       this.auth.login(this.loginForm.value)
         .subscribe({
           next:(res) => {
+            
             //alert(res.message)
             this.loginForm.reset();
             this.auth.storeToken(res.token);
@@ -69,25 +72,17 @@ export class LoginComponent implements OnInit {
             this.userStore.setRoleForStore(tokenPayload.role);
             this.userStore.setIdForStore(tokenPayload.nameid);
             
-            
-            
+            //this.toast.success({detail: "SUCCESS", summary: res.message.toString(), sticky:true, position:'tr',duration:3000 });
+            toastr.success(tokenPayload.unique_name, 'Success', {timeOut: 1000});
+
             this.chatService.addUser(tokenPayload.nameid).subscribe(
-              () => {                
+              () => {                                
                 this.chatService.userId = tokenPayload.nameid;
                 this.chatService.createChatConnection(tokenPayload.nameid);
               }              
             );
-
-            // this.chatService.getChatList(tokenPayload.nameid).subscribe(
-            //   list => {
-            //      this.chatService.chatList = list;
-            //      this.chatService.unreadCount  = list.filter(l => !l.isRead).length;                
-            //   }
-            // )
             
 
-
-            this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
             this.sharedService.sendData(true);
             this.router.navigate(["/"]);
           },

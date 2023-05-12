@@ -1,6 +1,13 @@
 @import "fonts";
 @import "variables.scss";
 @import "reset.scss";
+//@import "~toastr/toastr.scss";
+@import "/node_modules/toastr/toastr.scss";
+
+.toast{
+    opacity: 1 !important;
+}
+
 
 body {
     color: #333;
@@ -16,6 +23,7 @@ body {
   i{
     cursor: pointer;
 }
+
   
   .wrapper {
     min-height: 100%;
@@ -42,7 +50,9 @@ a{
 .container{
     width: 1200px;
     margin: 0 auto;
-    padding: 90px 0 0 0;
+    padding: 140px 0 0 0;
+    //height: 100%;
+    //background-color:aliceblue;
 }
 
 
@@ -50,11 +60,58 @@ a{
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 60px;
+    text-align: center;
 }
 
 
+///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
 
+.items{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.item{
+    display: flex;
+    margin-bottom: 28px;
+    
+
+padding-bottom: 8px;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid $border;
+    
+}
+
+.item:last-child{
+    margin:0;
+    border: none;
+}
+
+.item-data{    
+   div{
+    display: block;
+   }
+   display: flex;
+   width: 70%;
+}
+
+.item-name{
+    width: 90%;    
+}
+
+///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
 
 
@@ -108,9 +165,17 @@ a{
 
 .input-field{
     margin-bottom: 28px;
+    label{
+        display: inline-block;
+        width: 112px;
+    }
     input{
         width:360px;
     }
+}
+
+.input-icon{
+    margin-right: 8px;
 }
 
 .form-title{

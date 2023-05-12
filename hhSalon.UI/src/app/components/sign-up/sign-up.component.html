@@ -39,11 +39,13 @@
                         *Password is requiered
                     </p>
                 </div>
-                <!-- <div class="input-field">
+
+                <div class="input-field">
                     <span class="fa fa-lock"></span>
-                    <input [type]="type" placeholder="Confirm Password">
-                    <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
-                </div> -->
+                    <input (change)="confirmPassword(signUpForm.get('confirmPassword'))" formControlName="confirmPassword" [type]="type" placeholder="Confirm Password">
+                    <p *ngIf="passwordMismatch">*Password doesn't match</p>
+                </div>
+
                 <button (click)="onSingUp()" type="submit" class="btn">Sign up</button>
                 <div>
                     Already have an account?

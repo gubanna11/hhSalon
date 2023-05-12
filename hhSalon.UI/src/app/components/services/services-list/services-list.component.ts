@@ -58,9 +58,11 @@ export class ServicesListComponent implements OnInit {
     this.services = services;
     this.serviceToEdit = null;
 
-    this.route.params.subscribe(params => {
-      this.groupName = params['groupName'];      
-   })
+    
+
+  //   this.route.params.subscribe(params => {
+  //     this.groupName = params['groupName'];      
+  //  })
 
     //this.groupService.getGroupById(services[0].groupId).subscribe((group) => this.groupName = group.name);
 

@@ -9,6 +9,7 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Message</th>
+                <th></th>
             </tr>
         </thead>
         <tbody *ngFor="let attendance of attendances">
@@ -19,6 +20,9 @@
                 <td>{{attendance.date | date}}</td>
                 <td>{{attendance.time | timeString}}</td>
                 <td><a [routerLink]="['/chat', attendance.client.id]">Message</a></td>
+                <td (click)="deleteAttendance(attendance.id)">
+                    <i class="bi bi-trash"></i>
+                </td>
             </tr>
         </tbody>
     </table>

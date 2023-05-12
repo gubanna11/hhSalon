@@ -15,6 +15,8 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
   workerId: string = "";
   workerName: string = "";
 
+  isPaid = false;
+
   @Output() attendanceToEdit: any;
 
   constructor(
@@ -52,12 +54,15 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
     this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
       result => {this.attendances = result}
     )   
+    this.isPaid = false;
   }
 
   filterIsPaid(){
     this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
       result => this.attendances = result
     )   
+    this.isPaid = true;
+    
   }
 
   editAttendance(attendance:any){
@@ -70,5 +75,39 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
     if(attendances != undefined)
       this.attendances = attendances;
     
+  }
+
+
+  attendanceChanged(attendance:any){
+    this.attendanceService.updateAttendance(attendance).subscribe(
+      ()=>{
+        if(!this.isPaid){
+          this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }else{
+          this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+      }
+    )    
+  }
+
+
+  deleteAttendance(id: number){
+    this.attendanceService.deleteAttendance(id).subscribe(
+      () => {
+        if(!this.isPaid){
+          this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }else{
+          this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+      }
+    )
   }
 }

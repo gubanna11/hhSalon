@@ -10,7 +10,7 @@
 
     <div>
         <label for="group">Group</label>
-        <select id="selectGroup" (change)="selectChanged($event.target)" [(ngModel)] = "service.groupId">
+        <select id="selectGroup" [(ngModel)] = "service.groupId">
             <option [value]="group.id" *ngFor="let group of groups">
                 {{ group.name }}
             </option>

@@ -1,11 +1,22 @@
 
 <div class="container">
-   <div *ngFor="let group of groups">
-      <a [routerLink]="['/services', group.id, group.name]">
-         <img [src]="group.imgUrl" alt="img" height="100px">
-         <p>{{ group.name }}</p>
-      </a>
-      <input (click)="deleteGroup(group)" type="submit" value="Delete">
-      <input [routerLink]="['/groups/edit', group.id]" type="submit" value="Edit">
+  <div class="items">
+      <p class="title">Groups of services</p>
+   <div class="item" *ngFor="let group of groups">
+
+      <div class="item-data" [routerLink]="['/services', group.id, group.name]">
+         <!-- <img class="item-img" [src]="group.imgUrl" alt="img" height="100px"> -->
+         <a class="name">{{ group.name }}</a>
+      </div>
+
+     <div>
+         <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
+     </div>
+     
+     <div  (click)="deleteGroup(group)">
+         <i class="bi bi-trash"></i>
+     </div>
+     
    </div>
+  </div>
 </div>

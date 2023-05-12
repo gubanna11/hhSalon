@@ -5,6 +5,7 @@ import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
 import { GroupsService } from 'src/app/services/groups.service';
 import { WorkersService } from 'src/app/services/workers.service';
+import * as toastr from 'toastr'; 
 
 @Component({
   selector: 'app-worker-edit',
@@ -43,9 +44,6 @@ export class WorkerEditComponent implements OnInit{
           //       this.worker.schedules[i] = {day: this.Days[i], workerId: this.workerId};             
           // }
 
-       
-
-        //   console.log(this.worker);
           
         })
 
@@ -58,8 +56,6 @@ export class WorkerEditComponent implements OnInit{
 
 
   Save(){
-    console.log(this.worker);
-    
   //   if(!(this.worker.address && this.worker.firstName && this.worker.lastName &&
   //       this.worker.gender && this.worker.groupsIds && this.worker.userName && this.worker.email))
   //     {
@@ -72,14 +68,16 @@ export class WorkerEditComponent implements OnInit{
     this.workersService.updateWorker(this.worker).subscribe(
       {
         next: res =>{
-          this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
-        
+          //this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
+          toastr.success(res.message, 'SUCCESS');
+
           this.router.navigate(['/workers']);
         },
         error: (err) => {
           console.log(err.error.message);
           
-          this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+          toastr.success(err.error.message, 'ERROR');
+          //this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
         }
       }
     )

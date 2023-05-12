@@ -1,14 +1,14 @@
 <div style="display: flex; width: 1200px; gap: 24px" class="container">
-    <div style="height: 440px;">
+    <div class="messages">
         <p style="margin: 0 0 28px 0; font-weight: 500; font-size: 18px">Messages</p>
-        <div class="chat-item" *ngFor="let chat of chatService.chatList" (click)="toUserChanged(chat)" [class.selected]="chatSelected == chat" >
+        <div class="chat-item" *ngFor="let chat of chatService.chatList" (click)="toUserChanged(chat)" [class.selected]="(chatSelected == chat) || (chat.toUserId === toUserId || chat.userId === toUserId)" >
             <div>
                 <span *ngIf="chat.userId === userId">
-                    <p>{{chat.toUser.userName}}</p>
+                    <p class="user-name__with">{{chat.toUser.userName}}</p>
                     <span>you: </span>
                 </span>
                 <span *ngIf="chat.userId != userId">
-                    <p>{{chat.user.userName}}</p>
+                    <p class="user-name__with">{{chat.user.userName}}</p>
                     <span>{{chat.user.userName}}: </span>
                 </span>
 
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div *ngIf="toUser === undefined" style="height: 300px; width: 60%; background-color: rgb(208, 248, 248);">
-        <div style="text-align: center;padding-top: 20%;">Select a chat</div>
+    <div *ngIf="toUser === undefined" style="height: 300px; width: 60%; ">
+        <div style="text-align: center;padding-top: 20%; font-weight: 500;">Select a chat</div>
     </div>
 </div>

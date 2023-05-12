@@ -1,46 +1,71 @@
-<p>Attendances {{workerName}}</p>
-<form name="filter">
-   <div>
-        <input (change)="filterNotPaid()" checked type="radio" name="attendance" id="not-paid">
-        <label for="not-paid">Not Paid</label>
-   </div>
-
-    <div>
-        <input (change)="filterIsPaid()" type="radio" name="attendance" id="is-paid">
-        <label for="is-paid">Is Paid</label>
+<div class="container">
+    <div class="title-filter">
+        <p class="title"> Attendances {{workerName}}</p>
+        <form class="filter" name="filter">
+            <div>
+                    <input (change)="filterNotPaid()" checked type="radio" name="attendance" id="not-paid">
+                    <label for="not-paid">Not Paid</label>
+            </div>
+    
+            <div>
+                <input (change)="filterIsPaid()" type="radio" name="attendance" id="is-paid">
+                <label for="is-paid">Is Paid</label>
+            </div>
+        </form>
+        <p *ngIf="attendances.length === 0">Empty</p>
     </div>
-</form>
-<div>
-    <table> 
-        <thead> 
-            <tr>
-                <th>Service</th>
-                <th>Group</th>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Edit</th>
-                <th>Chat</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let attendance of attendances">
-            <tr>
-                <td>{{attendance.service.name}}</td>
-                <td>{{attendance.group.name}}</td>
-                <td>{{attendance.client.firstName}}</td>
-                <td>{{attendance.date | date}}</td>
-                <td>{{attendance.time | timeString}}</td>
-                <!-- edit -->
+    <div>
+        <table  class="attendances-table"> 
+            <thead> 
+                <tr>
+                    <th>Service</th>
+                    <th>Group</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Edit</th>
+                    <th>Chat</th>
+                    <th>Is Paid</th>
+                    <th>Is Rendered</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let attendance of attendances">
+                <tr class="attendance-item">
+                    <td>{{attendance.service.name}}</td>
+                    <td>{{attendance.group.name}}</td>
+                    <td>{{attendance.client.firstName}}</td>
+                    <td>{{attendance.date | date}}</td>
+                    <td>{{attendance.time | timeString}}</td>
+                    
+                    <td>
+                        <i (click)="editAttendance(attendance)" class="bi bi-pencil-fill"></i>
+                    </td>
                 
-                <td>
-                    <i (click)="editAttendance(attendance)" class="bi bi-pencil-fill"></i>
-                </td>
-            
-                <td><a [routerLink]="['/chat', attendance.clientId]">Message</a></td>
-            </tr>
-        </tbody>
-    </table>
+                    <td><a [routerLink]="['/chat', attendance.clientId]">Message</a></td>
+                    
+                    <td>
+                        <select  (change)="attendanceChanged(attendance)" [(ngModel)]="attendance.isPaid" [value]="attendance.isPaid">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>                        
+                        </select>
+                    </td>
+                    <td>
+                        <select (change)="attendanceChanged(attendance)" [(ngModel)]="attendance.isRendered" [value]="attendance.isRendered">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>                        
+                        </select>
+                    </td>
+    
+                    <td (click)="deleteAttendance(attendance.id)">
+                        <i class="bi bi-trash"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <app-update-attendance *ngIf="attendanceToEdit" (attendanceOutput)="newAttendance($event)" [attendance]="attendanceToEdit"></app-update-attendance>
+    
+    
 </div>
-
-<app-update-attendance *ngIf="attendanceToEdit" (attendanceOutput)="newAttendance($event)" [attendance]="attendanceToEdit"></app-update-attendance>
-

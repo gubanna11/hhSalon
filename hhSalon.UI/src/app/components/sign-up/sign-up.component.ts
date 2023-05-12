@@ -32,7 +32,10 @@ export class SignUpComponent implements OnInit{
       userName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     });
+
+    
   }
 
   hideShowPass(){
@@ -41,8 +44,23 @@ export class SignUpComponent implements OnInit{
     this.isText ? this.type = "text" : this.type = "password";
   }
 
+  get passwordMismatch() {
+    const password = this.signUpForm.get('password');
+    const confirmPassword = this.signUpForm.get('confirmPassword');
+      if(password && confirmPassword)
+        return password.value !== confirmPassword.value;   
+      return true;
+  }
+
+  confirmPassword(confirmPassword:any){
+    if(confirmPassword){
+      confirmPassword.value
+    }
+  }
+
   onSingUp(){
-    if(this.signUpForm.valid){
+
+    if(this.signUpForm.valid && !this.passwordMismatch){
 
       this.auth.signUp(this.signUpForm.value)
         .subscribe({

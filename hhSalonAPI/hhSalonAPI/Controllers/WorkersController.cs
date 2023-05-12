@@ -50,7 +50,7 @@ namespace hhSalonAPI.Controllers
 
 
 
-		[Authorize(Roles = UserRoles.Admin)]
+		[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Worker}")]
 		[HttpPost("schedule/create")]
 		public async Task<ActionResult> CreateWorkerSchedule([FromBody] List<Schedule> schedules)
 		{
@@ -58,7 +58,7 @@ namespace hhSalonAPI.Controllers
 			if (schedules.Count == 0)
 				return BadRequest(new
 				{
-					Message = "Worker Schedule should have start and end time!",
+					Message = "Worker's schedule should have start and end time!",
 				});
 
 
@@ -66,13 +66,13 @@ namespace hhSalonAPI.Controllers
 
 			return Ok(new
 			{
-				Message = "Worker Schedule Updated!",
+				Message = "Worker's schedule was updated!",
 			});
 		}
 
 
 
-		[Authorize(Roles = UserRoles.Admin)]
+		[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Worker}")]
 		[HttpPut]
 		public async Task<ActionResult> UpdateWorker(WorkerVM workerVM)
 		{
@@ -95,7 +95,7 @@ namespace hhSalonAPI.Controllers
 
 			return Ok(new
 			{
-				Message = "Worker Data Updated!",
+				Message = "Worker's data was updated!",
 			});
 		}
 

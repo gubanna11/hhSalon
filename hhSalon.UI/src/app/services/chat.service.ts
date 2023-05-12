@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Observable, map } from 'rxjs';
+import { Observable, map, toArray } from 'rxjs';
 import { ChatItem } from '../models/chatItem';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Message } from '../models/message';
 import { NgToastService } from 'ng-angular-popup';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import * as toastr from 'toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -34,11 +34,13 @@ export class ChatService {
 
 
   constructor(private http: HttpClient,
-     private toast: NgToastService,
+     public toast: NgToastService,
     //private toast: ToastrService,
     private usersService:UsersService,
     private router: Router
-    ) {   }
+    ) {  
+      toastr.options.timeOut = 20000;
+     }
 
   public addUser(userId: string){      
     //let user = {id: userId};
@@ -63,7 +65,7 @@ export class ChatService {
    }
 
 
-   createChatConnection(userId: string){        
+   createChatConnection(userId: string){   
       this.userId = userId;
       this.usersService.getUserById(userId).subscribe(
         user => this.user = user
@@ -79,10 +81,10 @@ export class ChatService {
       this.chatConnection.on('UserConnected', () => {
         this.addUserConnectionId();
 
-
         this.getChatList(this.userId).subscribe(
           list => {
-             this.chatList = list;
+             this.chatList = list.sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));             
+             
              this.unreadCount  = list.filter(l => !l.isRead && l.toUserId === this.userId).length;                
           }
         )
@@ -97,12 +99,10 @@ export class ChatService {
 
               let mess =  newMessage.fromUser.userName + ": " + newMessage.content;
 
-              this.toast.info({detail: "New message!", summary: mess.toString()});          
+              toastr.info(mess.toString(), 'New message!');
 
               this.saveMessage(newMessage).subscribe(
                 () => { 
-                  //this.toast.info({detail: "New message!", summary: mess.toString(), duration: 15000});          
-                  
                 });
 
           }    
@@ -161,6 +161,7 @@ export class ChatService {
    }
 
    async addUserConnectionId(){
+
     return this.chatConnection?.invoke('AddUserConnectionId', this.userId)
       .catch(error => console.log(error)
       )
@@ -191,9 +192,7 @@ export class ChatService {
             
           })
             .catch(error => {
-              //if not online
-              console.log('NOT ONLINE');
-              
+              //if not online             
               this.saveMessage(message).subscribe(
                 () => { 
                   

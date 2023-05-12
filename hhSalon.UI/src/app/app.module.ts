@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgToastModule } from 'ng-angular-popup';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +18,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { CreateAttendanceComponent } from './components/attendances/create-attendance/create-attendance.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { UsersComponent } from './components/users/users.component';
+import { UsersListComponent } from './components/users/users-list/users-list.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AdminCreateComponent } from './components/admin-create/admin-create.component';
 import { MyNotRenderedAttendancesComponent } from './components/attendances/my-not-rendered-attendances/my-not-rendered-attendances.component';
@@ -39,6 +39,11 @@ import { MessagesComponent } from './components/messages/messages.component';
 import { ChatInputComponent } from './components/chat-input/chat-input.component';
 import { UpdateAttendanceComponent } from './components/attendances/update-attendance/update-attendance.component';
 import { TimeStringPipe } from './pipes/time-string.pipe';
+import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
+import * as toastr from 'toastr';
+import { UserEditComponent } from './components/users/user-edit/user-edit.component';
+
+
 
 @NgModule({
   declarations: [
@@ -53,7 +58,7 @@ import { TimeStringPipe } from './pipes/time-string.pipe';
     LoginComponent,
     SignUpComponent,
     CreateAttendanceComponent,
-    UsersComponent,
+    UsersListComponent,
     HeaderComponent,
     AdminCreateComponent,
     WorkerCreateComponent,
@@ -73,13 +78,14 @@ import { TimeStringPipe } from './pipes/time-string.pipe';
     ChatInputComponent,
     UpdateAttendanceComponent,
     TimeStringPipe,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
+    HttpClientModule,    
+    FormsModule,    
+    ReactiveFormsModule,    
     NgToastModule
   ],
   providers: [SharedService, 
@@ -89,5 +95,6 @@ import { TimeStringPipe } from './pipes/time-string.pipe';
     multi: true
   }],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

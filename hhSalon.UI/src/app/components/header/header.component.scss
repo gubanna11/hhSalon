@@ -210,14 +210,14 @@
   position: relative;
 }
 
-.identity-sign-out {
+.identity-dropdown {
   overflow: hidden;
   opacity: 0;
   -webkit-transition: all 0.8s ease;
   transition: all 0.8s ease;
   position: absolute;
   top: 100%;
-  min-width: 220px;
+  min-width: 200px;
   padding: 20px 25px;
   border: 1px solid #d8dede;
   border-radius: 7px;
@@ -229,7 +229,7 @@
   cursor: pointer;
 }
 
-.identity:hover .identity-sign-out{
+.identity:hover .identity-dropdown{
   visibility: visible;
   opacity: 1;
   pointer-events: all;

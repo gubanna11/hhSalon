@@ -65,5 +65,10 @@ export class AttendancesService {
   public updateAttendance(attendance: any){
     return this.http.put(`${environment.apiUrl}/${this.url}`, attendance);
   }
+
+
+  public deleteAttendance(id: number){
+    return this.http.delete(`${environment.apiUrl}/${this.url}/${id}`)
+  }
   
 }

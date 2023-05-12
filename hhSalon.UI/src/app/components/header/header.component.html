@@ -127,21 +127,30 @@
 	
     <div *ngIf="isAuthorized">
       
-      <div class="identity-sign-in">
-        <!-- <img class="header-identity__img"> -->
-        <i class="bi bi-person"></i>
-        <div class="identity-sign-in__info">
-          {{ fullName }}
+        <div class="identity-sign-in">
+          <!-- <img class="header-identity__img"> -->
+          <i class="bi bi-person"></i>
+          <div class="identity-sign-in__info">
+            {{ user.userName }}
+          </div>
         </div>
-      </div>
-  
-        <div class="identity-sign-out"> 
-         <div *ngIf="role === 'Worker'">
-          <i  [routerLink]="['/workers/edit', id]" class="bi bi-pencil-fill"></i>
-          <a>Edit</a>
-        </div>
-            <i class="bi bi-box-arrow-right"></i>
-            <a (click)="signOut()" *ngIf="isAuthorized">Sign Out</a>
+    
+        <div class="identity-dropdown">
+            
+              <div *ngIf="role === 'Worker'"  [routerLink]="['/workers/edit', id]">
+                <i  class="bi bi-pencil-fill"></i>
+                <a>Edit</a>
+              </div>
+              
+              <div *ngIf="role !== 'Worker'"  [routerLink]="['/users/edit', id]">
+                <i  class="bi bi-pencil-fill"></i>
+                <a>Edit</a>
+              </div>
+
+              <div class="identity-sign-out"> 
+                  <i class="bi bi-box-arrow-right"></i>
+                  <a (click)="signOut()" *ngIf="isAuthorized">Sign Out</a>
+            </div>
         </div>
       </div>
     </div>

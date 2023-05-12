@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { LogLevel } from '@microsoft/signalr';
 import { ChatItem } from 'src/app/models/chatItem';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
@@ -57,11 +58,13 @@ export class ChatComponent implements OnInit, OnDestroy{
       this.chatService.getChatList(this.userId).subscribe(
         list => {
 
-          this.chatService.chatList = list.sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));
-                  
-         
-          
-           if(this.toUserId != ''){
+          //this.chatService.chatList = list.sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));
+                     
+          if(this.toUserId != ''){
+
+            this.chatSelected = list.filter(l => 
+              l.toUserId === this.toUserId || l.userId === this.toUserId)[0];
+
             this.chatService.getMessageOfUser(this.userId, this.toUserId).subscribe(
               (messages) =>{
                 this.chatService.messages = messages;     
@@ -71,19 +74,7 @@ export class ChatComponent implements OnInit, OnDestroy{
            }
         }
        )
-   })    
-
-      this.chatService.getChatList(this.userId).subscribe(
-        list => {
-          if(this.toUserId != ''){
-            this.chatSelected = list.filter(l => 
-              l.toUserId === this.toUserId || l.userId === this.toUserId)[0];
-          }
-        }
-    )
-
-   
-    
+   })        
   } 
 
   toUserChanged(chat: any){

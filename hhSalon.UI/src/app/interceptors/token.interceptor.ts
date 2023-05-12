@@ -12,6 +12,7 @@ import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
 import { UserStoreService } from '../services/user-store.service';
+import * as toastr from 'toastr';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -39,16 +40,18 @@ export class TokenInterceptor implements HttpInterceptor {
           if(err.status === 401){                   
             this.userStore.setRoleForStore("Client");
             
-            this.toast.warning({detail: "Warning", summary: "Please Log in!"})
+            toastr.warning('Please Log in!', 'Warning');
+            //this.toast.warning({detail: "Warning", summary: "Please Log in!"})
             this.auth.signOut();
             this.sharedService.sendData(false);
             this.router.navigate(['login']);
           }
 
-          // if(err.status === 403){
-          //   this.toast.warning({detail: "Warning", summary: "Ooops...)"})
-          //   this.router.navigate(['login']);
-          // }
+          if(err.status === 403){
+            toastr.warning('You are not allowed', 'Warning!');
+            //this.toast.warning({detail: "Warning", summary: "You are not allowed!"})
+            this.router.navigate(['login']);
+          }
         }
 
         return throwError(() => err);

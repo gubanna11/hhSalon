@@ -1,11 +1,13 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +23,7 @@ export class HeaderComponent {
   public fullName: string = "";
   public role!: string;
   public id!: string;
+  public user: any;
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
@@ -28,6 +31,8 @@ export class HeaderComponent {
               private auth: AuthService,
               private userStore: UserStoreService,
               public chatService: ChatService,
+              public toast: NgToastService,
+              private usersService: UsersService
       ){}
  
   ngOnInit(): void {
@@ -53,6 +58,13 @@ export class HeaderComponent {
       const idFromToken = this.auth.getIdFromToken();      
       const id = value || idFromToken;
       this.id = id;
+
+      this.usersService.getUserById(this.id).subscribe(
+        (user) => {
+            this.user = user;
+        }
+      )
+
       this.chatService.addUser(id).subscribe(
         () => {
           this.chatService.userId = id;
@@ -70,12 +82,14 @@ export class HeaderComponent {
 
   signOut(){
     this.isAuthorized = false;
-    this.auth.signOut(); 
+     this.auth.signOut(); 
     
-    this.userStore.setRoleForStore("Client");
+     this.userStore.setRoleForStore("Client");
 
-    this.chatService.closePrivateChatMessage();
+    // //this.chatService.closePrivateChatMessage();
+     this.chatService.stopChatConnection();
 
-    this.router.navigate(['login']);
+
+    this.router.navigate(['/login']);
   }
 }

@@ -41,4 +41,11 @@ export class WorkerHistoryComponent implements OnInit{
       }
     )    
   }
+
+
+  deleteAttendance(id: number){
+    this.attendanceService.deleteAttendance(id).subscribe(
+      
+      )
+  }
 }
