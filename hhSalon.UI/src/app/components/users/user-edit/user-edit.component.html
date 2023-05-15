@@ -5,12 +5,14 @@
         <div>
             <div class="input-field">
                 <span class="fa fa-user input-icon"></span>
+                <label for="firstName">First Name</label>
                 <!-- <label for="firstName">First Name</label> -->
                 <input name="firstName"  id="firstName" [(ngModel)]="user.firstName">
                 
             </div>
             <div class="input-field">
-                <span class="fa fa-user input-icon"></span>
+                <span class="fa fa-user input-icon"></span>                
+                <label for="lastName">Last Name</label>
                 <!-- <label for="lastName">Last Name</label> -->
                 <input [(ngModel)]="user.lastName" id="lastName" type="text" placeholder="Last name">
                 <!-- <p >
@@ -19,6 +21,7 @@
             </div>
             <div class="input-field">
                 <span class="fa fa-user input-icon"></span>
+                <label for="email">Email</label>                
                 <!-- <label for="email">Email</label>                 -->
                 <input [(ngModel)]="user.email" type="text" placeholder="Email">
                 <!-- <p >

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from 'src/app/models/group';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-update-group',
@@ -38,6 +39,7 @@ export class UpdateGroupComponent implements OnInit {
       .subscribe((groups) => {
         //this.groupsUpdated.emit(groups);
         this.sharedService.sendData(groups);
+        toastr.success('The group was updated!', 'SUCCESS');
         this.router.navigate(['groups'])
     });
   }

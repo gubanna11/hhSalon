@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Group } from 'src/app/models/group';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-create-group',
@@ -33,6 +34,7 @@ export class CreateGroupComponent implements OnInit{
        next: (groups) => {
         //this.groupsUpdated.emit(groups);
         this.sharedService.sendData(groups);
+        toastr.success('Group was created!', 'SUCCESS');
         this.router.navigate(['groups'])
         },
         error: (error) =>  this.mistake = error.error.errors.Name,        

@@ -1,5 +1,5 @@
 <div class="signup" name="signup">
-    <div class="container">
+    <div class="" style="padding-top: 80px; display: flex; flex-direction: column; align-items: center;">
        <h3 class="form-title">Sign up Worker</h3>
        <div>
             <form [formGroup]="signUpForm" class="form-auth">
@@ -65,7 +65,7 @@
                         *Gender is requiered
                     </p>
                 </div>
-  
+
                 <div class="input-field">
                     <span class="fa fa-lock"></span>
                     <input formControlName="password" [type]="type" placeholder="Password">
@@ -79,15 +79,10 @@
                     <input [type]="type" placeholder="Confirm Password">
                     <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
                 </div> -->
-                <button (click)="onSingUp()" type="submit" class="btn-auth">Sign up</button>
-                <div>
-                    Already have an account?
-                    <a id="forget" routerLink="/login">Login</a>
-                </div>
+                <button (click)="onSingUp()" type="submit" class="btn">Sign up</button>
+                
             </form>
-            <div>
-
-            </div>
+            
        </div>
     </div>
 </div>

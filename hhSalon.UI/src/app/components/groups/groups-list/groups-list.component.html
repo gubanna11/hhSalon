@@ -5,18 +5,20 @@
    <div class="item" *ngFor="let group of groups">
 
       <div class="item-data" [routerLink]="['/services', group.id, group.name]">
-         <!-- <img class="item-img" [src]="group.imgUrl" alt="img" height="100px"> -->
+        <img class="item-img" [src]="group.imgUrl" alt="" height="50px">
          <a class="name">{{ group.name }}</a>
+         
       </div>
 
      <div>
          <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
      </div>
      
-     <div  (click)="deleteGroup(group)">
-         <i class="bi bi-trash"></i>
+     <div class="delete">
+         <a (click)="eventsService.confirmDelete()" class="delete-confirm"><i class="bi bi-trash"></i></a>
+         <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a>
      </div>
-     
+    
    </div>
   </div>
 </div>

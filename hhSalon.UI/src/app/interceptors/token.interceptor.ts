@@ -41,15 +41,13 @@ export class TokenInterceptor implements HttpInterceptor {
             this.userStore.setRoleForStore("Client");
             
             toastr.warning('Please Log in!', 'Warning');
-            //this.toast.warning({detail: "Warning", summary: "Please Log in!"})
             this.auth.signOut();
             this.sharedService.sendData(false);
             this.router.navigate(['login']);
           }
 
           if(err.status === 403){
-            toastr.warning('You are not allowed', 'Warning!');
-            //this.toast.warning({detail: "Warning", summary: "You are not allowed!"})
+            toastr.error('You are not allowed', 'Error!');
             this.router.navigate(['login']);
           }
         }

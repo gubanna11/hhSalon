@@ -30,7 +30,6 @@ isShown: boolean = false;
     private attendanceService: AttendancesService,
      private userStore: UserStoreService,
      private auth: AuthService,
-     private toast: NgToastService,
   ){      
   }
 
@@ -56,13 +55,12 @@ isShown: boolean = false;
         this.attendances = result;
 console.log(result);
 
+
         if(result.length > 0)
           this.isShown = true;
 
           this.calculateTotalPrice(result);
-        // result.map(r => {
-        //   this.totalPrice += r.price;
-        // })
+     
                 
         window.paypal.Buttons({
           style: {
@@ -105,7 +103,7 @@ console.log(result);
                       result => {
                         this.attendances = result;
                         this.calculateTotalPrice(result);
-                        this.toast.success({detail: 'SUCCESS'});
+                        toastr.success('', 'SUCCESS', {timeOut: 5000});
                       }
                     );
                   },                  
@@ -123,7 +121,7 @@ console.log(result);
                   next: () => {
                     this.attendances = [];
                     this.totalPrice = 0;
-                    this.toast.success({detail: 'SUCCESS'});    
+                    toastr.success('', 'SUCCESS', {timeOut: 5000});
                   },                  
                   error: (error) => console.log(error.error)
                 })
@@ -132,7 +130,7 @@ console.log(result);
             })
           },
           onError: (error: any) => {
-            alert(error);
+            console.log(error);
           }
         }).render(this.paymentRef.nativeElement);          
         

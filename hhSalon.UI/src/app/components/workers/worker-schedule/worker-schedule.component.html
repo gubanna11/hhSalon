@@ -1,15 +1,18 @@
 <!-- <div *ngFor="let day of Days | enumToArray;"> -->
-<div *ngFor="let schedule of schedules">
-    <p>{{ schedule.day }} </p>
-    <div>
-        <label for="start">Start</label>
-        <input id="start" [(ngModel)]="schedule.start" type="time">    
-    
-        <label for="end">End</label>
-        <input id="end" [(ngModel)]="schedule.end" type="time">
+<div class="container container-content">
+    <div *ngFor="let schedule of schedules">
+        <p>{{ schedule.day }} </p>
+        <div>
+            <label for="start">Start</label>
+            <input id="start" [(ngModel)]="schedule.start" type="time">    
+        
+            <label for="end">End</label>
+            <input id="end" [(ngModel)]="schedule.end" type="time">
+        </div>
+        <br>
     </div>
-    <br>
+    
+    <button routerLink="/workers" style="font-weight: 500; font-size: 16px;">Skip</button>
+    <button (click)="createSchedule(schedules)" class="btn" style="width: 36%">Update</button>
+    
 </div>
-
-<button (click)="createSchedule(schedules)">Update</button>
-<button routerLink="/workers">Skip</button>

@@ -1,4 +1,5 @@
-<table>
+<p class="title">Workers</p>
+<table class="attendances-table">
     <thead>
         <tr>
             <th>Name</th>
@@ -6,14 +7,16 @@
             <th>What</th>
             <th>Message</th>
             <th>Edit</th>
-            <th>Delete</th>            
+            <th>Delete</th>          
         </tr>
     </thead>
     <tbody *ngFor="let worker of workers">
-        <tr>
+        <tr class="attendance-item">
             <td>{{worker.user.firstName}}</td>
             <td>{{worker.user.lastName}}</td>
-            <td *ngFor="let group of worker.workers_Groups">{{group.group.name}}</td>     
+            <td style="display: flex; flex-direction: column;">
+                <span *ngFor="let group of worker.workers_Groups">{{group.group.name}}</span>
+            </td>     
             <td><a [routerLink]="['/chat', worker.id]">Message</a></td>   
             <td>
                 <i  [routerLink]="['/workers/edit', worker.id]" class="bi bi-pencil-fill"></i>

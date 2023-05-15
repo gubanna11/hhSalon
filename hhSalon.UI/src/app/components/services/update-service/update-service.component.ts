@@ -5,6 +5,7 @@ import { Group } from 'src/app/models/group';
 import { Service } from 'src/app/models/service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { ServicesService } from 'src/app/services/services.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-update-service',
@@ -21,7 +22,6 @@ export class UpdateServiceComponent implements OnInit{
   constructor(private groupsService: GroupsService,
     private servicesService: ServicesService,
     private router: Router,
-    private toast: NgToastService,
     ){
       
   }
@@ -41,12 +41,12 @@ export class UpdateServiceComponent implements OnInit{
       next:(services) => {
         
         this.servicesUpdated.emit(services);
-
+        toastr.success('The service was updated!', 'SUCCESS', {timeOut: 5000});
         this.router.navigate([`services/${service.groupId}/${this.selectedGroupName}`])
 
       },
-      error:(err) => {               
-        this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+      error:(err) => {     
+        toastr.error(err.error.message,'ERROR', {timeOut: 5000});
       }
   })
    }

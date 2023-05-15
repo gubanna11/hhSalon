@@ -50,11 +50,17 @@
             <a routerLink="attendances/create">New appointment</a>
           </li>
 
+
           <li class="menu__link" *ngIf="isAuthorized">
             <a [routerLink]="['chat', '']">Chat</a>
             <span *ngIf="chatService.unreadCount > 0" style="margin-left: 5px">{{ chatService.unreadCount }}</span>
           </li>
 
+          
+          <li class="menu__link">
+            <a [routerLink]="['workers']">Workers</a>
+          </li>
+          
           <li class="menu__link" *ngIf="isAuthorized">
             <div class="menu__link-name">
               <a class="">
@@ -71,6 +77,7 @@
 
           </li>
 
+
           <ng-container *ngIf="role == 'Admin'">
             <li class="menu__link">
               <div class="menu__link-name">
@@ -85,11 +92,13 @@
                 
                 <li class="menu__sub-link"><a routerLink="workers"><i class="bi bi-person-square"></i> Workers</a></li>
                 <li class="menu__sub-link"><a routerLink="users"><i class="bi bi-person-square"></i> Users</a></li>
-                
+                <li class="menu__sub-link"><a routerLink="all-attendances"><i class="bi bi-person-square"></i> Attendances</a></li>
+
                   <li class="menu__sub-link"><a routerLink="sign-up"><i class="bi bi-person-square"></i> New Client</a></li>
                   <li class="menu__sub-link"><a routerLink="worker-create"><i class="bi bi-person-square"></i> New Worker</a></li>
                   <li class="menu__sub-link"><a routerLink="admin-create"><i class="bi bi-person-square"></i> New Admin</a></li>
                 
+                  
               </ul>
             </li>
           </ng-container>

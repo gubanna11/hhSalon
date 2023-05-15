@@ -14,7 +14,6 @@ namespace hhSalon.Domain.Concrete.EntityConfiguration
 		public void Configure(EntityTypeBuilder<Attendance> builder)
 		{
 			builder.HasIndex(att => new { att.ClientId, att.Date, att.ServiceId }).IsUnique();
-			//builder.HasIndex(att => new { att.WorkerId, att.Date, att.ServiceId }).IsUnique();
 			builder.Property(a => a.Time).HasColumnType("time");
 			builder.Property(a => a.Date).HasColumnType("date");
 		}

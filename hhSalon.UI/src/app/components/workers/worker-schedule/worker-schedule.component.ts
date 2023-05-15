@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import { Days } from 'src/app/models/enums/Days';
 import { Schedule } from 'src/app/models/schedule';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { UsersService } from 'src/app/services/users.service';
 import { WorkersService } from 'src/app/services/workers.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-worker-schedule',
@@ -22,7 +22,6 @@ export class WorkerScheduleComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     private workersService:WorkersService,
-    private toast: NgToastService,
     private router: Router,
     private userStore: UserStoreService,
     private auth: AuthService,
@@ -34,10 +33,10 @@ export class WorkerScheduleComponent implements OnInit {
       const roleFromToken = this.auth.getRoleFromToken();
       let role = roleVal || roleFromToken;
       
-      if(role != 'Admin'){
-        this.toast.warning({detail: "Oooops..."});
-        this.router.navigate(['login']);
-      }
+      // if(role != 'Admin'){
+      //   this.toast.warning({detail: "Oooops..."});
+      //   this.router.navigate(['login']);
+      // }
     })
 
     const routeParams = this.route.snapshot.paramMap;
@@ -60,12 +59,14 @@ export class WorkerScheduleComponent implements OnInit {
     this.workersService.createWorkerSchedule(schedules) 
     .subscribe({
       next: (res) => {
-        this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
+        
+        toastr.success(res.message,'SUCCESS', {timeOut: 5000})
         
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+        
+        toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
       }
     })
  

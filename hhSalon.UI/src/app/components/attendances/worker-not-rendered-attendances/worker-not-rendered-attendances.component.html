@@ -15,7 +15,7 @@
         <p *ngIf="attendances.length === 0">Empty</p>
     </div>
     <div>
-        <table  class="attendances-table"> 
+        <table *ngIf="attendances.length > 0"  class="attendances-table"> 
             <thead> 
                 <tr>
                     <th>Service</th>

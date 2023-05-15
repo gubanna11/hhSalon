@@ -176,7 +176,7 @@ namespace hhSalonAPI.Controllers
 			{
 				return BadRequest();
 			}
-
+			workerVM.Id = Guid.NewGuid().ToString();
 
 			//double id
 			if (_context.Users.Where(u => u.Id == workerVM.Id).Count() > 0)
@@ -205,7 +205,7 @@ namespace hhSalonAPI.Controllers
 
 			workerVM.Token = "";
 
-			workerVM.Id = Guid.NewGuid().ToString();
+			
 
 			User user = new User
 			{

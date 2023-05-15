@@ -5,15 +5,15 @@
     <div>
         <img [src]="group.imgUrl" alt="" height="50px">
     </div>
-    <div>  
-        <label for="name"></label>
+    <div class="input-field">  
+        <label for="name">Name</label>
         <input id="name" [(ngModel)]="group.name">
     </div>
-    <div>  
-        <label for="img"></label>
+    <div class="input-field">  
+        <label for="img">Img</label>
         <input id="img" [(ngModel)]="group.imgUrl">
     </div>
     <div>
-        <button (click)="updateGroup(group)" type="submit">Save</button>
+        <button (click)="updateGroup(group)" type="submit" class="btn">Save</button>
     </div>
 </div>

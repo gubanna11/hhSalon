@@ -72,12 +72,13 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.HasIndex("WorkerId");
-
                     b.HasIndex("ClientId", "Date", "ServiceId")
                         .IsUnique();
 
-                    b.ToTable("Attendances");
+                    b.HasIndex("WorkerId", "Date", "ServiceId")
+                        .IsUnique();
+
+                    b.ToTable("Attendances", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Chat", b =>
@@ -113,7 +114,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.GroupOfServices", b =>
@@ -138,7 +139,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("groups_of_services");
+                    b.ToTable("groups_of_services", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Schedule", b =>
@@ -162,7 +163,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("WorkerId", "Day");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Service", b =>
@@ -187,7 +188,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.ServiceGroup", b =>
@@ -207,7 +208,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("ServiceId")
                         .IsUnique();
 
-                    b.ToTable("Services_Groups");
+                    b.ToTable("Services_Groups", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.User", b =>
@@ -246,7 +247,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Worker", b =>
@@ -267,7 +268,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workers");
+                    b.ToTable("Workers", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.WorkerGroup", b =>
@@ -284,7 +285,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Workers_Groups");
+                    b.ToTable("Workers_Groups", (string)null);
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Attendance", b =>

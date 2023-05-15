@@ -40,8 +40,9 @@ import { ChatInputComponent } from './components/chat-input/chat-input.component
 import { UpdateAttendanceComponent } from './components/attendances/update-attendance/update-attendance.component';
 import { TimeStringPipe } from './pipes/time-string.pipe';
 import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
-import * as toastr from 'toastr';
+//import * as toastr from 'toastr';
 import { UserEditComponent } from './components/users/user-edit/user-edit.component';
+import { AllAttendancesComponent } from './components/attendances/all-attendances/all-attendances.component';
 
 
 
@@ -79,6 +80,7 @@ import { UserEditComponent } from './components/users/user-edit/user-edit.compon
     UpdateAttendanceComponent,
     TimeStringPipe,
     UserEditComponent,
+    AllAttendancesComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
-<p>Attendances History {{workerName}}</p>
+<p class="title">Attendances History {{workerName}}</p>
 <div>
-    <table> 
+    <table class="attendances-table"> 
         <thead> 
             <tr>
                 <th>Service</th>
@@ -9,23 +9,27 @@
                 <th>Date</th>
                 <th>Time</th>
                 <th>Message</th>
+                <th>Edit</th>
                 <th></th>
             </tr>
         </thead>
         <tbody *ngFor="let attendance of attendances">
-            <tr>
+            <tr class="attendance-item">
                 <td>{{attendance.service.name}}</td>
                 <td>{{attendance.group.name}}</td>
                 <td>{{attendance.client.firstName}}</td>
                 <td>{{attendance.date | date}}</td>
                 <td>{{attendance.time | timeString}}</td>
                 <td><a [routerLink]="['/chat', attendance.client.id]">Message</a></td>
+                <td>
+                    <i (click)="editAttendance(attendance)" class="bi bi-pencil-fill"></i>
+                </td>
                 <td (click)="deleteAttendance(attendance.id)">
                     <i class="bi bi-trash"></i>
                 </td>
             </tr>
         </tbody>
     </table>
-
+    <app-update-attendance *ngIf="attendanceToEdit" (attendanceOutput)="newAttendance($event)" [attendance]="attendanceToEdit"></app-update-attendance>
 </div>
 

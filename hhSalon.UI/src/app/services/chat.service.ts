@@ -35,7 +35,6 @@ export class ChatService {
 
   constructor(private http: HttpClient,
      public toast: NgToastService,
-    //private toast: ToastrService,
     private usersService:UsersService,
     private router: Router
     ) {  
@@ -103,6 +102,7 @@ export class ChatService {
 
               this.saveMessage(newMessage).subscribe(
                 () => { 
+             
                 });
 
           }    
@@ -123,7 +123,7 @@ export class ChatService {
                     this.saveMessage(newMessage).subscribe(
                       {
                         next: () =>{
-                          
+          
                         },
                         error: (error)=> console.log(error.error)            
                       });
@@ -136,10 +136,10 @@ export class ChatService {
                             console.log(error.error)
                           }
                         )
-                  }
+                }
           
           this.updateChatList(newMessage);
-          
+            
           this.unreadCount = this.chatList.filter(l => l.messageUnreadCount > 0 && l.toUserId === this.userId).length;
           
           return;
@@ -212,7 +212,7 @@ export class ChatService {
       }
 
 
-      updateChatList(newMessage:Message){
+    updateChatList(newMessage:Message){
 
         this.chatList.map(
           c => {
@@ -234,28 +234,33 @@ export class ChatService {
         )
 
         
+        //if(this.chatList.filter(c => c.toUserId === newMessage.toId || c.userId === newMessage.toId).length === 0){
+        if(this.chatList.filter(c => (c.userId === newMessage.fromId && c.toUserId == newMessage.toId)
+         || (c.userId === newMessage.toId && c.toUserId == newMessage.fromId)).length === 0){
+            
+            let item: ChatItem = {
+              lastMessage : newMessage.content,
+              userId : newMessage.fromId,
+              user : newMessage.fromUser,
 
-        if(this.chatList.filter(c => c.toUserId === newMessage.toId || c.userId === newMessage.toId).length === 0){
-          let item: ChatItem = {
-            lastMessage : newMessage.content,
-            userId : newMessage.fromId,
-            user : newMessage.fromUser,
+              messageUnreadCount: 1,
 
-            messageUnreadCount: 1,
+              toUserId : newMessage.toId,
+              toUser : newMessage.toUser,
+              isRead : newMessage.isRead,
+              date: newMessage.date
+            }
 
-            toUserId : newMessage.toId,
-            toUser : newMessage.toUser,
-            isRead : newMessage.isRead,
-            date: newMessage.date
-          }
+            if(newMessage.isRead){
+              item.messageUnreadCount = 0;
+            }else{
+              item.messageUnreadCount = 1;
+            }
 
-          if(newMessage.isRead){
-            item.messageUnreadCount = 0;
-          }else{
-            item.messageUnreadCount = 1;
-          }
+            this.chatList = [...this.chatList, item];
 
-          this.chatList = [...this.chatList, item]
+            console.log(this.chatList);
+            
         }
 
         this.chatList.sort((a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()));

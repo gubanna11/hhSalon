@@ -12,7 +12,7 @@
 }
 
 .header__container {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0px auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -29,6 +29,7 @@
 
 .header__menu{
   justify-content: space-between;
+  padding-left: 44px;
 }
 
 .header__logo{
@@ -189,7 +190,7 @@
 // }
 
 .identity-sign-in {
-  padding: 26px 0px;
+   padding: 26px 0px;
 }
 
 .identity-sign-out {
@@ -217,12 +218,32 @@
   transition: all 0.8s ease;
   position: absolute;
   top: 100%;
-  min-width: 200px;
+  left: 0;
+  //min-width: 200px;
+  width: 100%;
   padding: 20px 25px;
   border: 1px solid #d8dede;
   border-radius: 7px;
   background-color: #fff;
   pointer-events: none;
+
+  div{
+    a{
+      margin-left: 8px;
+    }
+    a:hover{
+      color: $beigeColor;
+
+      -webkit-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+    }
+  }
+}
+
+
+.identity-dropdown div:last-child{
+  
+  padding-bottom: 0;
 }
 
 .identity-sign-in__info{

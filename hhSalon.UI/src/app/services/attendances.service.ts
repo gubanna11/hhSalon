@@ -71,4 +71,14 @@ export class AttendancesService {
     return this.http.delete(`${environment.apiUrl}/${this.url}/${id}`)
   }
   
+
+
+
+  public getAllAttendances(){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/all-attendances`);
+  }
+
+  public filterAttendances(content: string){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}?content=${content}`);
+  }
 }

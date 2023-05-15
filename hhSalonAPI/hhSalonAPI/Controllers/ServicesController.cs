@@ -1,11 +1,14 @@
 ﻿using hhSalon.Domain.Entities;
+using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.Services.Interfaces;
 using hhSalon.Services.ViewModels;
 using hhSalonAPI.Domain.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace hhSalonAPI.Controllers
 {
@@ -30,6 +33,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<ServiceVM>>> CreateService(ServiceVM newService)
 		{
 			try
@@ -45,6 +49,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<ServiceVM>>> DeleteService(int id)
 		{
 			var serviceVM = await _servicesService.GetServiceByIdWithGroupAsync(id);
@@ -55,6 +60,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpPut]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<ServiceVM>>> UpdateService(ServiceVM serviceVM)
 		{
 			try
@@ -65,7 +71,7 @@ namespace hhSalonAPI.Controllers
 			}
 			catch (DbUpdateException)
 			{
-				return BadRequest(new { Message = "This Service already exist!" });
+				return BadRequest(new { Message = "This Service already exists!" });
 			}			
 
 		}

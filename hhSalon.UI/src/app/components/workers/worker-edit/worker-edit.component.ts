@@ -1,6 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgToastComponent, NgToastService } from 'ng-angular-popup';
 import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -23,7 +22,6 @@ export class WorkerEditComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private workersService: WorkersService,
-    private toast: NgToastService,
     private groupsService: GroupsService,
     ){
 
@@ -68,16 +66,14 @@ export class WorkerEditComponent implements OnInit{
     this.workersService.updateWorker(this.worker).subscribe(
       {
         next: res =>{
-          //this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
-          toastr.success(res.message, 'SUCCESS');
+          toastr.success(res.message, 'SUCCESS', {timeOut: 5000});
 
           this.router.navigate(['/workers']);
         },
         error: (err) => {
           console.log(err.error.message);
           
-          toastr.success(err.error.message, 'ERROR');
-          //this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+          toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
         }
       }
     )

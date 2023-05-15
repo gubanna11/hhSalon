@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { AuthService } from 'src/app/services/auth.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-sign-up',
@@ -17,10 +17,11 @@ export class SignUpComponent implements OnInit{
 
   signUpForm! : FormGroup;
 
+  passwordMismatch: boolean = false;
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private auth: AuthService,
-    private toast: NgToastService
     ){
 
   }
@@ -44,18 +45,18 @@ export class SignUpComponent implements OnInit{
     this.isText ? this.type = "text" : this.type = "password";
   }
 
-  get passwordMismatch() {
-    const password = this.signUpForm.get('password');
-    const confirmPassword = this.signUpForm.get('confirmPassword');
-      if(password && confirmPassword)
-        return password.value !== confirmPassword.value;   
-      return true;
-  }
+  // get passwordMismatch() {
+  //   const password = this.signUpForm.get('password');
+  //   const confirmPassword = this.signUpForm.get('confirmPassword');
+  //     if(password && confirmPassword)
+  //       return password.value !== confirmPassword.value;   
+  //     return true;
+  // }
 
   confirmPassword(confirmPassword:any){
-    if(confirmPassword){
-      confirmPassword.value
-    }
+    const password = this.signUpForm.get('password');
+      if(password && confirmPassword)
+        this.passwordMismatch = password.value !== confirmPassword.value;         
   }
 
   onSingUp(){
@@ -65,12 +66,12 @@ export class SignUpComponent implements OnInit{
       this.auth.signUp(this.signUpForm.value)
         .subscribe({
           next: (res) => {
-            this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
+            toastr.success(res.message, 'SUCCESS', {timeOut: 5000});
             //this.signUpForm.reset();
             this.router.navigate(['/login']);
           },
           error: (err) => {
-            this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+            toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
           }
         })
     }else{

@@ -1,19 +1,20 @@
 
 <div *ngIf="group">
+    <p class="title">New Group</p>
     <p style="color:red">{{ mistake }}</p>
-    <div>
+    <div class="input-field">
         <img [src]="group.imgUrl" alt="" height="100px">
         <br>
         <label for="img">Group Image</label>
         <input id="img" [(ngModel)]="group.imgUrl" placeholder="Select...">
     </div>
 
-    <div>
+    <div class="input-field">
         <label for="name">Group Name</label>
         <input id="name" [(ngModel)]="group.name" placeholder="Name">
     </div>
    
     <div>
-        <button (click)="createGroup(group)" type="submit" value="Create"></button>
+        <button (click)="createGroup(group)" type="submit" class="btn">Create</button>
     </div>
 </div>

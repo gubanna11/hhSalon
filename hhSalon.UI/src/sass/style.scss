@@ -56,6 +56,16 @@ a{
 }
 
 
+
+.container-content{
+    height: 560px;  
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 .title{
     font-size: 24px;
     font-weight: 500;
@@ -101,12 +111,45 @@ padding-bottom: 8px;
     display: block;
    }
    display: flex;
-   width: 70%;
+   width: 80%;
 }
 
 .item-name{
     width: 90%;    
 }
+
+
+
+
+
+
+
+
+
+
+
+.delete__confirmed {
+    
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+}
+
+.delete > form > input {
+}
+
+.delete.active > .delete__confirmed {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+    
+}
+
+
+
+
+
 
 ///////////////////////////////////////////////////////
 /// ///////////////////////////////////////////////////////

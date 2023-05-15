@@ -14,11 +14,10 @@ export class AuthGuard implements CanActivate {
     ){
       //toastr.options.timeOut = 30000;      
   }
-  canActivate():boolean{
+  canActivate():boolean{    
     if(this.auth.isLoggedIn())
       return true;
 
-    //this.toast.error({detail: "ERROR", summary: "Log in!", duration: 5000})
     toastr.error('Log in', 'Error', {timeOut: 5000});
     this.router.navigate(['/login']);
     return false;

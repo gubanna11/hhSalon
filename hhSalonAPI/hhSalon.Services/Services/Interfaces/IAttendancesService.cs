@@ -6,6 +6,9 @@ namespace hhSalon.Services.Services.Interfaces
 {
     public interface IAttendancesService : IEntityBaseRepository<Attendance>
 	{
+		Task<IEnumerable<Attendance>> GeAllAttendances();
+		Task<IEnumerable<Attendance>> GeAttendancesBySearch(string content);
+
 
 		Task AddNewAttendanceAsync(NewAttendanceVM newAttendance);
 

@@ -42,7 +42,7 @@
 
                 <div class="input-field">
                     <span class="fa fa-lock"></span>
-                    <input (change)="confirmPassword(signUpForm.get('confirmPassword'))" formControlName="confirmPassword" [type]="type" placeholder="Confirm Password">
+                    <input (input)="confirmPassword(signUpForm.get('confirmPassword'))" formControlName="confirmPassword" [type]="type" placeholder="Confirm Password">
                     <p *ngIf="passwordMismatch">*Password doesn't match</p>
                 </div>
 

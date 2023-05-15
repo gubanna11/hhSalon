@@ -32,8 +32,8 @@ namespace hhSalonAPI.Controllers
 			}
 			catch(Exception ex)
 			{
-				if (ex.InnerException.Message.Contains("Dublicate"))
-					return BadRequest( new { Message = "You already have the appointment on the date"});
+				if (ex.InnerException.Message.Contains("Duplicate"))
+					return BadRequest( new { Message = "You already have the appointment with the same service on this date"});
 				return BadRequest();
 			}			
 		}
@@ -122,6 +122,31 @@ namespace hhSalonAPI.Controllers
 			await _attendancesService.DeleteAsync(id);
 
 			return Ok();
+		}
+
+
+
+
+		[HttpGet("all-attendances")]
+		public async Task<ActionResult> GetAllAttendances()
+		{
+			var attendances = await _attendancesService.GeAllAttendances();
+
+			return Ok(attendances);
+		}
+
+		[HttpGet]
+		public async Task<ActionResult> FilterAttendances([FromQuery]string content)
+		{
+			IEnumerable<Attendance> attendances = new List<Attendance>();
+
+			if (content == null)
+				attendances = await _attendancesService.GeAllAttendances();
+			
+			else 
+				attendances = await _attendancesService.GeAttendancesBySearch(content);
+
+			return Ok(attendances);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using hhSalon.Domain.Entities;
+using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -104,6 +105,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> DeleteGroupById(int id)
 		{
 			var group = await _groupsService.GetByIdAsync(id);

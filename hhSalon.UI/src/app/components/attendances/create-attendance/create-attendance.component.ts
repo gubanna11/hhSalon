@@ -1,7 +1,6 @@
 import { Time, getLocaleDateFormat } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import { Attendance } from 'src/app/models/attendance';
 import { Group } from 'src/app/models/group';
 import { Service } from 'src/app/models/service';
@@ -12,6 +11,7 @@ import { ServicesService } from 'src/app/services/services.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { UsersService } from 'src/app/services/users.service';
 import { WorkersService } from 'src/app/services/workers.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-create-attendance',
@@ -40,7 +40,6 @@ export class CreateAttendanceComponent implements OnInit {
     private groupsService: GroupsService,
     private servicesService: ServicesService,
     private workersService:  WorkersService,
-    private toast: NgToastService,
   ) {
     this.attendance = new Attendance();
     this.attendance.groupId = 1;
@@ -68,6 +67,7 @@ export class CreateAttendanceComponent implements OnInit {
   timeSelected(slot:any){
     if (this.activeSlot == slot){
       this.activeSlot = undefined;
+      this.attendance.time = undefined;
       return;
     }
 
@@ -121,6 +121,10 @@ export class CreateAttendanceComponent implements OnInit {
    
     if(this.attendance.date != undefined)
     {
+      
+      if(!this.dateIsCorrect())
+        return;
+
       this.slots = [];
       this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date).subscribe(
         result => {
@@ -146,12 +150,14 @@ export class CreateAttendanceComponent implements OnInit {
 
 
   createAttendance(attendance: Attendance){
+    if(attendance.time == undefined){
+      toastr.error('Select the time', 'Error', {timeOut: 2000});
+      return;
+    }
 
-  if(attendance.time == undefined){
-    this.toast.error({detail: 'Error', summary: 'Select the time!'})
-    return;
-  }
-  
+    if(!this.dateIsCorrect()){
+      return;
+    }
 
     this.userStore.getIdFromStore().subscribe(
       idValue => {
@@ -168,9 +174,30 @@ export class CreateAttendanceComponent implements OnInit {
       this.attendancesService.createAttendance(attendance).subscribe(
         {
           next: () => this.router.navigate(['my-not-rendered-attendances']),
-          error: (error) => console.log(error.error)          
+          error: (error) =>{
+            console.log(error.error)          
+            toastr.error(error.error.message, 'ERROR', {timeOut: 5000});
+          } 
         }        
         
       );
+  }
+
+
+  dateIsCorrect(){
+    if(this.attendance.date != undefined)
+    {
+      
+      if(new Date(this.attendance.date) < new Date(Date.now())){
+        console.log(new Date(this.attendance.date));
+        console.log(new Date(Date.now()));
+        
+          toastr.error("You can't choose this date", 'Error', {timeOut: 2000});
+          return false;
+      }
+      return true;
+    }
+
+    return false;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import { NgToastService } from 'ng-angular-popup';
 
 @Component({
@@ -7,12 +7,16 @@ import { NgToastService } from 'ng-angular-popup';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit{
 
   constructor(
   ){}
+  ngAfterViewInit(): void {
+    throw new Error('Method not implemented.');
+  }
  
   
   ngOnInit(): void {    
+     
   }
  }

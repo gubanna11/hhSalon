@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { AttendancesService } from 'src/app/services/attendances.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
@@ -14,6 +14,8 @@ export class WorkerHistoryComponent implements OnInit{
   workerId: string = "";
   workerName: string = "";
 
+  @Output() attendanceToEdit: any;
+  
   constructor(
     private attendanceService: AttendancesService,
      private userStore: UserStoreService,
@@ -45,7 +47,29 @@ export class WorkerHistoryComponent implements OnInit{
 
   deleteAttendance(id: number){
     this.attendanceService.deleteAttendance(id).subscribe(
-      
+        () => {
+          this.attendanceService.WorkerHistoryAttendances(this.workerId).subscribe(
+            result => {
+              this.attendances = result;
+            }
+          )   
+        }
       )
+  }
+
+
+  editAttendance(attendance:any){
+    this.attendanceToEdit = attendance;
+  }
+
+  newAttendance(attendances:any){
+    this.attendanceToEdit = undefined;
+
+    this.attendanceService.WorkerHistoryAttendances(this.workerId).subscribe(
+      result => {
+        this.attendances = result;
+      }
+    )   
+    
   }
 }

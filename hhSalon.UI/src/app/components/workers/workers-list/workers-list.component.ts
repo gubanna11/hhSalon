@@ -24,7 +24,8 @@ export class WorkersListComponent implements OnInit{
 
   deleteWorker(workerId:string){
     this.workersService.deleteWorker(workerId).subscribe(
-      result => {this.workers = result; console.log(result);
+      result => {
+        this.workers = result;
       }
     )
   }

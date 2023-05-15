@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
@@ -24,7 +23,6 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
      private router: Router,
      private auth: AuthService,
-     private toast: NgToastService,
      private sharedService: SharedService,
      private userStore: UserStoreService,
      private chatService: ChatService,
@@ -72,7 +70,6 @@ export class LoginComponent implements OnInit {
             this.userStore.setRoleForStore(tokenPayload.role);
             this.userStore.setIdForStore(tokenPayload.nameid);
             
-            //this.toast.success({detail: "SUCCESS", summary: res.message.toString(), sticky:true, position:'tr',duration:3000 });
             toastr.success(tokenPayload.unique_name, 'Success', {timeOut: 1000});
 
             this.chatService.addUser(tokenPayload.nameid).subscribe(
@@ -89,8 +86,7 @@ export class LoginComponent implements OnInit {
           error:(err) => {
             //alert(err?.error.message);       
             console.log(err.error.message);
-                 
-            this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+            toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
           }
         });
       
@@ -99,7 +95,6 @@ export class LoginComponent implements OnInit {
       //throw the error using toaster and with required fields
       ValidateForm.validateAllFormFields(this.loginForm);
       
-      //  alert("invalid");
     }
   }
 
