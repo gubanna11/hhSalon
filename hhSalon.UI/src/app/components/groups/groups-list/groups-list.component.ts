@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Group } from 'src/app/models/group';
-import { EventsService } from 'src/app/services/events.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -10,18 +9,14 @@ import { SharedService } from 'src/app/services/shared.service';
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
 })
-export class GroupsListComponent implements OnInit, AfterViewInit{
+export class GroupsListComponent implements OnInit{
   groups:Group[] = [];
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
               private router: Router,
-              public eventsService: EventsService,
       ){
       }
-  ngAfterViewInit(): void {
-    this.eventsService.confirmDelete();
-  }
 
  
   ngOnInit(): void {
@@ -32,13 +27,6 @@ export class GroupsListComponent implements OnInit, AfterViewInit{
     
   }
 
-  confirmDelete(){
-    //console.log(event.target);
-    
-    //console.log(document.getElementsByClassName('delete')[0]);
-    //console.log(document);
-    
-  }
 
   deleteGroup(group: Group){
 

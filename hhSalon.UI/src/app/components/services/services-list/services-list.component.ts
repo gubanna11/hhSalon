@@ -1,8 +1,10 @@
 import { Component,  OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Service } from 'src/app/models/service';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { ServicesService } from 'src/app/services/services.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-services-list',
@@ -14,10 +16,13 @@ export class ServicesListComponent implements OnInit {
   services: Service[] = [];
 
   serviceToEdit?:Service | null;
-
+  role: string = '';
+  
   constructor(private servicesService: ServicesService,
     private route: ActivatedRoute,
-    private router: Router){
+    private router: Router,
+    private userStore: UserStoreService,
+    private auth: AuthService){
 
   }
 
@@ -38,6 +43,12 @@ export class ServicesListComponent implements OnInit {
         (services: Service[]) => this.services = services
       );
     })
+
+    this.userStore.getRoleFromStore().subscribe(
+      roleValue => {
+        const roleFromToken = this.auth.getRoleFromToken();
+        this.role = roleValue || roleFromToken;
+     })  
   }
 
 

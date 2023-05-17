@@ -14,11 +14,11 @@
                 <span class="item-price">{{service.price}} </span>  
             </div>
     
-            <div (click)="updateService(service)">
+            <div *ngIf="role === 'Admin'" (click)="updateService(service)">
                 <i  class="bi bi-pencil-fill"></i>
             </div>
             
-            <div  (click)="deleteService(service)">
+            <div *ngIf="role === 'Admin'" (click)="deleteService(service)">
                 <i class="bi bi-trash"></i>
             </div>
             

@@ -1,5 +1,6 @@
 <!-- <div *ngFor="let day of Days | enumToArray;"> -->
-<div class="container container-content">
+<div class="container" style="display: flex; flex-direction: column; align-items: center;">
+    <p class="title">Create Schedule</p>
     <div *ngFor="let schedule of schedules">
         <p>{{ schedule.day }} </p>
         <div>
