@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace hhSalonAPI.Controllers
@@ -30,12 +31,23 @@ namespace hhSalonAPI.Controllers
 
 		
 		[HttpPost]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> CreateGroup(GroupOfServices newGroup)
 		{
+			try
+			{
+				await _groupsService.AddAsync(newGroup);
 
-			await _groupsService.AddAsync(newGroup);
-
-			return Ok(await _groupsService.GetAllAsync());
+				return Ok(await _groupsService.GetAllAsync());
+			}
+			catch (DbUpdateException)
+			{
+				return BadRequest(new { Message = "This Group already exists!" });
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 
 		private async void UploadFIle()
@@ -97,6 +109,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpPut]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> UpdateGroup(GroupOfServices group)
 		{
 			await _groupsService.UpdateGroupAsync(group);

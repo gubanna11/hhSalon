@@ -39,6 +39,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpGet("my-not-rendered-not-paid-attendances/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyNotRenderedNotPaidAttendances(string userId)
 		{
 			var attendances = await _attendancesService.MyNotRenderedNotPaidAttendances(userId);
@@ -47,6 +48,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpGet("my-not-rendered-is-paid-attendances/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyNotRenderedIsPaidAttendances(string userId)
 		{
 			var attendances = await _attendancesService.MyNotRenderedIsPaidAttendances(userId);
@@ -55,6 +57,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpGet("my-history/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyHistory(string userId)
 		{
 			var attendances = await _attendancesService.MyIsRenderedAttendances(userId);
@@ -66,6 +69,7 @@ namespace hhSalonAPI.Controllers
 		//WORKERS DATA
 
 		[HttpGet("worker-history/{workerId}")]
+
 		public async Task<ActionResult> WorkerHistory(string workerId)
 		{
 			var attendances = await _attendancesService.WorkerIsRenderedAttendances(workerId);

@@ -19,6 +19,9 @@ namespace hhSalon.Services.Services.Implementations
         {
             var services = await _context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == groupId).ToListAsync();
 
+            if(services.Count == 0)
+                throw new NullReferenceException();
+
             List<ServiceVM> servicesVM = new List<ServiceVM>();
 
             foreach (var service in services)
@@ -65,31 +68,40 @@ namespace hhSalon.Services.Services.Implementations
             {
                 service.Name = serviceVM.Name;
                 service.Price = serviceVM.Price;
+
+                if (service.ServiceGroup.GroupId != serviceVM.GroupId)
+                {
+                    var service_group = _context.Services_Groups.Where(sg => sg.ServiceId == service.Id).FirstOrDefault();
+                _context.Services_Groups.Remove(service_group);
+
+                ServiceGroup newService_Group = new ServiceGroup()
+                {
+                    ServiceId = service.Id,
+                    GroupId = serviceVM.GroupId
+                };
+
+                await _context.Services_Groups.AddAsync(newService_Group);
+                await _context.SaveChangesAsync();
+                }
             }
-
-            var service_group = _context.Services_Groups.Where(sg => sg.ServiceId == service.Id).FirstOrDefault();
-            _context.Services_Groups.Remove(service_group);
-
-            ServiceGroup newService_Group = new ServiceGroup()
-            {
-                ServiceId = service.Id,
-                GroupId = serviceVM.GroupId
-            };
-
-            await _context.Services_Groups.AddAsync(newService_Group);
-            await _context.SaveChangesAsync();
+            else
+                throw new NullReferenceException();           
         }
 
-        public async Task<ServiceVM> GetServiceByIdWithGroupAsync(int id)
+        public async Task<ServiceVM> GetServiceVMByIdAsync(int id)
         {
 
-            //var service = await _context.Services.Where(s => s.Id == id)
-            //	.Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
-
-            var groupId = await _context.Services_Groups.Where(sg => sg.ServiceId == id).Select(sg => sg.GroupId).FirstOrDefaultAsync();
+			//var service = await _context.Services.Where(s => s.Id == id)
+			//	.Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
 
 
-            var service = await _context.Services.Where(s => s.Id == id).FirstOrDefaultAsync();
+			var service = await _context.Services.Where(s => s.Id == id).FirstOrDefaultAsync();
+
+            if(service == null)
+                throw new NullReferenceException();
+
+			var groupId = await _context.Services_Groups.Where(sg => sg.ServiceId == id).Select(sg => sg.GroupId).FirstOrDefaultAsync();
+                        
 
             return new ServiceVM() { Id = id, Name = service.Name, Price = service.Price, GroupId = groupId };
         }

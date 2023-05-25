@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Group } from 'src/app/models/group';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-groups-list',
@@ -11,10 +13,13 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class GroupsListComponent implements OnInit{
   groups:Group[] = [];
+  role: string = '';
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
               private router: Router,
+              private userStore: UserStoreService,
+              private auth: AuthService,
       ){
       }
 
@@ -24,7 +29,11 @@ export class GroupsListComponent implements OnInit{
       (result: Group[]) => {this.groups = result; }
     );
     
-    
+    this.userStore.getRoleFromStore().subscribe(
+      roleValue => {
+        const roleFromToken = this.auth.getRoleFromToken();
+        this.role = roleValue || roleFromToken;
+     })  
   }
 
 

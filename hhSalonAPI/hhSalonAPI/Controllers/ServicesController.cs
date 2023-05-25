@@ -17,51 +17,70 @@ namespace hhSalonAPI.Controllers
 	public class ServicesController : ControllerBase
 	{
 		private readonly IServicesService _servicesService;
-		private readonly IGroupsService _groupsService;
 
-		public ServicesController(IServicesService servicesService, AppDbContext context, IGroupsService groupsService)
+		public ServicesController(IServicesService servicesService)
 		{
 			_servicesService = servicesService;
-			_groupsService = groupsService;
 		}
 
 
 		[HttpGet("{groupId}")]
-		public async Task<ActionResult<List<ServiceVM>>> GetServicesByGroupId(int groupId)
+		public  async Task<IActionResult> GetServiceVMsByGroupId(int groupId)
 		{
-			return Ok(await _servicesService.GetServicesByGroupIdAsync(groupId));
+			try
+			{
+				var services = await _servicesService.GetServicesByGroupIdAsync(groupId);
+				return Ok(services);
+			}
+			catch(Exception ex)
+			{
+				return NotFound(new { Message = ex.Message });
+			}
 		}
 
 		[HttpPost]
 		[Authorize(Roles = UserRoles.Admin)]
-		public async Task<ActionResult<List<ServiceVM>>> CreateService(ServiceVM newService)
+		public async Task<IActionResult> CreateService(ServiceVM newService)
 		{
 			try
 			{
 				await _servicesService.AddNewServiceAsync(newService);
+				return Ok(await _servicesService.GetServicesByGroupIdAsync(newService.GroupId));
 			}
 			catch (DbUpdateException)
 			{
 				return BadRequest(new { Message = "This Service already exists!" });
-			}
-
-			return Ok(await _servicesService.GetServicesByGroupIdAsync(newService.GroupId));
+			}			
 		}
 
 		[HttpDelete("{id}")]
 		[Authorize(Roles = UserRoles.Admin)]
-		public async Task<ActionResult<List<ServiceVM>>> DeleteService(int id)
+		public async Task<IActionResult> DeleteService(int id)
 		{
-			var serviceVM = await _servicesService.GetServiceByIdWithGroupAsync(id);
-			
-			await _servicesService.DeleteAsync(id);
+			try
+			{
+				var serviceVM = await _servicesService.GetServiceVMByIdAsync(id);
 
-			return Ok(await _servicesService.GetServicesByGroupIdAsync(serviceVM.GroupId));
+				await _servicesService.DeleteAsync(id);
+
+				try
+				{
+					return Ok(await _servicesService.GetServicesByGroupIdAsync(serviceVM.GroupId));
+				}
+				catch(Exception ex)
+				{
+					return Ok(null);
+				}
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 
 		[HttpPut]
 		[Authorize(Roles = UserRoles.Admin)]
-		public async Task<ActionResult<List<ServiceVM>>> UpdateService(ServiceVM serviceVM)
+		public async Task<IActionResult> UpdateService(ServiceVM serviceVM)
 		{
 			try
 			{
@@ -72,8 +91,11 @@ namespace hhSalonAPI.Controllers
 			catch (DbUpdateException)
 			{
 				return BadRequest(new { Message = "This Service already exists!" });
-			}			
-
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 	}
 }

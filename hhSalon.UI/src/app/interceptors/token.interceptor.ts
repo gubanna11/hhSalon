@@ -28,14 +28,14 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const myToken = this.auth.getToken();
     
-    if(myToken){
+    if(myToken){      
       request = request.clone({        
         setHeaders: {Authorization: `Bearer ${myToken}`}
       })
     }
 
     return next.handle(request).pipe(
-      catchError((err:any) => {
+      catchError((err:any) => {        
         if(err instanceof HttpErrorResponse){
           if(err.status === 401){                   
             this.userStore.setRoleForStore("Client");

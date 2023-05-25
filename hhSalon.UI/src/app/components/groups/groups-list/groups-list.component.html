@@ -2,22 +2,21 @@
 <div class="container">
   <div class="items">
       <p class="title">Groups of services</p>
-   <div class="item" *ngFor="let group of groups">
+    <div class="item" *ngFor="let group of groups">
 
-      <div class="item-data" [routerLink]="['/services', group.id, group.name]">
-        <img class="item-img" [src]="group.imgUrl" alt="" height="50px">
-         <a class="name">{{ group.name }}</a>
-         
+        <div class="item-data" [routerLink]="['/services', group.id, group.name]">
+          <img class="item-img" [src]="group.imgUrl" alt="" height="50px">
+          <a class="name">{{ group.name }}</a>         
+        </div>
+
+      <div *ngIf="role === 'Admin'">
+          <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
       </div>
-
-     <div>
-         <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
-     </div>
-     
-     <div class="delete">
-         <a class="delete-confirm"><i class="bi bi-trash"></i></a>
-         <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a>
-     </div>
+      
+      <div *ngIf="role === 'Admin'" class="delete">
+          <a class="delete-confirm"><i class="bi bi-trash"></i></a>
+          <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a>
+      </div>
     
    </div>
   </div>
