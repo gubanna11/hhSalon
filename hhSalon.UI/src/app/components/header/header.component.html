@@ -29,6 +29,10 @@
 <header class="header">
   <nav class="header__container">
 
+    <div class="menu_img" #menu_icon>
+      <img src="assets/img/icons/menu.png" alt="">
+    </div>
+
     <a class="header__logo" routerLink="/">
       hhSalon</a>
     
@@ -36,87 +40,98 @@
       <nav class="menu__body">
         <ul class="menu__list">
 
-          <li class="menu__link">
-              <div class="menu__link-name">
-                <a routerLink="groups">
-                  Groups
-                </a>
-                <span class="menu__arrow"></span>
-              </div>
-              <app-groups-menu class="menu__sub-list"></app-groups-menu>
-          </li>
+          <div class="menu__link_div" #menu__link>
+              <li class="menu__link" >
+                <div class="menu__link-name">
+                    <a routerLink="groups" #link>
+                      Groups
+                    </a>
+                  <span class="menu__arrow"></span>
+                </div>
+                <app-groups-menu class="menu__sub-list"></app-groups-menu>
+            </li>
+          </div>
+          
 
           <li class="menu__link">
-            <a routerLink="attendances/create">New appointment</a>
+            <a routerLink="attendances/create" #link>New appointment</a>
           </li>
 
 
           <li class="menu__link" *ngIf="isAuthorized">
-            <a [routerLink]="['chat', '']">Chat</a>
+            <a [routerLink]="['chat', '']" #link>Chat</a>
             <span *ngIf="chatService.unreadCount > 0" style="margin-left: 5px">{{ chatService.unreadCount }}</span>
           </li>
 
           
           <li class="menu__link">
-            <a [routerLink]="['workers']">Workers</a>
+            <a [routerLink]="['workers']" #link>Workers</a>
           </li>
           
-          <li class="menu__link" *ngIf="isAuthorized">
-            <div class="menu__link-name">
-              <a class="">
-                <i class="bi bi-gear"></i>
-                My Attendances
-              </a>
-              <span class="menu__arrow"></span>
-            </div>
-            <ul class="menu__sub-list">
-              <li class="menu__sub-link"><a routerLink="my-history"><i class="bi bi-person-square"></i> History</a></li>
-              <li class="menu__sub-link"><a routerLink="my-not-rendered-attendances"><i class="bi bi-person-square"></i> Not rendered</a></li>
-                <!-- <li class="menu__sub-link"><a><i class="bi bi-person-square"></i> All Attendances</a></li> -->
-            </ul>
 
-          </li>
+          <span class="menu__link_div" [class.hide]="!isAuthorized" #menu__link >
+            <li class="menu__link" *ngIf="isAuthorized">
+            
+                <div class="menu__link-name">
+                  <a class="">
+                    <i class="bi bi-gear"></i>
+                    My Attendances
+                  </a>
+                  <span class="menu__arrow"></span>
+                </div>
+                <ul class="menu__sub-list">
+                  <li class="menu__sub-link" #link><a routerLink="my-history"><i class="bi bi-person-square"></i> History</a></li>
+                  <li class="menu__sub-link" #link><a routerLink="my-not-rendered-attendances"><i class="bi bi-person-square"></i> Not rendered</a></li>
+                    <!-- <li class="menu__sub-link"><a><i class="bi bi-person-square"></i> All Attendances</a></li> -->
+                </ul>
+            </li>
+         </span>
 
 
-          <ng-container *ngIf="role == 'Admin'">
-            <li class="menu__link">
-              <div class="menu__link-name">
-                <a class="">
-                  <i class="bi bi-gear"></i> Management
-                </a>
-                <span class="menu__arrow"></span>
-              </div>
-              <ul class="menu__sub-list">
-                <li class="menu__sub-link"><a routerLink="groups/create"><i class="bi bi-collection"></i> New Group</a></li>
-                <li class="menu__sub-link"><a routerLink="services/create"><i class="bi bi-receipt"></i> New Service</a></li>
-                
-                <li class="menu__sub-link"><a routerLink="workers"><i class="bi bi-person-square"></i> Workers</a></li>
-                <li class="menu__sub-link"><a routerLink="users"><i class="bi bi-person-square"></i> Users</a></li>
-                <li class="menu__sub-link"><a routerLink="all-attendances"><i class="bi bi-person-square"></i> Attendances</a></li>
-
-                  <li class="menu__sub-link"><a routerLink="sign-up"><i class="bi bi-person-square"></i> New Client</a></li>
-                  <li class="menu__sub-link"><a routerLink="worker-create"><i class="bi bi-person-square"></i> New Worker</a></li>
-                  <li class="menu__sub-link"><a routerLink="admin-create"><i class="bi bi-person-square"></i> New Admin</a></li>
-                
+      <div class="menu__link_div" [class.hide]="role != 'Admin'" #menu__link>
+          <li *ngIf="role == 'Admin'" class="menu__link">
+              <div >
+                <div class="menu__link-name">
+                  <a class="">
+                    <i class="bi bi-gear"></i> Management
+                  </a>
+                  <span class="menu__arrow"></span>
+                </div>
+                <ul class="menu__sub-list">
+                  <li class="menu__sub-link" #link><a routerLink="groups/create"><i class="bi bi-collection"></i> New Group</a></li>
+                  <li class="menu__sub-link" #link><a routerLink="services/create"><i class="bi bi-receipt"></i> New Service</a></li>
                   
-              </ul>
-            </li>
-          </ng-container>
-          
-          <ng-container *ngIf="role == 'Worker'">
-            <li class="menu__link">
-              <div class="menu__link-name">
-                <a class="">
-                  <i class="bi bi-gear"></i> Management
-                </a>
-                <span class="menu__arrow"></span>
+                  <li class="menu__sub-link" #link><a routerLink="workers"><i class="bi bi-person-square"></i> Workers</a></li>
+                  <li class="menu__sub-link" #link><a routerLink="users"><i class="bi bi-person-square"></i> Users</a></li>
+                  <li class="menu__sub-link" #link><a routerLink="all-attendances"><i class="bi bi-person-square"></i> Attendances</a></li>
+  
+                    <li class="menu__sub-link" #link><a routerLink="sign-up"><i class="bi bi-person-square"></i> New Client</a></li>
+                    <li class="menu__sub-link" #link><a routerLink="worker-create"><i class="bi bi-person-square"></i> New Worker</a></li>
+                    <li class="menu__sub-link" #link><a routerLink="admin-create"><i class="bi bi-person-square"></i> New Admin</a></li>
+                  
+                    
+                </ul>
               </div>
-              <ul class="menu__sub-list">                
-                  <li class="menu__sub-link"><a routerLink="worker-not-rendered"><i class="bi bi-person-square"></i> Not rendered</a></li>
-                  <li class="menu__sub-link"><a routerLink="worker-history"><i class="bi bi-person-square"></i> History</a></li>
-              </ul>
+          </li>
+        </div>
+
+
+        <div  class="menu__link_div" [class.hide]="role != 'Worker'"  #menu__link>
+            <li *ngIf="role == 'Worker'" class="menu__link" >
+              <ng-container >            
+                  <div class="menu__link-name">
+                    <a class="">
+                      <i class="bi bi-gear"></i> Management
+                    </a>
+                    <span class="menu__arrow"></span>
+                  </div>
+                  <ul class="menu__sub-list">                
+                      <li class="menu__sub-link" #link><a routerLink="worker-not-rendered"><i class="bi bi-person-square"></i> Not rendered</a></li>
+                      <li class="menu__sub-link" #link><a routerLink="worker-history"><i class="bi bi-person-square"></i> History</a></li>
+                  </ul>
+                </ng-container>
             </li>
-          </ng-container>
+       </div>
 
           <li class="menu__link">
             <a routerLink="contacts">Contacts</a>
@@ -129,39 +144,40 @@
     </div>
     
     
-
-	<div class="identity">
-		<a routerLink="login" *ngIf="!isAuthorized" class="sign-in">Login</a>
-		<a routerLink="sign-up" *ngIf="!isAuthorized" class="sign-up">Sign Up</a>
-	
-    <div *ngIf="isAuthorized">
+    <div #menu__link >
+      <div class="identity" >
+        <a routerLink="login" *ngIf="!isAuthorized" class="sign-in">Login</a>
+        <a routerLink="sign-up" *ngIf="!isAuthorized" class="sign-up">Sign Up</a>
       
-        <div class="identity-sign-in">
-          <!-- <img class="header-identity__img"> -->
-          <i class="bi bi-person"></i>
-          <div class="identity-sign-in__info">
-            {{ user.userName }}
+        <div *ngIf="isAuthorized">
+          
+            <div class="identity-sign-in">
+              <!-- <img class="header-identity__img"> -->
+              <i class="bi bi-person"></i>
+              <div class="identity-sign-in__info">
+                {{ user.userName }}
+              </div>
+            </div>
+        
+            <div class="identity-dropdown">
+                
+                  <div *ngIf="role === 'Worker'"  [routerLink]="['/workers/edit', id]">
+                    <i  class="bi bi-pencil-fill"></i>
+                    <a>Edit</a>
+                  </div>
+                  
+                  <div *ngIf="role !== 'Worker'"  [routerLink]="['/users/edit', id]">
+                    <i  class="bi bi-pencil-fill"></i>
+                    <a>Edit</a>
+                  </div>
+
+                  <div class="identity-sign-out"> 
+                      <i class="bi bi-box-arrow-right"></i>
+                      <a (click)="signOut()" *ngIf="isAuthorized">Sign Out</a>
+                </div>
+            </div>
           </div>
         </div>
-    
-        <div class="identity-dropdown">
-            
-              <div *ngIf="role === 'Worker'"  [routerLink]="['/workers/edit', id]">
-                <i  class="bi bi-pencil-fill"></i>
-                <a>Edit</a>
-              </div>
-              
-              <div *ngIf="role !== 'Worker'"  [routerLink]="['/users/edit', id]">
-                <i  class="bi bi-pencil-fill"></i>
-                <a>Edit</a>
-              </div>
-
-              <div class="identity-sign-out"> 
-                  <i class="bi bi-box-arrow-right"></i>
-                  <a (click)="signOut()" *ngIf="isAuthorized">Sign Out</a>
-            </div>
-        </div>
-      </div>
     </div>
   </nav>
 </header>

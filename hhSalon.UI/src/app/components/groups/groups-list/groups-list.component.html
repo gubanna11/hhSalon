@@ -1,21 +1,32 @@
 
 <div class="container">
-  <div class="items">
-      <p class="title">Groups of services</p>
-    <div class="item" *ngFor="let group of groups">
+  <div class="">
+    <p class="title">Groups of services</p>
+      <div class="groups">
+        <div class="group" *ngFor="let group of groups">
 
-        <div class="item-data" [routerLink]="['/services', group.id, group.name]">
-          <img class="item-img" [src]="group.imgUrl" alt="" height="50px">
-          <a class="name">{{ group.name }}</a>         
-        </div>
+          <div class="group-data" >
+            <img class="group-img" [src]="group.imgUrl" height="50px" *ngIf="group.imgUrl">
+            <img *ngIf="!group.imgUrl" src="assets/img/no-image.png">
+            
+            
+            
+              <div class="group-data__name-icons">
+                  <a [routerLink]="['/services', group.id, group.name]" class="group-name">{{ group.name }}</a>    
+                  <div class="group-icons">
+                      <div *ngIf="auth.role === 'Admin'">
+                        <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
+                      </div>
+                    
+                      <div *ngIf="auth.role === 'Admin'" class="delete">
+                          <a class="delete-confirm" (click)="deleteGroup(group)"><i class="bi bi-trash"></i></a>
+                          <!-- <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a> -->
+                      </div>
+                  </div>
+              </div>
+          </div>
 
-      <div *ngIf="role === 'Admin'">
-          <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
-      </div>
-      
-      <div *ngIf="role === 'Admin'" class="delete">
-          <a class="delete-confirm"><i class="bi bi-trash"></i></a>
-          <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a>
+           
       </div>
     
    </div>

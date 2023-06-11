@@ -19,23 +19,25 @@ namespace hhSalon.Services.Services.Implementations
         {
             var services = await _context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == groupId).ToListAsync();
 
-            if(services.Count == 0)
-                throw new NullReferenceException();
-
-            List<ServiceVM> servicesVM = new List<ServiceVM>();
-
-            foreach (var service in services)
+            if (services.Count != 0)
             {
-                ServiceVM serviceVM = new ServiceVM()
+                List<ServiceVM> servicesVM = new List<ServiceVM>();
+
+                foreach (var service in services)
                 {
-                    Id = service.Id,
-                    Name = service.Name,
-                    Price = service.Price,
-                    GroupId = service.ServiceGroup.GroupId
-                };
-                servicesVM.Add(serviceVM);
+                    ServiceVM serviceVM = new ServiceVM()
+                    {
+                        Id = service.Id,
+                        Name = service.Name,
+                        Price = service.Price,
+                        GroupId = service.ServiceGroup.GroupId
+                    };
+                    servicesVM.Add(serviceVM);
+                }
+                return servicesVM;
             }
-            return servicesVM;
+
+            return null;
         }
 
 
@@ -98,7 +100,7 @@ namespace hhSalon.Services.Services.Implementations
 			var service = await _context.Services.Where(s => s.Id == id).FirstOrDefaultAsync();
 
             if(service == null)
-                throw new NullReferenceException();
+                throw new Exception();
 
 			var groupId = await _context.Services_Groups.Where(sg => sg.ServiceId == id).Select(sg => sg.GroupId).FirstOrDefaultAsync();
                         

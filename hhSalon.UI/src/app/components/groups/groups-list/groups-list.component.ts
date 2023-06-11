@@ -13,13 +13,13 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 export class GroupsListComponent implements OnInit{
   groups:Group[] = [];
-  role: string = '';
+  // role: string = '';
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
               private router: Router,
               private userStore: UserStoreService,
-              private auth: AuthService,
+              public auth: AuthService,
       ){
       }
 
@@ -29,11 +29,12 @@ export class GroupsListComponent implements OnInit{
       (result: Group[]) => {this.groups = result; }
     );
     
-    this.userStore.getRoleFromStore().subscribe(
-      roleValue => {
-        const roleFromToken = this.auth.getRoleFromToken();
-        this.role = roleValue || roleFromToken;
-     })  
+    // this.userStore.getRoleFromStore().subscribe(
+    //   roleValue => {
+    //     const roleFromToken = this.auth.getRoleFromToken();
+    //     this.role = roleValue || roleFromToken;
+    //  })  
+
   }
 
 
@@ -41,11 +42,11 @@ export class GroupsListComponent implements OnInit{
 
     this.groupsService
       .deleteGroup(group)
-      .subscribe((groups) => {
-        this.groups = groups;
-        this.sharedService.sendData(groups);
-        //this.router.navigate(['groups'])
-      });
+        .subscribe((groups) => {
+          this.groups = groups;
+          this.sharedService.sendData(groups);
+          //this.router.navigate(['groups'])
+        });
   }
 
  

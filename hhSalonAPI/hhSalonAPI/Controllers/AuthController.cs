@@ -12,6 +12,9 @@ using hhSalonAPI.Domain.Concrete;
 using hhSalon.Domain.Entities;
 using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.ViewModels;
+using System.Security.Cryptography;
+using hhSalon.Services.Services.Interfaces;
+using hhSalon.Services.Models.Dto;
 
 namespace hhSalonAPI.Controllers
 {
@@ -21,10 +24,12 @@ namespace hhSalonAPI.Controllers
 	{
 		private readonly AppDbContext _context;
 		private readonly IConfiguration _configuration;
-		public AuthController(AppDbContext context, IConfiguration configuration)
+		private readonly IEmailService _emailService;
+		public AuthController(AppDbContext context, IConfiguration configuration, IEmailService emailService)
 		{
 			_context = context;
 			_configuration = configuration;
+			_emailService = emailService;
 		}
 
 		[HttpPost("authenticate")]
@@ -45,14 +50,29 @@ namespace hhSalonAPI.Controllers
 				return BadRequest(new { Message = "Incorrect password!" });
 
 
-			user.Token = CreateJwt(user);
 
+			//user.Token = CreateJwt(user);
 			//await _context.SaveChangesAsync();
 
-			return Ok(new
+			//return Ok(new
+			//{
+			//	Token = user.Token,
+			//	Message = "Login success!"
+			//});
+
+			user.Token = CreateJwt(user);
+			var newAccessToken = user.Token;
+			var newRefreshToken = CreateRefreshToken();
+
+			user.RefreshToken = newRefreshToken;
+			user.RefreshTokenExpiryTime = DateTime.Now.AddDays(5);
+
+			await _context.SaveChangesAsync();
+
+			return Ok(new TokenApiDto()
 			{
-				Token = user.Token,
-				Message = "Login success!"
+				AccessToken = newAccessToken,
+				RefreshToken = newRefreshToken
 			});
 		}
 
@@ -139,7 +159,8 @@ namespace hhSalonAPI.Controllers
 			var identity = new ClaimsIdentity(new Claim[]
 			{
 				new Claim(ClaimTypes.Role, user.Role),
-				new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+				//new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+				new Claim(ClaimTypes.Name, $"{user.UserName}"),
 				new Claim(ClaimTypes.NameIdentifier, user.Id),
 			});
 
@@ -159,12 +180,166 @@ namespace hhSalonAPI.Controllers
 		}
 
 
-		//[Authorize (Roles = UserRoles.Admin)]
-		//[HttpGet]
-		//public async Task<ActionResult<User>> GetAllUser()
-		//{
-		//	return Ok(await _context.Users.ToListAsync());
-		//}
+		private string CreateRefreshToken()
+		{
+			var tokenBytes = RandomNumberGenerator.GetBytes(64);
+			var refreshToken = Convert.ToBase64String(tokenBytes);
+
+			var tokenInUser = _context.Users
+				.Any(u => u.RefreshToken == refreshToken);
+
+			if (tokenInUser)
+			{
+				return CreateRefreshToken();
+			}
+			return refreshToken;
+		}
+
+
+
+		private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+		{
+			var key = Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Token").Value);
+			var tokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateAudience = false,
+				ValidateIssuer = false,
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = new SymmetricSecurityKey(key),
+				ValidateLifetime = false,
+			};
+
+			var tokenHandler = new JwtSecurityTokenHandler();
+			SecurityToken securityToken;
+			var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+
+			var jwtSecurityToken = securityToken as JwtSecurityToken;
+			if(jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+			{
+				throw new SecurityTokenException("This is Invalid Token");
+			}
+			return principal;
+		}
+
+
+
+		[HttpPost("refresh")]
+		public async Task<IActionResult> Refresh(TokenApiDto tokenApiDto)
+		{
+			if(tokenApiDto is null)
+				return BadRequest("Invalid Client Request");
+			
+			string accessToken = tokenApiDto.AccessToken;
+			string refreshToken = tokenApiDto.RefreshToken;
+
+			var principal = GetPrincipalFromExpiredToken(accessToken);
+
+			var userName = principal.Identity.Name;
+
+			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+			if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+				return BadRequest("Invalid Request");
+
+
+            var newAccessToken = CreateJwt(user);
+			var newRefreshToken = CreateRefreshToken();
+
+			user.RefreshToken = newRefreshToken;
+
+			await _context.SaveChangesAsync();
+
+			return Ok(new TokenApiDto()
+			{
+				AccessToken = newAccessToken,
+				RefreshToken = newRefreshToken,
+			});
+		}
+
+
+
+		[HttpPost("send-reset-email/{email}")]
+		public async Task<IActionResult> SendEmail(string email)
+		{
+			var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+			if(user is null)
+			{
+				return NotFound(new
+				{ 
+					StatusCOde = 404,
+					Message = "Email doesn't exist"
+				});
+			}
+
+			var tokenBytes = RandomNumberGenerator.GetBytes(64);
+			var emailToken = Convert.ToBase64String(tokenBytes);
+
+			user.ResetPasswordToken = emailToken;
+			user.ResetPasswordExpiry = DateTime.Now.AddMinutes(15);
+
+			string from = _configuration["EmailSettings:From"];
+			var emailModel = new EmailModel(email, "Reset Password", EmailBody.EmailStringBody(email, emailToken));
+
+			_emailService.SendEmail(emailModel);
+
+			_context.Entry(user).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+
+			return Ok(new
+			{
+				StatusCode = 200,
+				Message = "Email has sent!"
+			});
+		}
+
+
+		[HttpPost("reset-password")]
+		public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+		{
+			var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+
+			var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == resetPasswordDto.Email);
+
+            if (user is null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "User doesn't exist"
+                });
+            }
+
+			var tokenCode = user.ResetPasswordToken;
+			DateTime emailTokenExpiry = user.ResetPasswordExpiry;
+
+			if(tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
+			{
+				return BadRequest(new
+				{
+					StatusCode = 400,
+					Message = "Invalid Reset link"
+				});
+			}
+
+
+            //check password
+
+            var pass = CheckPasswordStrength(resetPasswordDto.NewPassword);
+            if (!string.IsNullOrEmpty(pass))
+                return BadRequest(new { Message = pass });
+
+
+
+            user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+			_context.Entry(user).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+
+			return Ok(new
+			{
+				StatusCode = 200,
+				Message = "Password reset successfully"
+			});
+        }
+
 
 
 
@@ -205,7 +380,7 @@ namespace hhSalonAPI.Controllers
 
 			workerVM.Token = "";
 
-			
+
 
 			User user = new User
 			{
@@ -249,15 +424,20 @@ namespace hhSalonAPI.Controllers
 			}
 
 			await _context.Workers_Groups.AddRangeAsync(list);
-			
+
 			await _context.SaveChangesAsync();
 
-			
+
 			return Ok(new
 			{
-				Message = "Worker Registered!", WorkerId = workerVM.Id
+				Message = "Worker Registered!",
+				WorkerId = workerVM.Id
 			});
 		}
+
+
+
+
 
 	}
 }

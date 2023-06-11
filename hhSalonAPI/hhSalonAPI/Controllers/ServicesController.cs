@@ -30,7 +30,11 @@ namespace hhSalonAPI.Controllers
 			try
 			{
 				var services = await _servicesService.GetServicesByGroupIdAsync(groupId);
-				return Ok(services);
+
+				if(services.Count == 0 || services == null)
+                    return NotFound(new { Message = "Empty!" });
+
+                return Ok(services);
 			}
 			catch(Exception ex)
 			{
@@ -65,11 +69,13 @@ namespace hhSalonAPI.Controllers
 
 				try
 				{
-					return Ok(await _servicesService.GetServicesByGroupIdAsync(serviceVM.GroupId));
+					var services = await _servicesService.GetServicesByGroupIdAsync(serviceVM.GroupId);
+
+                    return Ok(services);
 				}
 				catch(Exception ex)
 				{
-					return Ok(null);
+					return Ok(new { Message = ex.Message });
 				}
 			}
 			catch (Exception ex)

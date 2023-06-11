@@ -53,11 +53,18 @@ export class ServicesListComponent implements OnInit {
 
 
   deleteService(service:Service){
-    this.servicesService.deleteService(service).subscribe(
-      (services:Service[]) => {
-        this.services = services;
-        //this.router.navigate([`services/${service.groupId}/${this.groupName}`])
-      }
+    this.servicesService.deleteService(service).subscribe({
+          next: (services:Service[]) => {
+            this.services = services;
+            //this.router.navigate([`services/${service.groupId}/${this.groupName}`])
+            },
+            error: (err) => {
+              console.log(err.error.message);
+              
+            }
+
+        }
+      
       );
   }
 

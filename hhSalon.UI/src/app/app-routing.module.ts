@@ -27,11 +27,16 @@ import { WorkerGuard } from './guards/worker.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { WorkerAdminGuard } from './guards/worker-admin.guard';
 import { AllAttendancesComponent } from './components/attendances/all-attendances/all-attendances.component';
+import { ContactsComponent } from './components/contacts/contacts.component';
+import { HomeComponent } from './components/home/home.component';
+import { ResetComponent } from './components/reset/reset.component';
 
 const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forRoot([
+      {path: '', component: HomeComponent},
+
       {path: 'groups', component: GroupsListComponent},
       {path: 'groups/create', component: CreateGroupComponent, canActivate:[AdminGuard]},
       {path: 'groups/edit/:groupId', component: UpdateGroupComponent, canActivate:[AdminGuard]},
@@ -61,7 +66,9 @@ const routes: Routes = [];
 
       {path: 'chat/:toUser', component: ChatComponent, canActivate:[AuthGuard]},
 
+      {path: 'contacts', component: ContactsComponent},
 
+      {path: 'reset', component: ResetComponent},
     ])
   ],
   exports: [RouterModule]

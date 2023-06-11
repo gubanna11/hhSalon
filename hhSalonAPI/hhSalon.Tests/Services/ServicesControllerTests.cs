@@ -34,7 +34,7 @@ namespace hhSalon.Tests.Services
 		}
 
 		[Test, Order(1)]
-		public async Task HTTPGET_GetServicesByGroupIdAsync_ReturnOk()
+		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnOk()
 		{
 			int id = 1;
 			IActionResult actionResult = await servicesController.GetServiceVMsByGroupId(id);
@@ -50,9 +50,9 @@ namespace hhSalon.Tests.Services
 
 
 		[Test, Order(2)]
-		public async Task HTTPGET_GetServicesByGroupIdAsync_ReturnNotFound()
+		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnNotFound()
 		{
-			int id = 111;
+			int id = 1111;
 			IActionResult actionResult = await servicesController.GetServiceVMsByGroupId(id);
 
 			Assert.That(actionResult, Is.TypeOf<NotFoundObjectResult>());
@@ -60,7 +60,7 @@ namespace hhSalon.Tests.Services
 
 
 		[Test, Order(3)]
-		public async Task HTTPPUT_CreateService_ReturnOk()
+		public async Task ServicesController_CreateService_ReturnOk()
 		{
 			ServiceVM serviceVM = new ServiceVM()
 			{
@@ -80,7 +80,7 @@ namespace hhSalon.Tests.Services
 
 
 		[Test, Order(4)]
-		public async Task HTTPPUT_UpdateService_ReturnOk()
+		public async Task ServicesController_UpdateService_ReturnOk()
 		{
 			ServiceVM serviceVM = new ServiceVM()
 			{
@@ -99,7 +99,7 @@ namespace hhSalon.Tests.Services
 		}
 
 		[Test, Order(5)]
-		public async Task HTTPPUT_UpdateService_ReturnBadRequest()
+		public async Task ServicesController_UpdateService_ReturnBadRequest()
 		{
 			ServiceVM serviceVM = new ServiceVM()
 			{
@@ -116,7 +116,7 @@ namespace hhSalon.Tests.Services
 
 
 		[Test, Order(6)]
-		public async Task HTTPDELETE_DeleteService_ReturnOk()
+		public async Task ServicesController_DeleteService_ReturnOk()
 		{
 			IActionResult actionResult = await servicesController.DeleteService(5);
 
@@ -128,7 +128,7 @@ namespace hhSalon.Tests.Services
 
 
 		[Test, Order(7)]
-		public async Task HTTPDELETE_DeleteService_ReturnBadRequest()
+		public async Task ServicesController_DeleteService_ReturnBadRequest()
 		{
 			IActionResult actionResult = await servicesController.DeleteService(999);
 

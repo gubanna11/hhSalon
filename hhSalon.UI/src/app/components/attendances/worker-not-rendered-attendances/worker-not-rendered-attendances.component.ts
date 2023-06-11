@@ -45,7 +45,8 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
 
     this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
       result => {
-        this.attendances = result;          
+        this.attendances = result;  
+                
       }
     )    
   }
@@ -65,9 +66,10 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
     
   }
 
-  editAttendance(attendance:any){
+  editAttendance(attendance:any){    
     this.attendanceToEdit = attendance;
   }
+
 
   newAttendance(attendances:any){
     this.attendanceToEdit = undefined;

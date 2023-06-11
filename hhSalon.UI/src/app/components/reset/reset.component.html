@@ -1,0 +1,36 @@
+<div class="login">
+   
+   <div class="">
+        <h3 class="form-title" style="text-align: center;">Reset Password</h3>
+        <div>
+            <form [formGroup]="resetPasswordForm" class="form-auth">
+                <div class="input-field">
+                    <span class="fa fa-lock"></span>
+                    <input formControlName="password" type="password" placeholder="New Password">
+                    <p *ngIf="resetPasswordForm.controls['password'].dirty && resetPasswordForm.hasError('required', 'password')">
+                        *New Password is requiered
+                    </p>
+                </div>
+                
+
+                <div class="input-field">
+                    <span class="fa fa-lock"></span>
+                    <input formControlName="confirmPassword" placeholder="Confirm Password" type="password">
+                
+                    <p *ngIf="resetPasswordForm.controls['confirmPassword'].dirty && resetPasswordForm.hasError('required', 'confirmPassword')">
+                        *Confirm Password is requiered
+                    </p>
+                    <p *ngIf="resetPasswordForm.hasError('confirmPasswordValidator', 'confirmPassword')">
+                        *Password doesn't match
+                    </p>
+                </div>
+                
+
+                <button (click)="reset()" type="submit" class="btn">Reset</button>
+            
+            </form>
+            
+        </div>
+   </div>
+    
+</div>

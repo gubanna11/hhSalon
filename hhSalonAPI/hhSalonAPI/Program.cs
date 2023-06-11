@@ -36,6 +36,7 @@ builder.Services.AddScoped<IAttendancesService, AttendancesService>();
 builder.Services.AddScoped<IUsersService, UsersService>();	
 builder.Services.AddTransient<IWorkersService, WorkersService>();
 builder.Services.AddScoped<IChatDataService, ChatDataService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddSignalR();
 

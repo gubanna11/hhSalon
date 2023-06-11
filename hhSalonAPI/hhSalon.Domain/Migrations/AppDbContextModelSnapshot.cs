@@ -72,13 +72,12 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("ServiceId");
 
+                    b.HasIndex("WorkerId");
+
                     b.HasIndex("ClientId", "Date", "ServiceId")
                         .IsUnique();
 
-                    b.HasIndex("WorkerId", "Date", "ServiceId")
-                        .IsUnique();
-
-                    b.ToTable("Attendances", (string)null);
+                    b.ToTable("Attendances");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Chat", b =>
@@ -114,7 +113,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.GroupOfServices", b =>
@@ -139,7 +138,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("groups_of_services", (string)null);
+                    b.ToTable("groups_of_services");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Schedule", b =>
@@ -163,7 +162,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("WorkerId", "Day");
 
-                    b.ToTable("Schedules", (string)null);
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Service", b =>
@@ -188,7 +187,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.ServiceGroup", b =>
@@ -208,7 +207,7 @@ namespace hhSalon.Domain.Migrations
                     b.HasIndex("ServiceId")
                         .IsUnique();
 
-                    b.ToTable("Services_Groups", (string)null);
+                    b.ToTable("Services_Groups");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.User", b =>
@@ -232,6 +231,22 @@ namespace hhSalon.Domain.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("longtext")
                         .HasColumnName("password");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("refresh_token_exp_time");
+
+                    b.Property<DateTime>("ResetPasswordExpiry")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("reset_password_expiry");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("longtext")
+                        .HasColumnName("reset_password_token");
 
                     b.Property<string>("Role")
                         .HasColumnType("longtext")
@@ -268,7 +283,7 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workers", (string)null);
+                    b.ToTable("Workers");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.WorkerGroup", b =>
@@ -285,13 +300,13 @@ namespace hhSalon.Domain.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Workers_Groups", (string)null);
+                    b.ToTable("Workers_Groups");
                 });
 
             modelBuilder.Entity("hhSalon.Domain.Entities.Attendance", b =>
                 {
                     b.HasOne("hhSalon.Domain.Entities.User", "Client")
-                        .WithMany()
+                        .WithMany("Attendances")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -305,9 +320,9 @@ namespace hhSalon.Domain.Migrations
                         .HasForeignKey("ServiceId");
 
                     b.HasOne("hhSalon.Domain.Entities.Worker", "Worker")
-                        .WithMany()
+                        .WithMany("Attendances")
                         .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Client");
@@ -406,8 +421,15 @@ namespace hhSalon.Domain.Migrations
                     b.Navigation("ServiceGroup");
                 });
 
+            modelBuilder.Entity("hhSalon.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
             modelBuilder.Entity("hhSalon.Domain.Entities.Worker", b =>
                 {
+                    b.Navigation("Attendances");
+
                     b.Navigation("Schedules");
 
                     b.Navigation("Workers_Groups");

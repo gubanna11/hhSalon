@@ -14,8 +14,7 @@ import * as toastr from 'toastr';
 export class CreateGroupComponent implements OnInit{
   group? :Group;
   //file: File | null = null;
-  mistake?: string = "";
-
+  
   ngOnInit(): void {
   }
 
@@ -37,7 +36,12 @@ export class CreateGroupComponent implements OnInit{
         toastr.success('Group was created!', 'SUCCESS');
         this.router.navigate(['groups'])
         },
-        error: (error) =>  this.mistake = error.error.errors.Name,        
+        error: (err) =>{
+          //this.mistake = error.error.errors.Name, 
+          toastr.error(err.error.message, 'Error');
+      
+          
+        }         
       });
       
   }

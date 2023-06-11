@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
+import { ResetPasswordService } from 'src/app/services/reset-password.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import * as toastr from 'toastr';
@@ -20,13 +22,17 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
 
+
+  public resetPasswordEmail!: string;
+  public isValidEmail!: boolean;
+
   constructor(private formBuilder: FormBuilder,
      private router: Router,
      private auth: AuthService,
      private sharedService: SharedService,
      private userStore: UserStoreService,
      private chatService: ChatService,
-     
+     private resetService: ResetPasswordService,
      ){
 
   }
@@ -62,7 +68,8 @@ export class LoginComponent implements OnInit {
             
             //alert(res.message)
             this.loginForm.reset();
-            this.auth.storeToken(res.token);
+            this.auth.storeToken(res.accessToken);
+            this.auth.storeRefreshToken(res.refreshToken);
 
             const tokenPayload = this.auth.decodedToken();
             
@@ -79,7 +86,6 @@ export class LoginComponent implements OnInit {
               }              
             );
             
-
             this.sharedService.sendData(true);
             this.router.navigate(["/"]);
           },
@@ -96,6 +102,37 @@ export class LoginComponent implements OnInit {
       ValidateForm.validateAllFormFields(this.loginForm);
       
     }
+  }
+
+  checkValidEmail(event: string){
+    const value = event;
+    const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
+    this.isValidEmail = pattern.test(value);
+    return this.isValidEmail;
+  }
+
+
+
+  confirmToSend(){
+    if(this.checkValidEmail(this.resetPasswordEmail)){
+      console.log(this.resetPasswordEmail);
+
+      //API
+      this.resetService.sendResetPasswordLink(this.resetPasswordEmail).subscribe({
+        next:(res) => {
+            toastr.success(res.message,'Success', {timeOut: 3000});
+
+            this.resetPasswordEmail = '';
+
+            const buttonRef = document.getElementById('closeBtn');
+            buttonRef?.click();
+        },
+        error:(err)=>{
+            toastr.error(err.error.message,'Error', {timeOut: 3000});
+        }
+      })
+    }
+
   }
 
 }

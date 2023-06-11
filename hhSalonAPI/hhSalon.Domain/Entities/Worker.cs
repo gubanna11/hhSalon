@@ -27,5 +27,6 @@ namespace hhSalon.Domain.Entities
 
 		public List<WorkerGroup> Workers_Groups { get; set; }
 		public List<Schedule> Schedules { get; set; }
+		public List<Attendance> Attendances { get; set; }
 	}
 }

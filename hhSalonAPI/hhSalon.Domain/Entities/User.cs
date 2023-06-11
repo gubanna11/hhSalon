@@ -23,6 +23,18 @@ namespace hhSalon.Domain.Entities
 		[Column("role")]
 		public string Role { get; set; }
 
+		[Column("refresh_token")]
+		public string RefreshToken { get; set; }
+		[Column("refresh_token_exp_time")]
+		public DateTime RefreshTokenExpiryTime { get; set; }
 
+		[Column("reset_password_token")]
+		public string ResetPasswordToken { get; set; }
+        [Column("reset_password_expiry")]
+        public DateTime ResetPasswordExpiry { get; set; }
+
+
+
+		public List<Attendance> Attendances { get; set; }
 	}
 }

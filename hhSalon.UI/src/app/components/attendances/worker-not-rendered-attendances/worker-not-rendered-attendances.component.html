@@ -35,11 +35,11 @@
                     <td>{{attendance.service.name}}</td>
                     <td>{{attendance.group.name}}</td>
                     <td>{{attendance.client.firstName}}</td>
-                    <td>{{attendance.date | date}}</td>
+                    <td>{{attendance.date |date }}</td>
                     <td>{{attendance.time | timeString}}</td>
                     
                     <td>
-                        <i (click)="editAttendance(attendance)" class="bi bi-pencil-fill"></i>
+                        <i data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="editAttendance(attendance)" class="bi bi-pencil-fill"></i>
                     </td>
                 
                     <td><a [routerLink]="['/chat', attendance.clientId]">Message</a></td>

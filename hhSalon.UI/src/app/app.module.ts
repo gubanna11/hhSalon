@@ -43,6 +43,9 @@ import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
 //import * as toastr from 'toastr';
 import { UserEditComponent } from './components/users/user-edit/user-edit.component';
 import { AllAttendancesComponent } from './components/attendances/all-attendances/all-attendances.component';
+import { ContactsComponent } from './components/contacts/contacts.component';
+import { HomeComponent } from './components/home/home.component';
+import { ResetComponent } from './components/reset/reset.component';
 
 
 
@@ -81,6 +84,9 @@ import { AllAttendancesComponent } from './components/attendances/all-attendance
     TimeStringPipe,
     UserEditComponent,
     AllAttendancesComponent,
+    ContactsComponent,
+    HomeComponent,
+    ResetComponent,
   ],
   imports: [
     BrowserModule,

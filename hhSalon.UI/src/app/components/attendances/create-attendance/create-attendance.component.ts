@@ -122,8 +122,11 @@ export class CreateAttendanceComponent implements OnInit {
     if(this.attendance.date != undefined)
     {
       
-      if(!this.dateIsCorrect())
+      if(!this.dateIsCorrect()){
+        this.slots = [];
+        this.slotsNull = '';
         return;
+      }
 
       this.slots = [];
       this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date).subscribe(
@@ -187,11 +190,8 @@ export class CreateAttendanceComponent implements OnInit {
   dateIsCorrect(){
     if(this.attendance.date != undefined)
     {
+      if(new Date(this.attendance.date).getDate() < new Date(Date.now()).getDate()){
       
-      if(new Date(this.attendance.date) < new Date(Date.now())){
-        console.log(new Date(this.attendance.date));
-        console.log(new Date(Date.now()));
-        
           toastr.error("You can't choose this date", 'Error', {timeOut: 2000});
           return false;
       }

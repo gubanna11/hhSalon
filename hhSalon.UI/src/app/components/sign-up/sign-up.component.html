@@ -19,9 +19,12 @@
                 </div>
                 <div class="input-field">
                     <span class="fa fa-user"></span>
-                    <input formControlName="email" type="text" placeholder="Email">
+                    <input formControlName="email" type="text" placeholder="Email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}">
                     <p *ngIf="signUpForm.controls['email'].dirty && signUpForm.hasError('required', 'email')">
                         *Email is requiered
+                    </p>
+                    <p *ngIf="signUpForm.controls['email'].errors?.['pattern']">
+                        example.@example.example
                     </p>
                 </div>
                 <div class="input-field">

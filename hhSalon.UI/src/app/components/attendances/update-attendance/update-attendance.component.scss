@@ -1,6 +1,6 @@
 @import "/src/sass/variables.scss";
 
-.modal {
+.my-modal {
     //display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -14,7 +14,7 @@
   }
   
   /* Modal Content/Box */
-  .modal-content {
+  .my-modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;

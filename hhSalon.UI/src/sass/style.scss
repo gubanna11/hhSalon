@@ -11,9 +11,11 @@
 
 body {
     color: #333;
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Montserrat";
     background: #fff;
+    font-weight: 500;
+    
   }
   
   a {
@@ -47,6 +49,13 @@ a{
     color: $textColor;
 }
 
+
+.footer{
+    height: 50px;
+    background-color: #333;
+    width: 100%;
+}
+
 .container{
     width: 1200px;
     margin: 0 auto;
@@ -58,7 +67,7 @@ a{
 
 
 .container-content{
-    height: 560px;  
+    // height: 560px;  
     
     display: flex;
     flex-direction: column;

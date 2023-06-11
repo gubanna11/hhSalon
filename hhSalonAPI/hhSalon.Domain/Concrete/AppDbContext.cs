@@ -43,8 +43,8 @@ namespace hhSalonAPI.Domain.Concrete
 
 			modelBuilder.Entity<WorkerGroup>().HasOne(w => w.Group).WithMany(wg => wg.Workers_Groups);
 
-            
-			
+
+            modelBuilder.Entity<Attendance>().HasOne(a => a.Worker).WithMany(a => a.Attendances).OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Schedule>().HasOne(s => s.Worker).WithMany(s => s.Schedules).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>().ToTable("users");

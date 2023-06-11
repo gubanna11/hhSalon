@@ -1,11 +1,24 @@
 @import '/src/sass/variables.scss';
 
+
+.chat{
+    display: flex;
+    width: 1300px; 
+    gap: 24px;
+    margin-bottom: 40px;
+    justify-content: center;
+
+    padding-top: -20px;
+}
+
+
 .messages{
     height: 490px;
     border-left: 2px $border solid;
     border-right: 2px $border solid;
     border-radius: 8%;
     padding: 16px;
+    width: 26%
     //box-shadow: 3px 3px 10px $border;
     //overflow-y: scroll;
 }

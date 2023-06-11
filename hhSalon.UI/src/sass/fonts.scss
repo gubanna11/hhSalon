@@ -1,15 +1,42 @@
-﻿@font-face {
-    font-family: 'Montserrat';
-    src: url("/src/fonts/Montserrat-Regular.ttf");
-    font-weight: 400;
-    font-display: swap;
-    font-style: normal;
-}
+﻿// @font-face {
+//     font-family: 'Montserrat';
+//     src: url("/src/fonts/Montserrat-Regular.ttf");
+//     font-weight: 400;
+//     font-display: swap;
+//     font-style: normal;
+// }
 
+
+// @font-face {
+//     font-family: 'Montserrat';
+//     src: url("/src/fonts/Montserrat-Bold.ttf");
+//     font-weight: 700;
+//     font-display: swap;
+//     font-style: normal;
+// }
+
+// @font-face {
+//     font-family: 'Montserrat';
+//     src: url("/src/fonts/Montserrat-Medium.ttf");
+//     font-weight: 500;
+//     font-display: swap;
+//     font-style: normal;
+// }
+
+//@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 @font-face {
+        font-family: 'Montserrat';
+        src: url("../fonts/static/Montserrat-Medium.ttf");
+        font-weight: 500;
+        font-display: swap;
+        font-style: normal;
+    }
+
+    
+@font-face {
     font-family: 'Montserrat';
-    src: url("/src/fonts/Montserrat-Bold.ttf");
+    src: url("../fonts/static/Montserrat-Bold.ttf");
     font-weight: 700;
     font-display: swap;
     font-style: normal;
@@ -17,8 +44,8 @@
 
 @font-face {
     font-family: 'Montserrat';
-    src: url("/src/fonts/Montserrat-Medium.ttf");
-    font-weight: 500;
+    src: url("../fonts/static/Montserrat-Regular.ttf");
+    font-weight: 400;
     font-display: swap;
     font-style: normal;
 }

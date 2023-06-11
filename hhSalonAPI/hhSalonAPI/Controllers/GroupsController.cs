@@ -42,7 +42,8 @@ namespace hhSalonAPI.Controllers
 			}
 			catch (DbUpdateException)
 			{
-				return BadRequest(new { Message = "This Group already exists!" });
+				return NotFound(new { Message = "This Group already exists!" });
+				//return BadRequest(new { Message = "This Group already exists!" });
 			}
 			catch (Exception ex)
 			{
