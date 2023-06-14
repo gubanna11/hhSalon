@@ -56,7 +56,7 @@ export class SignUpComponent implements OnInit{
   confirmPassword(confirmPassword:any){
     const password = this.signUpForm.get('password');
       if(password && confirmPassword)
-        this.passwordMismatch = password.value !== confirmPassword.value;         
+        this.passwordMismatch = password.value !== confirmPassword.value;    
   }
 
   onSingUp(){
@@ -66,12 +66,12 @@ export class SignUpComponent implements OnInit{
       this.auth.signUp(this.signUpForm.value)
         .subscribe({
           next: (res) => {
-            toastr.success(res.message, 'SUCCESS', {timeOut: 5000});
+            toastr.success(res.message, 'SUCCESS', {timeOut: 3000});
             //this.signUpForm.reset();
             this.router.navigate(['/login']);
           },
           error: (err) => {
-            toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
+            toastr.error(err.error.message.replace('\n', '<br/>'), 'ERROR', {timeOut: 5000});
           }
         })
     }else{

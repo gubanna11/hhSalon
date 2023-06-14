@@ -22,6 +22,12 @@ namespace hhSalon.Services.Services.Implementations
             if (dbGroup != null)
             {
                 dbGroup.Name = group.Name;
+
+                if(_context.Groups.Where(g => g.Name == group.Name).Any())
+                {
+                    throw new DbUpdateException("Group already exists!");
+                }
+
                 dbGroup.ImgUrl = group.ImgUrl;
 
                 await _context.SaveChangesAsync();

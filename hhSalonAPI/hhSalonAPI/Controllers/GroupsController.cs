@@ -113,9 +113,16 @@ namespace hhSalonAPI.Controllers
 		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> UpdateGroup(GroupOfServices group)
 		{
-			await _groupsService.UpdateGroupAsync(group);
+			try
+			{
+				await _groupsService.UpdateGroupAsync(group);
 
-			return Ok(await _groupsService.GetAllAsync());
+				return Ok(await _groupsService.GetAllAsync());
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 
 		[HttpDelete("{id}")]

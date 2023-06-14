@@ -9,7 +9,6 @@ namespace hhSalon.Services.Services.Interfaces
 		Task<IEnumerable<Attendance>> GeAllAttendances();
 		Task<IEnumerable<Attendance>> GeAttendancesBySearch(string content);
 
-
 		Task AddNewAttendanceAsync(NewAttendanceVM newAttendance);
 
 

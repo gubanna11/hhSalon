@@ -19,25 +19,26 @@ namespace hhSalon.Services.Services.Implementations
         {
             var services = await _context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == groupId).ToListAsync();
 
-            if (services.Count != 0)
+            if( services is null || services.Count == 0)
             {
-                List<ServiceVM> servicesVM = new List<ServiceVM>();
-
-                foreach (var service in services)
-                {
-                    ServiceVM serviceVM = new ServiceVM()
-                    {
-                        Id = service.Id,
-                        Name = service.Name,
-                        Price = service.Price,
-                        GroupId = service.ServiceGroup.GroupId
-                    };
-                    servicesVM.Add(serviceVM);
-                }
-                return servicesVM;
+                throw new Exception("Empty");
             }
 
-            return null;
+            List<ServiceVM> servicesVM = new List<ServiceVM>();
+
+            foreach (var service in services)
+            {
+                ServiceVM serviceVM = new ServiceVM()
+                {
+                    Id = service.Id,
+                    Name = service.Name,
+                    Price = service.Price,
+                    GroupId = service.ServiceGroup.GroupId
+                };
+                servicesVM.Add(serviceVM);
+            }
+            return servicesVM;
+        
         }
 
 
@@ -64,27 +65,30 @@ namespace hhSalon.Services.Services.Implementations
 
         public async Task UpdateServiceAsync(ServiceVM serviceVM)
         {
-            var service = await GetByIdAsync(serviceVM.Id);
-
+            //var service = await GetByIdAsync(serviceVM.Id);
+            var service = _context.Services.Where(s => s.Id == serviceVM.Id).Include(s => s.ServiceGroup).FirstOrDefault();
+            
             if (service != null)
             {
+                
                 service.Name = serviceVM.Name;
                 service.Price = serviceVM.Price;
 
                 if (service.ServiceGroup.GroupId != serviceVM.GroupId)
                 {
                     var service_group = _context.Services_Groups.Where(sg => sg.ServiceId == service.Id).FirstOrDefault();
-                _context.Services_Groups.Remove(service_group);
+                    _context.Services_Groups.Remove(service_group);
 
-                ServiceGroup newService_Group = new ServiceGroup()
-                {
-                    ServiceId = service.Id,
-                    GroupId = serviceVM.GroupId
-                };
+                    ServiceGroup newService_Group = new ServiceGroup()
+                    {
+                        ServiceId = service.Id,
+                        GroupId = serviceVM.GroupId
+                    };
 
-                await _context.Services_Groups.AddAsync(newService_Group);
-                await _context.SaveChangesAsync();
+                    await _context.Services_Groups.AddAsync(newService_Group);
                 }
+
+                await _context.SaveChangesAsync();
             }
             else
                 throw new NullReferenceException();           

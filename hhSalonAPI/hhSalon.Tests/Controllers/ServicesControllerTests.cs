@@ -1,5 +1,3 @@
-
-
 using hhSalon.Domain.Entities;
 using hhSalon.Services.Services.Implementations;
 using hhSalon.Services.ViewModels;
@@ -8,10 +6,10 @@ using hhSalonAPI.Domain.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace hhSalon.Tests.Services
+namespace hhSalon.Tests.Controllers
 {
-	public class Tests
-	{
+	public class ServicesControllerTests
+    {
 		private static DbContextOptions<AppDbContext> dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
 					.UseInMemoryDatabase(databaseName: "ServicesControllerTest")
 					.Options;
@@ -37,7 +35,7 @@ namespace hhSalon.Tests.Services
 		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnOk()
 		{
 			int id = 1;
-			IActionResult actionResult = await servicesController.GetServiceVMsByGroupId(id);
+			IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
 
 			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
@@ -53,7 +51,7 @@ namespace hhSalon.Tests.Services
 		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnNotFound()
 		{
 			int id = 1111;
-			IActionResult actionResult = await servicesController.GetServiceVMsByGroupId(id);
+			IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
 
 			Assert.That(actionResult, Is.TypeOf<NotFoundObjectResult>());
 		}

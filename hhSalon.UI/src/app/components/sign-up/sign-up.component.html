@@ -24,7 +24,7 @@
                         *Email is requiered
                     </p>
                     <p *ngIf="signUpForm.controls['email'].errors?.['pattern']">
-                        example.@example.example
+                        example@example.example
                     </p>
                 </div>
                 <div class="input-field">
@@ -45,8 +45,11 @@
 
                 <div class="input-field">
                     <span class="fa fa-lock"></span>
-                    <input (input)="confirmPassword(signUpForm.get('confirmPassword'))" formControlName="confirmPassword" [type]="type" placeholder="Confirm Password">
-                    <p *ngIf="passwordMismatch">*Password doesn't match</p>
+                    <input (input)="confirmPassword(signUpForm.get('confirmPassword'))" formControlName="confirmPassword" type="password" placeholder="Confirm Password">
+                    <p *ngIf="signUpForm.controls['confirmPassword'].dirty && signUpForm.hasError('required', 'confirmPassword')">
+                        *Confirm Password is requiered
+                    </p>
+                    <p *ngIf="passwordMismatch && signUpForm.controls['confirmPassword'].value !== '' && signUpForm.controls['password'].value !== ''">*Password doesn't match</p>
                 </div>
 
                 <button (click)="onSingUp()" type="submit" class="btn">Sign up</button>

@@ -1,0 +1,37 @@
+@import "/src/sass/variables";
+
+.chat-input__block{
+    display: flex; 
+    gap: 4px;
+    align-items: center;
+    justify-content: end;
+    margin-top: 16px;
+}
+
+.send{
+    font-weight: 600;
+    background-color: $beigeColor;
+    color: $textColor;
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: all 0.5s ease;
+}
+
+
+.send:hover{
+    transition: all 0.5s ease;
+    background-color: $hoverColor;
+    color: #fff;
+}
+
+
+.chat-input > input{
+    height: 36px;
+    width: 360px;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.chat-input > input:focus{
+    border: 1px solid $hoverColor;
+}

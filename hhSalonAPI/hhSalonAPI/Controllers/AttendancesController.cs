@@ -4,6 +4,7 @@ using hhSalon.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace hhSalonAPI.Controllers
 {
@@ -30,11 +31,13 @@ namespace hhSalonAPI.Controllers
 				await _attendancesService.AddNewAttendanceAsync(newAttendanceVM);
 				return Ok();
 			}
+			catch(DbUpdateException ex)
+			{
+                return BadRequest(new { Message = ex.Message });
+            }
 			catch(Exception ex)
 			{
-				if (ex.InnerException.Message.Contains("Duplicate"))
-					return BadRequest( new { Message = "You already have the appointment with the same service on this date"});
-				return BadRequest();
+				return BadRequest( new { Message = ex.Message});
 			}			
 		}
 
@@ -108,24 +111,31 @@ namespace hhSalonAPI.Controllers
 		{
 			await _attendancesService.UpdateAttendances(attendances);
 
-			return Ok();
-		}
+            return Ok(new { Message = "Updated successfully!" });
+        }
 
 		[HttpPut]
 		public async Task<ActionResult> UpdateAttendance(Attendance attendance)
 		{
 			await _attendancesService.UpdateAttendance(attendance);
 
-			return Ok();
-		}
+            return Ok(new { Message = "Updated successfully!" });
+        }
 
 
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> DeleteAttendance(int id)
 		{
-			await _attendancesService.DeleteAsync(id);
+			try
+			{
+				await _attendancesService.DeleteAsync(id);
 
-			return Ok();
+				return Ok(new { Message = "Deleted successfully!" });
+			}
+			catch (Exception ex)
+			{
+				return NotFound(new { Message = "Not Found!" });
+			}
 		}
 
 

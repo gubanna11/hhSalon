@@ -25,14 +25,14 @@ namespace hhSalonAPI.Controllers
 
 
 		[HttpGet("{groupId}")]
-		public  async Task<IActionResult> GetServiceVMsByGroupId(int groupId)
+		public  async Task<IActionResult> GetServicesVMsByGroupId(int groupId)
 		{
 			try
 			{
 				var services = await _servicesService.GetServicesByGroupIdAsync(groupId);
 
-				if(services.Count == 0 || services == null)
-                    return NotFound(new { Message = "Empty!" });
+				//if(services is null)
+    //                return NotFound(new { Message = "Empty!" });
 
                 return Ok(services);
 			}

@@ -24,6 +24,14 @@ namespace hhSalon.Services.Services.Implementations
 
 		public async Task AddNewAttendanceAsync(NewAttendanceVM newAttendance)
 		{
+			int count = _context
+				.Attendances
+				.Where(a => a.ClientId == newAttendance.ClientId && a.ServiceId == newAttendance.ServiceId && a.Date == newAttendance.Date)
+				.Count();
+
+			if (count > 0)
+				throw new DbUpdateException("You already have the appointment with the same service on this date");
+
 			Attendance attendance = new Attendance()
 			{
 				GroupId = newAttendance.GroupId,

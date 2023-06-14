@@ -1,5 +1,8 @@
 @import '/src/sass/variables.scss';
 
+.container{
+    padding: 108px 0px 0px 0px;
+}
 
 .chat{
     display: flex;
@@ -13,7 +16,7 @@
 
 
 .messages{
-    height: 490px;
+    height: 460px;
     border-left: 2px $border solid;
     border-right: 2px $border solid;
     border-radius: 8%;
@@ -39,4 +42,12 @@
     .user-name__with{
         font-weight: 600;
     }
+}
+
+
+
+.chat-block{
+    width: 60%;
+    background-color: rgb(222, 252, 252);
+    height: 100%;
 }
