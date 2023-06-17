@@ -14,13 +14,15 @@
                 <span class="item-price">{{service.price}} </span>  
             </div>
     
-            <div *ngIf="role === 'Admin'" (click)="updateService(service)">
-                <i  class="bi bi-pencil-fill"></i>
-            </div>
-            
-            <div *ngIf="role === 'Admin'" (click)="deleteService(service)">
-                <i class="bi bi-trash"></i>
-            </div>
+           <div *ngIf="role === 'Admin'" class="item-icons">
+                <div  (click)="updateService(service)">
+                    <i  class="bi bi-pencil-fill"></i>
+                </div>
+                
+                <div (click)="deleteService(service)">
+                    <i class="bi bi-trash"></i>
+                </div>
+           </div>
             
             <!-- <a (click)="updateService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Edit</a>
             <a (click)="deleteService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Delete</a> -->

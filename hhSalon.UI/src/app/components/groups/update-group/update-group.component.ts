@@ -12,7 +12,6 @@ import * as toastr from 'toastr';
 })
 export class UpdateGroupComponent implements OnInit {
   group?:Group;
-  mistake: string = '';
 
   constructor(private groupsService:GroupsService,
     private sharedService: SharedService,
@@ -31,16 +30,18 @@ export class UpdateGroupComponent implements OnInit {
   }
 
   updateGroup(group:Group){
-    // if(this.group != undefined && this.group?.name.length < 3){
-    //   this.mistake = "Name < 3";
-    // }
-     
     this.groupsService.updateGroup(group)
-      .subscribe((groups) => {
-        //this.groupsUpdated.emit(groups);
-        this.sharedService.sendData(groups);
-        toastr.success('The group was updated!', 'SUCCESS');
-        this.router.navigate(['groups'])
-    });
+      .subscribe({
+        next: (groups) => {
+          //this.groupsUpdated.emit(groups);
+          this.sharedService.sendData(groups);
+          toastr.success('The group was updated!', 'SUCCESS');
+          this.router.navigate(['groups'])
+        },
+
+        error: (err) =>{
+          toastr.error(err.error.message, 'Error');   
+        }       
+      });
   }
 }

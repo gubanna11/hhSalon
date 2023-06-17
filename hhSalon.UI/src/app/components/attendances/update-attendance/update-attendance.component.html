@@ -14,7 +14,7 @@
     
     
     
-            <div>
+            <div class="attendance-form__item">
                 <label for="service">Service</label>
     
                 <select (change)="serviceChanged($event.target)" name="service" [(ngModel)] = "attendance.serviceId">
@@ -26,17 +26,17 @@
     
     
     
-            <div >
+            <div class="attendance-form__item">
                 <label for="date">Date</label>
                 <input [(ngModel)] = "attendance.date" name="date" type="date" id="date">        
             </div>
     
-            <div>
+            <div class="attendance-form__item">
                 <label for="time">Time</label>
                 <input id="time" type="time" [(ngModel)]="attendance.time">
             </div>
     
-            <div>
+            <div class="attendance-form__item">
                 <label for="paid">Paid</label>
     
                 <select [value]="attendance.isPaid" name="paid" [(ngModel)] = "attendance.isPaid">
@@ -50,7 +50,7 @@
             </div>
 
 
-            <div>
+            <div class="attendance-form__item">
                 <label for="rendered">Rendered</label>
     
                 <select [value]="attendance.isRendered" name="rendered" [(ngModel)] = "attendance.isRendered">

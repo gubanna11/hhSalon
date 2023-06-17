@@ -10,7 +10,9 @@ export class TimeFromDatePipe implements PipeTransform {
      
       let a = (arr[arr.length - 1].split(' '))[1];
 
-      return arr[0] + ':' + arr[1] + ' ';
+      // return arr[0] + ':' + arr[1] + ' ';
+  
+      return arr[0] + ':' + arr[1] + ' ' + a;
     }
 
   }

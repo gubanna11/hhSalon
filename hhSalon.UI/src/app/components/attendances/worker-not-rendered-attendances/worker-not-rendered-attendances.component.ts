@@ -16,6 +16,7 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
   workerName: string = "";
 
   isPaid = false;
+  all = false;
 
   @Output() attendanceToEdit: any;
 
@@ -66,6 +67,14 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
     
   }
 
+  filterAll(){
+    this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
+      result => this.attendances = result
+    )   
+    this.all = true;
+    
+  }
+
   editAttendance(attendance:any){    
     this.attendanceToEdit = attendance;
   }
@@ -83,12 +92,17 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
   attendanceChanged(attendance:any){
     this.attendanceService.updateAttendance(attendance).subscribe(
       ()=>{
-        if(!this.isPaid){
+        if(!this.isPaid && !this.all){
           this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
             list => this.attendances = list
           )
-        }else{
+        }else if (this.isPaid && !this.all){
           this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+        else{
+          this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
             list => this.attendances = list
           )
         }
@@ -100,12 +114,17 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
   deleteAttendance(id: number){
     this.attendanceService.deleteAttendance(id).subscribe(
       () => {
-        if(!this.isPaid){
+        if(!this.isPaid && !this.all){
           this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
             list => this.attendances = list
           )
-        }else{
+        }else if (this.isPaid && !this.all){
           this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+        else{
+          this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
             list => this.attendances = list
           )
         }

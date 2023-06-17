@@ -97,7 +97,15 @@ namespace hhSalonAPI.Controllers
 			return Ok(attendances);
 		}
 
-		[HttpGet("time-slots/{workerId}/{day}")]
+        [HttpGet("worker-not-rendered-attendances/{workerId}")]
+        public async Task<ActionResult> WorkerNotRendered(string workerId)
+        {
+            var attendances = await _attendancesService.WorkerNotRenderedAttendances(workerId);
+
+            return Ok(attendances);
+        }
+
+        [HttpGet("time-slots/{workerId}/{day}")]
 		public async Task<ActionResult> GetFreeTimeSlots(string workerId, DateTime day)
 		{
 			var slots = await _attendancesService.GetFreeTimeSlots(workerId, day);

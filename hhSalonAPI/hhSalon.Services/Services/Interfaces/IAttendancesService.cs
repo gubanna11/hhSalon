@@ -21,7 +21,8 @@ namespace hhSalon.Services.Services.Interfaces
 		//WORKER'S DATA
 		Task<IEnumerable<Attendance>> WorkerNotRenderedIsPaidAttendances(string workerId);
 		Task<IEnumerable<Attendance>> WorkerNotRenderedNotPaidAttendances(string workerId);
-		Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId);
+        Task<IEnumerable<Attendance>> WorkerNotRenderedAttendances(string workerId);
+        Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId);
 
 		Task<IEnumerable<TimeSpan>> GetFreeTimeSlots(string workerId, DateTime date);
 

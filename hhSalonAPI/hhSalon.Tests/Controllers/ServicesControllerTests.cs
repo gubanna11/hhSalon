@@ -39,7 +39,7 @@ namespace hhSalon.Tests.Controllers
 
 			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
-			var actionResultData = (actionResult as OkObjectResult).Value as List<ServiceVM>;
+            var actionResultData = (actionResult as OkObjectResult).Value as List<ServiceVM>;
 
 			Assert.That(actionResultData.First().Name, Is.EqualTo("Service 1"));
 			Assert.That(actionResultData.First().Id, Is.EqualTo(1));
@@ -77,7 +77,22 @@ namespace hhSalon.Tests.Controllers
 		}
 
 
-		[Test, Order(4)]
+        [Test, Order(4)]
+        public async Task ServicesController_CreateService_ReturnBadRequest()
+        {
+            ServiceVM serviceVM = new ServiceVM()
+            {
+                GroupId = 1,
+                Name = "Service 5",
+                Price = 5,
+            };
+            IActionResult actionResult = await servicesController.CreateService(serviceVM);
+
+            Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+
+        [Test, Order(5)]
 		public async Task ServicesController_UpdateService_ReturnOk()
 		{
 			ServiceVM serviceVM = new ServiceVM()
@@ -96,7 +111,7 @@ namespace hhSalon.Tests.Controllers
 				Is.EqualTo(1));
 		}
 
-		[Test, Order(5)]
+		[Test, Order(6)]
 		public async Task ServicesController_UpdateService_ReturnBadRequest()
 		{
 			ServiceVM serviceVM = new ServiceVM()
@@ -113,7 +128,7 @@ namespace hhSalon.Tests.Controllers
 
 
 
-		[Test, Order(6)]
+		[Test, Order(7)]
 		public async Task ServicesController_DeleteService_ReturnOk()
 		{
 			IActionResult actionResult = await servicesController.DeleteService(5);
@@ -125,10 +140,12 @@ namespace hhSalon.Tests.Controllers
 		}
 
 
-		[Test, Order(7)]
+		[Test, Order(8)]
 		public async Task ServicesController_DeleteService_ReturnBadRequest()
 		{
-			IActionResult actionResult = await servicesController.DeleteService(999);
+			int id = 999;
+
+            IActionResult actionResult = await servicesController.DeleteService(id);
 
 			Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
 		}

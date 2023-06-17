@@ -44,6 +44,13 @@ namespace hhSalon.Services.Services.Implementations
 
         public async Task AddNewServiceAsync(ServiceVM newService)
         {
+            int count = _context.Services.Where(s => s.Name == newService.Name).Count();
+
+            if(count > 0)
+            {
+                throw new DbUpdateException("This Service already exists!");
+            }
+
             Service service = new Service
             {
                 Name = newService.Name,

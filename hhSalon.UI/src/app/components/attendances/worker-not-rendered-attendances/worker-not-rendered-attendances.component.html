@@ -11,6 +11,11 @@
                 <input (change)="filterIsPaid()" type="radio" name="attendance" id="is-paid">
                 <label for="is-paid">Is Paid</label>
             </div>
+
+            <div>
+                <input (change)="filterAll()" type="radio" name="attendance" id="all">
+                <label for="all">All</label>
+            </div>
         </form>
         <p *ngIf="attendances.length === 0">Empty</p>
     </div>

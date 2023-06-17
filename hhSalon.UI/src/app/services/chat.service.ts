@@ -185,6 +185,9 @@ export class ChatService {
           date: new Date(),
           isRead: false
         };
+
+        console.log(message);
+        
         this.updateChatList(message);
 
         this.chatConnection?.invoke('ReceivePrivateMessage', message).then( () => {

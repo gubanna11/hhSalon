@@ -1,2 +1,15 @@
 @import '/src/sass//variables.scss';
 
+.container{
+    padding: 110px 0px 0px 0px;
+}
+
+.item-data{
+    width: 100%;
+    font-size: 16px;
+}
+
+.item-icons{
+    display: flex;
+    gap: 16px;
+}

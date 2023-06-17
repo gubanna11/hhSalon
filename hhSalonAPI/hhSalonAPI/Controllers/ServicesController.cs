@@ -51,10 +51,14 @@ namespace hhSalonAPI.Controllers
 				await _servicesService.AddNewServiceAsync(newService);
 				return Ok(await _servicesService.GetServicesByGroupIdAsync(newService.GroupId));
 			}
-			catch (DbUpdateException)
+			catch (DbUpdateException ex)
 			{
-				return BadRequest(new { Message = "This Service already exists!" });
-			}			
+				return BadRequest(new { Message = ex.Message });
+			}	
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = "Some errors!" });
+            }
 		}
 
 		[HttpDelete("{id}")]

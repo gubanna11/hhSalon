@@ -95,7 +95,7 @@ namespace hhSalon.Tests.Controllers
 
 
         [Test, Order(4)]
-        public async Task AttendancesController_DeleteAttendance_ReturnNotFOund()
+        public async Task AttendancesController_DeleteAttendance_ReturnNotFound()
         {
             int id = 222;
             IActionResult actionResult = await attendancesController.DeleteAttendance(id);

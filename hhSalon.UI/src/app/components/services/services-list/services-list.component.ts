@@ -39,8 +39,15 @@ export class ServicesListComponent implements OnInit {
 
        this.groupName = params['groupName'];
 
-       this.servicesService.getServices(groupId).subscribe(        
-        (services: Service[]) => this.services = services
+       this.servicesService.getServices(groupId).subscribe(        {
+          next:  (services: Service[]) => {
+            this.services = services
+          },
+          error: (err)=>{
+            this.services = [];
+          }
+       }
+       
       );
     })
 

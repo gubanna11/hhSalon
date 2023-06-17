@@ -51,6 +51,10 @@ export class AttendancesService {
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/worker-not-rendered-is-paid-attendances/${workerId}`);
   }
   
+  public WorkerNotRenderedAttendances(workerId: string){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/worker-not-rendered-attendances/${workerId}`);
+  }
+
 
   public getFreeTimeSlots(workerId: any, date: any){
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/time-slots/${workerId}/${date}`);

@@ -1,7 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { UntypedFormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
+import { Schedule } from 'src/app/models/schedule';
 import { GroupsService } from 'src/app/services/groups.service';
 import { WorkersService } from 'src/app/services/workers.service';
 import * as toastr from 'toastr'; 
@@ -48,6 +50,14 @@ export class WorkerEditComponent implements OnInit{
         this.groupsService.getGroups().subscribe(
           (result: Group[]) => this.groups = result        
         );
+    
+  }
+
+
+  resetTime(schedule:Schedule){
+    let sch = this.worker.schedules.filter((s : any )=> s.day == schedule.day)[0];
+    sch.start = undefined;
+    sch.end = undefined;
     
   }
 
