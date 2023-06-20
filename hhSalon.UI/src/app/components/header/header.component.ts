@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Query, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { Subscription } from 'rxjs';
@@ -65,28 +65,6 @@ let groups_links :QueryList<ElementRef<HTMLDivElement>>= this.group_links.menu_l
         header_menu.classList.remove('active');
       })
     })
-
-    // let links = document.querySelectorAll('.menu__link');
-    // let sub__links = document.querySelectorAll('.menu__sub-link')
-
-    // links.forEach(l => {
-    //   l.addEventListener('click', function(){
-    //     if(l.childNodes.length <= 1){
-         
-    //           header_menu.classList.remove('active')
-    //     }
-      
-    //     //   header_menu.classList.remove('active')
-    //   })
-    // })
-
-
-    // sub__links.forEach(l => {
-    //   l.addEventListener('click', function(){
-    //       header_menu.classList.remove('active')
-    //   })
-    // })
-
   }
  
   ngOnInit(): void {
@@ -101,9 +79,6 @@ let groups_links :QueryList<ElementRef<HTMLDivElement>>= this.group_links.menu_l
     this.userStore.getRoleFromStore().subscribe(role => {      
       const roleFromToken = this.auth.getRoleFromToken();      
       this.role = role || roleFromToken;
-
-      
-      // this.role = (this.auth.decodedToken()).role;
     })
 
 
@@ -133,7 +108,6 @@ let groups_links :QueryList<ElementRef<HTMLDivElement>>= this.group_links.menu_l
 
   ngOnDestroy(): void {
    this.subscription?.unsubscribe();
-   //this.chatService.closePrivateChatMessage();
   }
 
   signOut(){
@@ -142,9 +116,7 @@ let groups_links :QueryList<ElementRef<HTMLDivElement>>= this.group_links.menu_l
     
      this.userStore.setRoleForStore("Client");
 
-    // //this.chatService.closePrivateChatMessage();
      this.chatService.stopChatConnection();
-
 
     this.router.navigate(['/login']);
   }

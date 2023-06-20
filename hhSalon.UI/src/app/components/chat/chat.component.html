@@ -27,12 +27,12 @@
             </div>
             
                
-            <div class="display: flex; justify-content:column;">
+            <div style="display: flex; flex-direction:column;justify-content: space-between;">
                 <div style="font-size: 12px">
                     {{chat.date | date}}
                     {{chat.date | time}}
                 </div>
-                <div *ngIf="chat.toUserId === userId && chat.messageUnreadCount > 0" style="margin-left: 5px; font-weight:500;">
+                <div *ngIf="chat.toUserId === userId && chat.messageUnreadCount > 0" style="margin-left: 5px; font-weight:600;">
                     {{ chat.messageUnreadCount}}
                 </div>
             </div>

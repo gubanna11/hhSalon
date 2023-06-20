@@ -5,14 +5,14 @@
       <div class="groups">
         <div class="group" *ngFor="let group of groups">
 
-          <div class="group-data"  [routerLink]="['/services', group.id, group.name]">
-            <img class="group-img" [src]="group.imgUrl" height="50px" *ngIf="group.imgUrl">
-            <img *ngIf="!group.imgUrl" src="assets/img/no-image.png">
+          <div class="group-data">
+            <img  [routerLink]="['/services', group.id, group.name] " class="group-img" [src]="group.imgUrl" height="50px" *ngIf="group.imgUrl">
+            <img  [routerLink]="['/services', group.id, group.name] "*ngIf="!group.imgUrl" src="assets/img/no-image.png">
             
             
             
               <div class="group-data__name-icons">
-                  <a class="group-name">{{ group.name }}</a>    
+                  <a class="group-name"   [routerLink]="['/services', group.id, group.name]">{{ group.name }}</a>    
                   <div class="group-icons" *ngIf="auth.role === 'Admin'">
                       <div>
                         <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>

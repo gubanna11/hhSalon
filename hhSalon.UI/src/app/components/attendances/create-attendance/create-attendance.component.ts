@@ -176,7 +176,10 @@ export class CreateAttendanceComponent implements OnInit {
 
       this.attendancesService.createAttendance(attendance).subscribe(
         {
-          next: () => this.router.navigate(['my-not-rendered-attendances']),
+          next: () => {
+            toastr.success("You've created a new appointment!", 'Success', {timeOut: 3000})
+            this.router.navigate(['my-not-rendered-attendances'])
+          },
           error: (error) =>{
             console.log(error.error)          
             toastr.error(error.error.message, 'ERROR', {timeOut: 5000});
@@ -190,7 +193,7 @@ export class CreateAttendanceComponent implements OnInit {
   dateIsCorrect(){
     if(this.attendance.date != undefined)
     {
-      if(new Date(this.attendance.date).getDate() < new Date(Date.now()).getDate()){
+      if(new Date(this.attendance.date) < new Date(Date.now())){
       
           toastr.error("You can't choose this date", 'Error', {timeOut: 2000});
           return false;

@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
-import { LogLevel } from '@microsoft/signalr';
-import { NgToastService } from 'ng-angular-popup';
 import { HeaderComponent } from './components/header/header.component';
-import { GroupsMenuComponent } from './components/groups-menu/groups-menu.component';
 
 @Component({
   selector: 'app-root',
@@ -10,33 +7,15 @@ import { GroupsMenuComponent } from './components/groups-menu/groups-menu.compon
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit, AfterViewInit{
- // @ViewChild('footer') footerElement!: ElementRef;
-  //@ViewChildren('footer') footerElements!: QueryList<ElementRef>;
- 
- @ViewChild(HeaderComponent) header!: HeaderComponent;
-  constructor(
-    private renderer: Renderer2
-  ){    }
-  
-  ngOnInit(): void {    
-   
-  }
+export class AppComponent implements AfterViewInit{
+  @ViewChild(HeaderComponent) header!: HeaderComponent;
+
+  constructor(){}  
 
   ngAfterViewInit() {
-  
-  //  this.footerElements.forEach(
-  //   f => {
-  //     f.nativeElement.addEventListener('click', function(){
-  //       console.log('CLICK');
-        
-  //     })
-  //   }
-  //  )
+ 
     const menuArrows: QueryList<ElementRef<HTMLDivElement>> = this.header.menuArrows;
     const links :QueryList<ElementRef<HTMLDivElement>> = this.header.menu_links;
-
-
 
       links.forEach(
         l => {

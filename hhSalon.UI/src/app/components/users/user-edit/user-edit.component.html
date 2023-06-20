@@ -1,18 +1,18 @@
-<div class="user-edit">
-    <p class="form-title">Edit {{user.firstName}} {{user.lastName}}</p>
-    <div class="">
+<div class="user-edit container">
+    <p class="form-title">Edit {{user.userName}}</p>
+    <div class="user-edit__body">
         
         <div>
             <div class="input-field">
-                <span class="fa fa-user input-icon"></span>
                 <label for="firstName">First Name</label>
+                <span class="fa fa-user input-icon"></span>
                 <!-- <label for="firstName">First Name</label> -->
                 <input name="firstName"  id="firstName" [(ngModel)]="user.firstName">
                 
             </div>
-            <div class="input-field">
-                <span class="fa fa-user input-icon"></span>                
+            <div class="input-field">               
                 <label for="lastName">Last Name</label>
+                <span class="fa fa-user input-icon"></span> 
                 <!-- <label for="lastName">Last Name</label> -->
                 <input [(ngModel)]="user.lastName" id="lastName" type="text" placeholder="Last name">
                 <!-- <p >
@@ -20,8 +20,8 @@
                 </p> -->
             </div>
             <div class="input-field">
-                <span class="fa fa-user input-icon"></span>
-                <label for="email">Email</label>                
+                <label for="email">Email</label>     
+                <span class="fa fa-user input-icon"></span>           
                 <!-- <label for="email">Email</label>                 -->
                 <input [(ngModel)]="user.email" type="text" placeholder="Email">
                 <!-- <p >
@@ -34,7 +34,7 @@
             </div>
          
        </div>
-       <button class="btn" (click)="Save()">Save</button>
+       <button style="width:100%" class="btn" (click)="Save()">Save</button>
     </div>
  </div>
  

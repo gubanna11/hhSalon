@@ -80,7 +80,10 @@ export class ServicesListComponent implements OnInit {
   }
 
   updatedServicesList(services: Service[]){
-    this.services = services;
+    console.log(services);
+    
+    if(services != undefined)
+      this.services = services;
     this.serviceToEdit = null;
 
     

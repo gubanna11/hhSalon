@@ -83,7 +83,7 @@ export class WorkerCreateComponent {
             this.router.navigate([`worker-schedule-create/${res.workerId}`]);
           },
           error: (err) => {
-            toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
+            toastr.error(err.error.message.replace('\n', '<br/>'), 'ERROR', {timeOut: 5000});
           }
         })
     }else{

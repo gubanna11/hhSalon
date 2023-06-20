@@ -1,6 +1,6 @@
 <div class="container" style="display: flex; justify-content: center; flex-direction: column;">
     <p class="title">Edit {{worker.userName}}</p>
-    <div style="display: flex; justify-content: center;">
+    <div class="edit-body">
         <div>
                 <div class="input-field">
                     <label for="firstName">First Name</label>
@@ -66,13 +66,17 @@
                         </option>
                     </select>
                 </div>
+
+                <div (click)="confirmToSend()" class="forget" *ngIf="auth.id === worker.id" style="font-style: oblique;">
+                    <a>Reset password</a>
+                </div>
         </div>
 
 
 
-            <div>
-                <div *ngFor="let schedule of worker.schedules">
-                    <p style="margin-bottom: 4px; font-weight: 500;">{{ schedule.day }} </p>
+            <div class="schedules">
+                <div *ngFor="let schedule of worker.schedules" class="schedule">
+                    <p class="schedule-day">{{ schedule.day }} </p>
                     <div>
                         <label for="start">Start</label>
                         <input style="margin-bottom: 8px" id="start" [(ngModel)]="schedule.start" type="time">    
@@ -82,13 +86,13 @@
 
                         <a (click)="resetTime(schedule)">Reset</a>
                     </div>
-                    
+                   
                 </div>
                 
             </div>
             
         </div>
-    <div style="width: 30%; margin: 0 auto">
+    <div style="width: 30%; margin: 0 auto;margin-top: -10px;">
         <button class="btn" (click)="Save()">Save</button>
     </div>
 </div>

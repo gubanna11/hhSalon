@@ -2,7 +2,6 @@
 using hhSalon.Services.Services.Interfaces;
 using hhSalon.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +12,10 @@ namespace hhSalonAPI.Controllers
 	public class AttendancesController : ControllerBase
 	{
 		private readonly IAttendancesService _attendancesService;
-		private readonly IUsersService _usersService;
 
-		public AttendancesController(IAttendancesService attendancesService, IUsersService usersService)
+		public AttendancesController(IAttendancesService attendancesService)
 		{
 			_attendancesService = attendancesService;
-			_usersService = usersService;
 		}
 
 		

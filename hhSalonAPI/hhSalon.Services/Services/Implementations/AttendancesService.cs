@@ -212,9 +212,14 @@ namespace hhSalon.Services.Services.Implementations
 					.Include(a => a.Service).Include(a => a.Worker.User).Include(a => a.Worker).ThenInclude(w => w.User)
 						.ToListAsync();
 
-			var filter = attendances.Where(a => a.Client.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
-							|| a.Worker.User.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
-							|| a.Date.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)
+			var filter = attendances
+				.Where(a => a.Client.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Client.FirstName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Client.LastName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.FirstName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.LastName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Date.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)
 							|| a.Time.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)
 							|| a.Group.Name.Contains(content, StringComparison.CurrentCultureIgnoreCase)
 							|| a.Service.Name.Contains(content, StringComparison.CurrentCultureIgnoreCase)

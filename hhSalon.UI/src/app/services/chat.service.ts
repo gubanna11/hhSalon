@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Observable, map, toArray } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ChatItem } from '../models/chatItem';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Message } from '../models/message';
@@ -41,8 +41,7 @@ export class ChatService {
       toastr.options.timeOut = 20000;
      }
 
-  public addUser(userId: string){      
-    //let user = {id: userId};
+  public addUser(userId: string){ 
     return this.http.post(`${environment.apiUrl}/${this.url}/add-user/${userId}`, userId);
    }
 
@@ -236,8 +235,7 @@ export class ChatService {
           }
         )
 
-        
-        //if(this.chatList.filter(c => c.toUserId === newMessage.toId || c.userId === newMessage.toId).length === 0){
+      
         if(this.chatList.filter(c => (c.userId === newMessage.fromId && c.toUserId == newMessage.toId)
          || (c.userId === newMessage.toId && c.toUserId == newMessage.fromId)).length === 0){
             

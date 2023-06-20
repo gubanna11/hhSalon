@@ -25,8 +25,6 @@ namespace hhSalon.Tests.Controllers
 
         AttendancesService attendancesService;
 
-        UsersService usersService;
-
         [OneTimeSetUp]
         public void Setup()
         {
@@ -36,8 +34,7 @@ namespace hhSalon.Tests.Controllers
             SeedDatabase();
 
             attendancesService = new AttendancesService(context);
-            usersService = new UsersService(context);
-            attendancesController = new AttendancesController(attendancesService, usersService);
+            attendancesController = new AttendancesController(attendancesService);
         }
 
 

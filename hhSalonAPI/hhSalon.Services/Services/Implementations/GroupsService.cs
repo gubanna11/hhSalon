@@ -23,10 +23,10 @@ namespace hhSalon.Services.Services.Implementations
             {
                 dbGroup.Name = group.Name;
 
-                if(_context.Groups.Where(g => g.Name == group.Name).Any())
+                if (_context.Groups.Where(g => g.Name == group.Name).Count() > 1)
                 {
                     throw new DbUpdateException("Group already exists!");
-                }
+                }               
 
                 dbGroup.ImgUrl = group.ImgUrl;
 

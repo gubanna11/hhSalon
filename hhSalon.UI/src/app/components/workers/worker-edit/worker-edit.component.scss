@@ -1,0 +1,43 @@
+.container{
+    padding: 110px 0px 0px 0px
+}
+
+.edit-body{
+    display: flex;
+    justify-content: center;
+    margin-top: -36px;
+}
+
+.input-field{
+    margin: 0px 0px 20px 0px;
+    input{
+        margin-left: 8px;
+    }
+}
+
+
+.schedule-day{
+    margin: 0px 0px 4px 0px; 
+    font-weight: 500;
+    font-size: 16px;
+    font-style: oblique;
+}
+
+
+.schedule{
+    margin: 4px 0px 0px 0px;
+    input{
+        font-size: 14px;
+        margin-right: 8px;
+        width: 100px;
+        font-weight: 500;
+    }
+    label{
+        font-size: 16px;
+        margin-right: 8px;
+    }
+}
+
+.schedule:first-of-type{
+    margin: 0px 0px 0px 0px;
+}

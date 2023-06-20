@@ -1,0 +1,25 @@
+.container{
+    padding: 90px 0px 0px 0px;
+}
+
+.schedules{
+    margin-top: -36px ;
+
+    label{
+        font-size: 16px;
+        margin-right: 8px;
+    }
+    input{
+        font-size: 14px;
+        margin-right: 8px;
+        width: 100px;
+        font-weight: 500;
+    }
+}
+
+.schedule-day{
+    margin: 0px 0px 4px 0px; 
+    font-weight: 500;
+    font-size: 16px;
+    font-style: oblique;
+}

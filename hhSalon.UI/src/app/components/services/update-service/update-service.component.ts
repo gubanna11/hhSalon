@@ -13,7 +13,7 @@ import * as toastr from 'toastr';
   styleUrls: ['./update-service.component.scss']
 })
 export class UpdateServiceComponent implements OnInit{
-  @Input() service?: Service | null;
+  @Input() service!: Service;
   @Output() servicesUpdated = new EventEmitter<Service[]>();
   selectedGroupName?: string | null;
   groups: Group[] = [];
@@ -50,5 +50,17 @@ export class UpdateServiceComponent implements OnInit{
       }
   })
    }
+
+
+   closeModal(event:any){
+    const modal = document.getElementById("myModal");
+    const closeBtn = document.getElementsByClassName('close')[0];
+    
+    if(modal && (event.target == modal || event.target == closeBtn))
+    {
+      this.servicesUpdated.emit();
+    }
+    
+  }
 
 }

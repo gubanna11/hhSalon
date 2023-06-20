@@ -1,11 +1,12 @@
 
-<div *ngIf="group">
+<div *ngIf="group" class="group">
     <p class="title">New Group</p>
-    <div class="input-field">
-        <img [src]="group.imgUrl" alt="" height="100px">
-        <br>
-        <label for="img">Group Image</label>
-        <input id="img" [(ngModel)]="group.imgUrl" placeholder="Select...">
+    <div class="input-field" style="display: flex;flex-direction: column; align-items: center;">
+        <img *ngIf="group.imgUrl" [src]="group.imgUrl" alt="" height="100px" class="group-image">
+        <div >
+            <label for="img">Group Image</label>
+            <input id="img" [(ngModel)]="group.imgUrl" placeholder="Select...">
+        </div>
     </div>
 
     <div class="input-field">

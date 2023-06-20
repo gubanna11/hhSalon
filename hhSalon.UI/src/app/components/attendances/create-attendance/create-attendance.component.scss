@@ -1,5 +1,9 @@
 @import '/src/sass/variables.scss';
 
+.container{
+    padding: 110px 0px 0px 0px;
+}
+
 .attendance{
     display: flex;
     flex-direction: column;
@@ -13,7 +17,7 @@
 
 
     font-size: 18px;
-    width: 360px;
+    width: 400px;
 
     input{
         display: inline-block;        
@@ -70,5 +74,5 @@
 
 
 .price{
-    margin: 16px 0;
+    margin: 20px 0px 0px 0px;
 }

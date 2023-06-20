@@ -4,7 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
 import { Schedule } from 'src/app/models/schedule';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
+import { ResetPasswordService } from 'src/app/services/reset-password.service';
 import { WorkersService } from 'src/app/services/workers.service';
 import * as toastr from 'toastr'; 
 
@@ -25,6 +27,8 @@ export class WorkerEditComponent implements OnInit{
     private router: Router,
     private workersService: WorkersService,
     private groupsService: GroupsService,
+    private resetService: ResetPasswordService,
+    public auth: AuthService,
     ){
 
   }
@@ -77,8 +81,6 @@ export class WorkerEditComponent implements OnInit{
       {
         next: res =>{
           toastr.success(res.message, 'SUCCESS', {timeOut: 5000});
-
-          this.router.navigate(['/workers']);
         },
         error: (err) => {
           console.log(err.error.message);
@@ -88,4 +90,19 @@ export class WorkerEditComponent implements OnInit{
       }
     )
    }
+
+
+   confirmToSend(){
+    //API
+      this.resetService.sendResetPasswordLink(this.worker.email).subscribe({
+        next:(res) => {
+            toastr.success(res.message,'Success', {timeOut: 3000});
+
+        },
+        error:(err)=>{
+            toastr.error(err.error.message, 'Error', {timeOut: 3000});
+        }
+      })
+    }
+
 }

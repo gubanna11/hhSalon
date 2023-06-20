@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Attendance } from '../models/attendance';
 
@@ -12,10 +11,6 @@ export class AttendancesService {
   private url = 'Attendances';
 
   constructor(private http: HttpClient) { }
-
-  // public getServices(groupId: number): Observable<Attendace[]>{
-  //   return this.http.get<Service[]>(`${environment.apiUrl}/${this.url}/${groupId}`);
-  // }
 
   public createAttendance(attendance: Attendance){
     return this.http.post<Attendance>(`${environment.apiUrl}/${this.url}`, attendance);
@@ -55,13 +50,13 @@ export class AttendancesService {
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/worker-not-rendered-attendances/${workerId}`);
   }
 
-
+ 
+  
   public getFreeTimeSlots(workerId: any, date: any){
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/time-slots/${workerId}/${date}`);
   }
 
-  
-  
+ 
   public updateAttendances(attendances: any[]){
     return this.http.put(`${environment.apiUrl}/${this.url}/update-attendances`, attendances);
   }

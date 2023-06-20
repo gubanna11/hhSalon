@@ -4,7 +4,7 @@
     
 
 <!-- UPDATE -->
-    <app-update-service (servicesUpdated)="updatedServicesList($event)" [service]="serviceToEdit"></app-update-service>
+  
 
     <div class="items">
         <div class="item" *ngFor="let service of services">
@@ -28,4 +28,7 @@
             <a (click)="deleteService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Delete</a> -->
         </div>
     </div>
+
+    <app-update-service *ngIf="serviceToEdit" (servicesUpdated)="updatedServicesList($event)" [service]="serviceToEdit"></app-update-service>
 </div>
+

@@ -55,7 +55,6 @@ isShown: boolean = false;
         this.attendances = result;
 console.log(result);
 
-
         if(result.length > 0)
           this.isShown = true;
 
