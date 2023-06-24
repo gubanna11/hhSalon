@@ -1,0 +1,40 @@
+<div class="user-edit container">
+    <p class="form-title">Edit {{user.userName}}</p>
+    <div class="user-edit__body">
+        
+        <div>
+            <div class="input-field">
+                <label for="firstName">First Name</label>
+                <span class="fa fa-user input-icon"></span>
+                <!-- <label for="firstName">First Name</label> -->
+                <input name="firstName"  id="firstName" [(ngModel)]="user.firstName">
+                
+            </div>
+            <div class="input-field">               
+                <label for="lastName">Last Name</label>
+                <span class="fa fa-user input-icon"></span> 
+                <!-- <label for="lastName">Last Name</label> -->
+                <input [(ngModel)]="user.lastName" id="lastName" type="text" placeholder="Last name">
+                <!-- <p >
+                    *Last Name is requiered
+                </p> -->
+            </div>
+            <div class="input-field">
+                <label for="email">Email</label>     
+                <span class="fa fa-user input-icon"></span>           
+                <!-- <label for="email">Email</label>                 -->
+                <input [(ngModel)]="user.email" type="text" placeholder="Email">
+                <!-- <p >
+                    *Email is requiered
+                </p> -->
+            </div>
+
+            <div (click)="confirmToSend()" class="forget">
+                <a>Reset password</a>
+            </div>
+         
+       </div>
+       <button style="width:100%" class="btn" (click)="Save()">Save</button>
+    </div>
+ </div>
+ 

@@ -33,5 +33,19 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			return _context.Users.Where(u => u.Id == id).FirstOrDefault();	
 		}
+
+
+		public async Task UpdateUser(User userObj)
+		{
+			var user = _context.Users.Where(u => u.Id == userObj.Id).FirstOrDefault();
+			if (user != null)
+			{
+				user.FirstName = userObj.FirstName;
+				user.LastName = userObj.LastName;
+				user.Email = userObj.Email;
+			}
+
+			await _context.SaveChangesAsync();
+		}
 	}
 }

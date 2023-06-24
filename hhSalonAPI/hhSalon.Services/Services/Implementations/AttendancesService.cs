@@ -14,7 +14,7 @@ using System.Data;
 
 namespace hhSalon.Services.Services.Implementations
 {
-    public class AttendancesService : EntityBaseRepository<Attendance>, IAttendancesService
+	public class AttendancesService : EntityBaseRepository<Attendance>, IAttendancesService
 	{
 		private readonly AppDbContext _context;
 		public AttendancesService(AppDbContext context) : base(context)
@@ -24,6 +24,14 @@ namespace hhSalon.Services.Services.Implementations
 
 		public async Task AddNewAttendanceAsync(NewAttendanceVM newAttendance)
 		{
+			int count = _context
+				.Attendances
+				.Where(a => a.ClientId == newAttendance.ClientId && a.ServiceId == newAttendance.ServiceId && a.Date == newAttendance.Date)
+				.Count();
+
+			if (count > 0)
+				throw new DbUpdateException("You already have the appointment with the same service on this date");
+
 			Attendance attendance = new Attendance()
 			{
 				GroupId = newAttendance.GroupId,
@@ -51,8 +59,9 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			var attendances = await _context.Attendances.Where(a => a.IsRendered == YesNo.No && a.IsPaid == YesNo.Yes && a.ClientId == userId)
 				.Include(a => a.Client).Include(a => a.Group)
-					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User)
-						.ToListAsync();
+					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time)
+                        .OrderBy(a => a.Date)
+							.ToListAsync();
 			return attendances;
 		}
 
@@ -62,8 +71,9 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			var attendances = await _context.Attendances.Where(a => a.IsRendered == YesNo.No && a.IsPaid == YesNo.No && a.ClientId == userId)
 				.Include(a => a.Client).Include(a => a.Group)
-					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User)
-						.ToListAsync();
+					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time)
+                        .OrderBy(a => a.Date)
+							.ToListAsync();
 			return attendances;
 		}
 
@@ -73,8 +83,9 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			var attendances = await _context.Attendances.Where(a => a.IsRendered == YesNo.Yes && a.ClientId == userId)
 				.Include(a => a.Client).Include(a => a.Group)
-					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User)
-						.ToListAsync();
+					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time)
+                        .OrderBy(a => a.Date)
+							.ToListAsync();
 			return attendances;
 		}
 
@@ -85,7 +96,7 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			var attendances = await _context.Attendances.Where(a => a.WorkerId == workerId && a.IsRendered == YesNo.No && a.IsPaid == YesNo.Yes)
 			.Include(a => a.Client).Include(a => a.Group)
-			   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).ToListAsync();
+			   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time).ToListAsync();
 			return attendances;
 		}
 
@@ -94,23 +105,35 @@ namespace hhSalon.Services.Services.Implementations
 		{
 			var attendances = await _context.Attendances.Where(a => a.WorkerId == workerId && a.IsRendered == YesNo.No && a.IsPaid == YesNo.No)
 			.Include(a => a.Client).Include(a => a.Group)
-			   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).ToListAsync();
+			   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time).ToListAsync();
 			return attendances;
 		}
 
-		//WORKER'S HISTORY CLIENTS
-		public async Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId)
+
+
+        public async Task<IEnumerable<Attendance>> WorkerNotRenderedAttendances(string workerId)
+        {
+            var attendances = await _context.Attendances.Where(a => a.WorkerId == workerId && a.IsRendered == YesNo.No)
+            .Include(a => a.Client).Include(a => a.Group)
+               .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time).ToListAsync();
+            return attendances;
+        }
+
+
+        //WORKER'S HISTORY CLIENTS
+        public async Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId)
 		{
-			var attendances = await _context.Attendances.Where(a => a.WorkerId == workerId)
+			var attendances = await _context.Attendances.Where(a => a.WorkerId == workerId && a.IsRendered == YesNo.Yes)
 			   .Include(a => a.Client).Include(a => a.Group)
-				   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User)
-			.ToListAsync();
+				   .Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User).OrderBy(a => a.Date).ThenBy(a => a.Time)
+                        .OrderBy(a => a.Date)
+							.ToListAsync();
 
 			return attendances;
 		}
 
 
-		public async Task<IEnumerable<TimeSpan>> GetFreeTimeSlots(string workerId, DateTime date)
+        public async Task<IEnumerable<TimeSpan>> GetFreeTimeSlots(string workerId, DateTime date)
 		{
 			List<TimeSpan> slots = new List<TimeSpan>();
 
@@ -123,14 +146,113 @@ namespace hhSalon.Services.Services.Implementations
 
 			var slotsTaken = attendances.Select(a => a.Time).ToList();
 
-			for(TimeSpan i = start; i < end; i = new TimeSpan(i.Hours + 1, minutes: i.Minutes, seconds: i.Seconds))
+			for (TimeSpan i = start; i < end; i = new TimeSpan(i.Hours + 1, minutes: i.Minutes, seconds: i.Seconds))
 			{
-				if (slotsTaken.Where(s => s == i ).Count() > 0)
+				if (slotsTaken.Where(s => s == i).Count() > 0)
 					continue;
 				slots.Add(i);
 			}
 
 			return slots;
 		}
-	}
+
+		public async Task UpdateAttendances(List<Attendance> attendances)
+		{
+			foreach (var attendanceVM in attendances)
+			{
+				var attendance = _context.Attendances.Where(a => a.Id == attendanceVM.Id).FirstOrDefault();
+
+				attendance.Date = attendanceVM.Date;
+				attendance.Time = attendanceVM.Time;
+				attendance.IsRendered = attendanceVM.IsRendered;
+				attendance.IsPaid = attendanceVM.IsPaid;
+				attendance.ServiceId = attendanceVM.ServiceId;
+				attendance.GroupId = attendanceVM.GroupId;
+
+				await _context.SaveChangesAsync();
+			}
+		}
+
+
+		public async Task UpdateAttendance(Attendance attendanceVM)
+		{
+			var attendance = _context.Attendances.Where(a => a.Id == attendanceVM.Id).FirstOrDefault();
+
+			attendance.Date = attendanceVM.Date;
+			attendance.Time = attendanceVM.Time;
+			attendance.IsRendered = attendanceVM.IsRendered;
+			attendance.IsPaid = attendanceVM.IsPaid;
+			attendance.ServiceId = attendanceVM.ServiceId;
+			attendance.GroupId = attendanceVM.GroupId;
+
+			await _context.SaveChangesAsync();
+
+		}
+
+
+
+
+
+		public async Task<IEnumerable<Attendance>> GeAllAttendances()
+		{
+			var attendances = await _context.Attendances
+				.Include(a => a.Client).Include(a => a.Group)
+					.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.User)
+						.OrderBy(a => a.Date)
+							.ToListAsync();
+
+			return attendances;
+		}
+
+
+		public async Task<IEnumerable<Attendance>> GeAttendancesBySearch(string content)
+		{
+			var attendances = await _context.Attendances
+				.Include(a => a.Client).Include(a => a.Group)
+					.Include(a => a.Service).Include(a => a.Worker.User).Include(a => a.Worker).ThenInclude(w => w.User)
+						.ToListAsync();
+
+			var filter = attendances
+				.Where(a => a.Client.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Client.FirstName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Client.LastName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.UserName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.FirstName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Worker.User.LastName.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+                            || a.Date.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Time.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Group.Name.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Service.Name.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.IsPaid.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.IsRendered.Contains(content, StringComparison.CurrentCultureIgnoreCase)
+							|| a.Price.ToString().Contains(content, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+
+			return filter;
+		}
+
+       
+
+
+        //public async Task<IEnumerable<Attendance>> GetNotRenderedAttendances()
+        //{
+        //	var attendances = await _context.Attendances.Where(a => a.IsRendered == YesNo.No.ToString())
+        //		.Include(a => a.Client).Include(a => a.Group)
+        //			.Include(a => a.Service).Include(a => a.Worker)
+        //				.ToListAsync();
+        //	return attendances;
+        //}
+
+
+
+
+        //public async Task<IEnumerable<Attendance>> GetIsRenderedAttendances()
+        //{
+        //	var attendances = await _context.Attendances.Where(a => a.IsRendered == YesNo.Yes.ToString())
+        //		.Include(a => a.Client).Include(a => a.Group)
+        //			.Include(a => a.Service).Include(a => a.Worker).ThenInclude(w => w.Client)
+        //				.ToListAsync();
+        //	return attendances;
+        //}
+    }
 }

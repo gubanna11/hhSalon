@@ -30,9 +30,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/sass/style.scss"
-            ],            
-            "scripts": []
+              "src/sass/style.scss",
+              "node_modules/toastr/toastr.scss"
+            ],       
+            "scripts": [
+              "node_modules/toastr/build/toastr.min.js"
+          ]
+          
           },
           "configurations": {
             "production": {

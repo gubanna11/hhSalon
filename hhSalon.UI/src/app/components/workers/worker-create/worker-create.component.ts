@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-worker-create',
@@ -26,7 +25,6 @@ export class WorkerCreateComponent {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private auth: AuthService,
-    private toast: NgToastService,
     private userStore: UserStoreService,
     private groupsService: GroupsService,
     ){
@@ -41,10 +39,11 @@ export class WorkerCreateComponent {
       const roleFromToken = this.auth.getRoleFromToken();
       let role = roleVal || roleFromToken;
 
-      if(role != 'Admin'){
-        this.toast.warning({detail: "Oooops..."});
-        this.router.navigate(['login']);
-      }
+      // if(role != 'Admin'){
+      //   //this.toast.warning({detail: "Oooops..."});
+      //   //toastr.success(res.message,'SUCCESS', {timeOut: 5000})
+      //   this.router.navigate(['login']);
+      // }
     })
 
     this.groupsService.getGroups().subscribe(
@@ -75,22 +74,19 @@ export class WorkerCreateComponent {
 
   onSingUp(){
     if(this.signUpForm.valid){
-      console.log(this.signUpForm.value);
-      
-
+     
       this.auth.signUpWorker(this.signUpForm.value)
         .subscribe({
           next: (res) => {
-            this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
+            toastr.success(res.message,'SUCCESS', {timeOut: 5000})
             
             this.router.navigate([`worker-schedule-create/${res.workerId}`]);
           },
           error: (err) => {
-            this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+            toastr.error(err.error.message.replace('\n', '<br/>'), 'ERROR', {timeOut: 5000});
           }
         })
     }else{
-      console.log(this.signUpForm.value);
       ValidateForm.validateAllFormFields(this.signUpForm);
     }
 

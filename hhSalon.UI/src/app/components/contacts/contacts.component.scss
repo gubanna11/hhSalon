@@ -1,0 +1,33 @@
+@import '/src/sass/variables.scss';
+
+.contacts-container{
+    width: 1200px;
+    padding: 110px 0px 0px 0px;
+}
+
+.contacts{
+    display: flex;
+    gap: 80px;
+    margin-bottom: 20px;
+    justify-content: center;
+    background-color: $beigeColor;
+    padding: 40px 0;
+    font-size: 16px;
+    color: $textColor;
+
+}
+
+.contacts > div{
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+i{
+    font-size: 32px;
+}
+
+.telephone:hover{
+    color: #000;
+}

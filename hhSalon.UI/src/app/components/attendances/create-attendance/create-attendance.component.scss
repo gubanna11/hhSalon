@@ -1,9 +1,78 @@
 @import '/src/sass/variables.scss';
 
+.container{
+    padding: 110px 0px 0px 0px;
+}
+
+.attendance{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.attendance-form{
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-between;
+
+
+    font-size: 18px;
+    width: 400px;
+
+    input{
+        display: inline-block;        
+    }
+}
+
+.attendance-form__item{
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.attendance-form label{
+    display: inline-block;
+    width: 92px;
+    font-size: 15px;
+}
+
+.attendance-form select{
+    width: 100%;
+    font-size: 16px;
+    option{
+        font-size: 16px;
+        
+    }
+}
+
+
+
+
+
+
+.time-buttons{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+
 .btnTime{
-    background-color: aqua;
+    background-color: $beigeColor;
+    padding: 10px;
+    border-radius: 20%;
 }
 
 .btnTime.active{
-    background-color: $beigeColor;
+    background-color: $hoverColor;
+    color: #fff;
+}
+
+
+
+
+.price{
+    margin: 20px 0px 0px 0px;
 }

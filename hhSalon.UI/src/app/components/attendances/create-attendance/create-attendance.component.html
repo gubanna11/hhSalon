@@ -1,55 +1,59 @@
-<p>New appointment</p>
+<div class="container attendance">
+    <p class="title">New appointment</p>
 
-<form name="attendance" *ngIf="attendance">
+    <form name="attendance" class="attendance-form" *ngIf="attendance">
 
-    <div>
-        <label for="group">Group</label>
-        <select (change)="groupChanged($event.target)" id="group" name="group" [(ngModel)] = "attendance.groupId">
-            <option [value]="group.id" *ngFor="let group of groups">
-                {{ group.name }}
-            </option>
-        </select>
-    </div>
-
-
-
-    <div>
-        <label for="service">Service</label>
-
-        <select (change)="serviceChanged($event.target)" name="service" [(ngModel)] = "attendance.serviceId">
-            <option [value]="service.id" *ngFor="let service of services">
-                {{ service.name }}
-            </option>
-        </select>
-    </div>
-
-
-    <div>
-        <label for="worker">Worker</label>
-
-        <select (change)="updateTime()" name="worker" [(ngModel)] = "attendance.workerId">
-            <option [value]="worker.id" *ngFor="let worker of workers">
-                {{ worker.firstName }} {{worker.lastName}}
-            </option>
-        </select>
-    </div>
-
-    <div>
-        <label for="date">Date</label>
-        <input (change)="updateTime()" [(ngModel)] = "attendance.date" name="date" type="date" id="date">        
-    </div>
-
-    <div>
-        <label for="time">Time</label>
-        <!-- <input [(ngModel)] = "attendance.time" name="time" type="time" id="time"> -->
-        <div *ngFor="let slot of slots">
-            <button class="btnTime"  [class.active]="slot == activeSlot" (click)="timeSelected(slot)">{{ slot }}</button>
+        <div class="attendance-form__item">
+            <label for="group">Group</label>
+            <select (change)="groupChanged($event.target)" id="group" name="group" [(ngModel)] = "attendance.groupId">
+                <option [value]="group.id" *ngFor="let group of groups">
+                    {{ group.name }}
+                </option>
+            </select>
         </div>
-        <span>{{slotsNull}}</span>
-    </div>
 
-    <div>
-        <p>{{attendance.price}}</p>
-        <button (click)="createAttendance(attendance)" type="submit">Create</button>
-    </div>
-</form>
+
+
+        <div class="attendance-form__item">
+            <label for="service">Service</label>
+
+            <select (change)="serviceChanged($event.target)" name="service" [(ngModel)] = "attendance.serviceId">
+                <option [value]="service.id" *ngFor="let service of services">
+                    {{ service.name }}
+                </option>
+            </select>
+        </div>
+
+
+        <div class="attendance-form__item">
+            <label for="worker">Worker</label>
+
+            <select (change)="updateTime()" name="worker" [(ngModel)] = "attendance.workerId">
+                <option [value]="worker.id" *ngFor="let worker of workers">
+                    {{ worker.firstName }} {{worker.lastName}}
+                </option>
+            </select>
+        </div>
+
+        <div class="attendance-form__item">
+            <label for="date">Date</label>
+            <input (change)="updateTime()" [(ngModel)] = "attendance.date" name="date" type="date" id="date">        
+        </div>
+
+        <div>
+            <label for="time">Time</label>
+            <!-- <input [(ngModel)] = "attendance.time" name="time" type="time" id="time"> -->
+            <div class="time-buttons">
+                <div *ngFor="let slot of slots">
+                    <button class="btnTime"  [class.active]="slot == activeSlot" (click)="timeSelected(slot)">{{ slot }}</button>
+                </div>
+            </div>
+            <span>{{slotsNull}}</span>
+        </div>
+
+        <div>
+            <p class="price">Price: {{attendance.price}}</p>
+            <button class="btn" (click)="createAttendance(attendance)" type="submit">Create</button>
+        </div>
+    </form>
+</div>

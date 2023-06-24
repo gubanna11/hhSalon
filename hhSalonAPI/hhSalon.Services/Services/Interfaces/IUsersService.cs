@@ -13,6 +13,8 @@ namespace hhSalon.Services.Services.Interfaces
 		Task<IEnumerable<User>> GetAllUser();
 
 		User GetUserById(string id);
-		
+
+		Task UpdateUser(User userObj);
+
 	}
 }

@@ -11,6 +11,7 @@ import { ServicesService } from 'src/app/services/services.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 import { UsersService } from 'src/app/services/users.service';
 import { WorkersService } from 'src/app/services/workers.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-create-attendance',
@@ -59,24 +60,17 @@ export class CreateAttendanceComponent implements OnInit {
     this.workers = workers; 
     
         this.attendance.workerId = this.workers[0].id;
-        // this.attendance.date = new Date();
-
-        // this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date.toDateString()).subscribe(
-        //   result => {
-        //       this.slots = result
-        //   }
-        // );
-
-        console.log(this.attendance);
-        
     
-    });      
-
-    //this.attendance.date = new Date(); 
-    
+    }); 
   }
 
   timeSelected(slot:any){
+    if (this.activeSlot == slot){
+      this.activeSlot = undefined;
+      this.attendance.time = undefined;
+      return;
+    }
+
     this.activeSlot = slot;
     
     if(this.attendance)
@@ -120,19 +114,33 @@ export class CreateAttendanceComponent implements OnInit {
     if(this.services && this.attendance)      
         for(let service of this.services)
           if(service.id == id)
-            this.attendance.price = service.price    
-
-            //console.log(this.attendance);
+            this.attendance.price = service.price;
   }
 
   updateTime(){
-    console.log(this.attendance);
-    
+   
     if(this.attendance.date != undefined)
     {
+      
+      if(!this.dateIsCorrect()){
+        this.slots = [];
+        this.slotsNull = '';
+        return;
+      }
+
+      this.slots = [];
       this.attendancesService.getFreeTimeSlots(this.attendance.workerId, this.attendance.date).subscribe(
         result => {
-            this.slots = result
+          if(result.length > 0){
+            result.map(
+              r => {
+                let time  = r.split(':');
+                
+                this.slots.push(time[0] + ':' + time[1]);
+              }
+            )
+          }
+
             if(this.slots.length == 0)
               this.slotsNull = 'There is no free time!';
             else
@@ -145,24 +153,49 @@ export class CreateAttendanceComponent implements OnInit {
 
 
   createAttendance(attendance: Attendance){
+    if(attendance.time == undefined){
+      toastr.error('Select the time', 'Error', {timeOut: 2000});
+      return;
+    }
+
+    if(!this.dateIsCorrect()){
+      return;
+    }
+
     this.userStore.getIdFromStore().subscribe(
       idValue => {
         const idFromToken = this.auth.getIdFromToken();
         attendance.clientId = idValue || idFromToken;
       })
-
-      //const hoursA = document.forms[0]['time'].value.split(':')[0];
-      //const minutesA = document.forms[0]['time'].value.split(':')[1];
-      //attendance.time = ({hours: hoursA, minutes: minutesA});
-      
-      
+    
 
       this.attendancesService.createAttendance(attendance).subscribe(
         {
-          next: () => this.router.navigate(['my-not-rendered-attendances']),
-          error: (error) => console.log(error.error)          
+          next: () => {
+            toastr.success("You've created a new appointment!", 'Success', {timeOut: 3000})
+            this.router.navigate(['my-not-rendered-attendances'])
+          },
+          error: (error) =>{
+            console.log(error.error)          
+            toastr.error(error.error.message, 'ERROR', {timeOut: 5000});
+          } 
         }        
         
       );
+  }
+
+
+  dateIsCorrect(){
+    if(this.attendance.date != undefined)
+    {
+      if(new Date(this.attendance.date).getTime() < (new Date(Date.now()).getTime())){
+      
+          toastr.error("You can't choose this date", 'Error', {timeOut: 2000});
+          return false;
+      }
+      return true;
+    }
+
+    return false;
   }
 }

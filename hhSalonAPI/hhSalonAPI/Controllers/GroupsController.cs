@@ -1,4 +1,5 @@
 ﻿using hhSalon.Domain.Entities;
+using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 namespace hhSalonAPI.Controllers
@@ -29,12 +31,24 @@ namespace hhSalonAPI.Controllers
 
 		
 		[HttpPost]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> CreateGroup(GroupOfServices newGroup)
 		{
+			try
+			{
+				await _groupsService.AddAsync(newGroup);
 
-			await _groupsService.AddAsync(newGroup);
-
-			return Ok(await _groupsService.GetAllAsync());
+				return Ok(await _groupsService.GetAllAsync());
+			}
+			catch (DbUpdateException)
+			{
+				return NotFound(new { Message = "This Group already exists!" });
+				//return BadRequest(new { Message = "This Group already exists!" });
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 
 		private async void UploadFIle()
@@ -96,14 +110,23 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpPut]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> UpdateGroup(GroupOfServices group)
 		{
-			await _groupsService.UpdateGroupAsync(group);
+			try
+			{
+				await _groupsService.UpdateGroupAsync(group);
 
-			return Ok(await _groupsService.GetAllAsync());
+				return Ok(await _groupsService.GetAllAsync());
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { Message = ex.Message });
+			}
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(Roles = UserRoles.Admin)]
 		public async Task<ActionResult<List<GroupOfServices>>> DeleteGroupById(int id)
 		{
 			var group = await _groupsService.GetByIdAsync(id);
@@ -113,6 +136,19 @@ namespace hhSalonAPI.Controllers
 			await _groupsService.DeleteAsync(id);
 
 			return Ok(await _groupsService.GetAllAsync());
+		}
+
+
+		[HttpGet("worker/{workerId}")]
+		public async Task<ActionResult<GroupOfServices>> GetGroupsByWorkerId(string workerId)
+		{
+			var groups = await _groupsService.GetGroupsByWorkerId(workerId);
+
+
+			if (groups == null)
+				return BadRequest("Groups weren't found");
+
+			return Ok(groups);
 		}
 	}
 }

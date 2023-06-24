@@ -1,22 +1,30 @@
-<p>My Attendances History {{name}}</p>
-<div>
-    <table> 
-        <thead> 
-            <tr>
-                <th>Service</th>
-                <th>Group</th>
-                <th>Worker</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody *ngFor="let attendance of attendances">
-            <tr>
-                <td>{{attendance.service.name}}</td>
-                <td>{{attendance.group.name}}</td>
-                <td>{{attendance.worker.user.firstName}}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container container-content">
+    <p class="title">My Attendances History <br> {{name}}</p>
+    <div>
+        <table class="attendances-table" > 
+            <thead> 
+                <tr>
+                    <th>Service</th>
+                    <th>Group</th>
+                    <th>Worker</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let attendance of attendances">
+                <tr class="attendance-item" >
+                    <td>{{attendance.service.name}}</td>
+                    <td>{{attendance.group.name}}</td>
+                    <td>{{attendance.worker.user.firstName}}</td>
+                    <td>{{attendance.date | date}}</td>
+                    <td>{{attendance.time | timeString}}</td>
+                    <td><a [routerLink]="['/chat', attendance.worker.id]">Message</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
 
 </div>
-

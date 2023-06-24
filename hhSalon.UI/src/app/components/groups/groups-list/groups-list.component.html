@@ -1,11 +1,34 @@
 
 <div class="container">
-   <div *ngFor="let group of groups">
-      <a [routerLink]="['/services', group.id, group.name]">
-         <img [src]="group.imgUrl" alt="img" height="100px">
-         <p>{{ group.name }}</p>
-      </a>
-      <input (click)="deleteGroup(group)" type="submit" value="Delete">
-      <input [routerLink]="['/groups/edit', group.id]" type="submit" value="Edit">
+  <div class="">
+    <p class="title">Groups of services</p>
+      <div class="groups">
+        <div class="group" *ngFor="let group of groups">
+
+          <div class="group-data">
+            <img  [routerLink]="['/services', group.id, group.name] " class="group-img" [src]="group.imgUrl" height="50px" *ngIf="group.imgUrl">
+            <img  [routerLink]="['/services', group.id, group.name] "*ngIf="!group.imgUrl" src="assets/img/no-image.png">
+            
+            
+            
+              <div class="group-data__name-icons">
+                  <a class="group-name"   [routerLink]="['/services', group.id, group.name]">{{ group.name }}</a>    
+                  <div class="group-icons" *ngIf="auth.role === 'Admin'">
+                      <div>
+                        <i [routerLink]="['/groups/edit', group.id]"  class="bi bi-pencil-fill"></i>
+                      </div>
+                    
+                      <div class="delete">
+                          <a class="delete-confirm" (click)="deleteGroup(group)"><i class="bi bi-trash"></i></a>
+                          <!-- <a class="delete__confirmed" (click)="deleteGroup(group)">Delete</a> -->
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+           
+      </div>
+    
    </div>
+  </div>
 </div>

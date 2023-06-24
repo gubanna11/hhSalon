@@ -18,13 +18,11 @@ namespace hhSalonAPI.Hubs
 
 		public override async Task OnConnectedAsync()
 		{
-			//await Groups.AddToGroupAsync(Context.ConnectionId, "hhSalon");
 			await Clients.Caller.SendAsync("UserConnected");
 		}
 
 		public override async Task OnDisconnectedAsync(Exception exception)
 		{
-			//await Groups.RemoveFromGroupAsync(Context.ConnectionId, "hhSalon");
 
 			var user = _chatService.GetUserByConnectionId(Context.ConnectionId);
 			_chatService.RemoveUserFromList(user);
@@ -50,48 +48,33 @@ namespace hhSalonAPI.Hubs
 			var toConnectionId = _chatService.GetConnectionIdByUser(toUser);
 			await Groups.AddToGroupAsync(toConnectionId, privateGroupName);
 
-			//opening private chatbox for the other end user
+			
 			await Clients.Client(toConnectionId).SendAsync("OpenPrivateChat", message);
 		}
 
 
 		public async Task ReceivePrivateMessage(Chat message)
 		{
-			//string privateGroupName = GetGroupName(message.FromId, message.ToId);
-			//await Clients.Group(privateGroupName).SendAsync("NewPrivateMessage", message);
 			var toUser = _usersService.GetUserById(message.ToId);
 			var toConnectionId = _chatService.GetConnectionIdByUser(toUser);
 			await Clients.Client(toConnectionId).SendAsync("NewPrivateMessage", message);
 		}
 
 
-		//public async Task RemovePrivateChat(string fromId, string toId)
+		
 		public async Task RemovePrivateChat(string id)
 		{
-			//string privateGroupName = GetGroupName(fromId, toId);
-			//await Clients.Group(privateGroupName).SendAsync("ClosePrivateChat");
-
-			//await Groups.RemoveFromGroupAsync(Context.ConnectionId, privateGroupName);
-
-			//var toUser = _usersService.GetUserById(toId);
-			//var toConnectionId = _chatService.GetConnectionIdByUser(toUser);
-			//await Groups.RemoveFromGroupAsync(toConnectionId, privateGroupName);
-
 			var user = _usersService.GetUserById(id);
 			_chatService.RemoveUserFromList(user);
 		}
 
+		public async Task ReadPrivateMessage(Chat message)
+		{
+			var toUser = _usersService.GetUserById(message.FromId);
+			var toConnectionId = _chatService.GetConnectionIdByUser(toUser);
 
-		//private async Task UserChat(string fromId, string toId)
-		//{
-		//	var users = _chatService.GetUserMessagesList(fromId);
-
-		//	var groupName = GetWorkerUserGroupName(fromId, toId);
-
-		//	await Clients.Groups(groupName).SendAsync("UserChatList", users);
-		//}
-
-
+			await Clients.Client(toConnectionId).SendAsync("MyMessageIsRead", message);
+		}
 
 		private string GetGroupName(string firstId, string secondId)
 		{

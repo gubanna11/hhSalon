@@ -1,19 +1,18 @@
-<div *ngIf="group">
-    <p>
-        {{mistake}}
-    </p>
-    <div>
-        <img [src]="group.imgUrl" alt="" height="50px">
+<div *ngIf="group" class="group">
+   <p class="title">Edit group</p>
+   <div class="input-field" style="display: flex;flex-direction: column; align-items: center;">
+    <img *ngIf="group.imgUrl" [src]="group.imgUrl" alt="" height="100px" class="group-image">
+    <div >
+        <label for="img">Group Image</label>
+        <input id="img" [(ngModel)]="group.imgUrl" placeholder="Select...">
     </div>
-    <div>  
-        <label for="name"></label>
+    </div>
+    <div class="input-field">  
+        <label for="name">Name</label>
         <input id="name" [(ngModel)]="group.name">
     </div>
-    <div>  
-        <label for="img"></label>
-        <input id="img" [(ngModel)]="group.imgUrl">
-    </div>
+  
     <div>
-        <button (click)="updateGroup(group)" type="submit">Save</button>
+        <button (click)="updateGroup(group)" type="submit" class="btn">Save</button>
     </div>
 </div>

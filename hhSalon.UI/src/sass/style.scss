@@ -1,12 +1,21 @@
 @import "fonts";
 @import "variables.scss";
 @import "reset.scss";
+//@import "~toastr/toastr.scss";
+@import "/node_modules/toastr/toastr.scss";
+
+.toast{
+    opacity: 1 !important;
+}
+
 
 body {
     color: #333;
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Montserrat";
     background: #fff;
+    font-weight: 500;
+    
   }
   
   a {
@@ -16,11 +25,14 @@ body {
   i{
     cursor: pointer;
 }
+
   
   .wrapper {
     min-height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
+    
+   
     display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -37,10 +49,155 @@ a{
     color: $textColor;
 }
 
+
+.footer{
+    height: 50px;
+    background-color: #333;
+    width: 100%;
+}
+
 .container{
     width: 1200px;
     margin: 0 auto;
-    //padding: 90px 0 0 0;
+    padding: 110px 0 0 0;
+    //height: 100%;
+    //background-color:aliceblue;
+}
+
+
+
+.container-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 60px;
+}
+
+
+.title{
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+
+///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+
+
+.items{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.item{
+    display: flex;
+    margin-bottom: 28px;
+    
+
+padding-bottom: 8px;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid $border;
+    
+}
+
+.item:last-child{
+    margin:0;
+    border: none;
+}
+
+.item-data{    
+   div{
+    display: block;
+   }
+   display: flex;
+   width: 80%;
+}
+
+.item-name{
+    width: 90%;    
+}
+
+
+
+
+
+
+
+
+
+
+
+.delete__confirmed {
+    
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+}
+
+.delete > form > input {
+}
+
+.delete.active > .delete__confirmed {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+    
+}
+
+
+
+
+
+
+///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+
+
+
+
+
+
+.attendances-table{
+
+    td, th{
+        font-size: 18px;
+        padding: 12px;
+    }
+    margin-bottom: 20px;
+    
+}
+
+
+.title-filter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.filter{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    div{
+       display: flex;
+       gap: 12px;
+       font-size: 16px;
+    }
 }
 
 
@@ -65,9 +222,17 @@ a{
 
 .input-field{
     margin-bottom: 28px;
+    label{
+        display: inline-block;
+        width: 112px;
+    }
     input{
         width:360px;
     }
+}
+
+.input-icon{
+    margin-right: 8px;
 }
 
 .form-title{
@@ -84,7 +249,7 @@ input::placeholder{
     font-size: 14px;
 }
 
-.btn-auth{
+.btn{
     font-size: 16px;
     padding: 16px 0px;
     border-radius: 12px;
@@ -97,7 +262,7 @@ input::placeholder{
     transition: 0.6s;
 }
 
-.btn-auth:hover{
+.btn:hover{
     transition: 0.5s;
     background-color: $beigeColor;
     color: $textColor;
@@ -114,6 +279,16 @@ input::placeholder{
     text-decoration: none;
 }
 
+
+
+.forget{
+    a{
+        font-size: 16px;
+    }
+    a:hover{
+        color: #000
+    }
+}
 
 
 

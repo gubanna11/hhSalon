@@ -1,8 +1,9 @@
-﻿using hhSalon.Services.Services.Interfaces;
+﻿using hhSalon.Domain.Entities;
+using hhSalon.Services.Services.Interfaces;
 using hhSalon.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace hhSalonAPI.Controllers
 {
@@ -11,12 +12,10 @@ namespace hhSalonAPI.Controllers
 	public class AttendancesController : ControllerBase
 	{
 		private readonly IAttendancesService _attendancesService;
-		private readonly IUsersService _usersService;
 
-		public AttendancesController(IAttendancesService attendancesService, IUsersService usersService)
+		public AttendancesController(IAttendancesService attendancesService)
 		{
 			_attendancesService = attendancesService;
-			_usersService = usersService;
 		}
 
 		
@@ -29,17 +28,18 @@ namespace hhSalonAPI.Controllers
 				await _attendancesService.AddNewAttendanceAsync(newAttendanceVM);
 				return Ok();
 			}
+			catch(DbUpdateException ex)
+			{
+                return BadRequest(new { Message = ex.Message });
+            }
 			catch(Exception ex)
 			{
-				if (ex.InnerException.Message.Contains("Dublicate"))
-					return BadRequest( new { Message = "You already have the appointment on the date"});
-				return BadRequest();
-			}
-
-			
+				return BadRequest( new { Message = ex.Message});
+			}			
 		}
 
 		[HttpGet("my-not-rendered-not-paid-attendances/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyNotRenderedNotPaidAttendances(string userId)
 		{
 			var attendances = await _attendancesService.MyNotRenderedNotPaidAttendances(userId);
@@ -48,6 +48,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpGet("my-not-rendered-is-paid-attendances/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyNotRenderedIsPaidAttendances(string userId)
 		{
 			var attendances = await _attendancesService.MyNotRenderedIsPaidAttendances(userId);
@@ -56,6 +57,7 @@ namespace hhSalonAPI.Controllers
 		}
 
 		[HttpGet("my-history/{userId}")]
+		[Authorize]
 		public async Task<ActionResult> MyHistory(string userId)
 		{
 			var attendances = await _attendancesService.MyIsRenderedAttendances(userId);
@@ -67,6 +69,7 @@ namespace hhSalonAPI.Controllers
 		//WORKERS DATA
 
 		[HttpGet("worker-history/{workerId}")]
+
 		public async Task<ActionResult> WorkerHistory(string workerId)
 		{
 			var attendances = await _attendancesService.WorkerIsRenderedAttendances(workerId);
@@ -91,12 +94,78 @@ namespace hhSalonAPI.Controllers
 			return Ok(attendances);
 		}
 
-		[HttpGet("time-slots/{workerId}/{day}")]
+        [HttpGet("worker-not-rendered-attendances/{workerId}")]
+        public async Task<ActionResult> WorkerNotRendered(string workerId)
+        {
+            var attendances = await _attendancesService.WorkerNotRenderedAttendances(workerId);
+
+            return Ok(attendances);
+        }
+
+        [HttpGet("time-slots/{workerId}/{day}")]
 		public async Task<ActionResult> GetFreeTimeSlots(string workerId, DateTime day)
 		{
 			var slots = await _attendancesService.GetFreeTimeSlots(workerId, day);
 
 			return Ok(slots);
+		}
+
+
+		[HttpPut("update-attendances")]
+		public async Task<ActionResult> UpdateAttendances(List<Attendance> attendances)
+		{
+			await _attendancesService.UpdateAttendances(attendances);
+
+            return Ok(new { Message = "Updated successfully!" });
+        }
+
+		[HttpPut]
+		public async Task<ActionResult> UpdateAttendance(Attendance attendance)
+		{
+			await _attendancesService.UpdateAttendance(attendance);
+
+            return Ok(new { Message = "Updated successfully!" });
+        }
+
+
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> DeleteAttendance(int id)
+		{
+			try
+			{
+				await _attendancesService.DeleteAsync(id);
+
+				return Ok(new { Message = "Deleted successfully!" });
+			}
+			catch (Exception ex)
+			{
+				return NotFound(new { Message = "Not Found!" });
+			}
+		}
+
+
+
+
+		[HttpGet("all-attendances")]
+		public async Task<ActionResult> GetAllAttendances()
+		{
+			var attendances = await _attendancesService.GeAllAttendances();
+
+			return Ok(attendances);
+		}
+
+		[HttpGet]
+		public async Task<ActionResult> FilterAttendances([FromQuery]string content)
+		{
+			IEnumerable<Attendance> attendances = new List<Attendance>();
+
+			if (content == null)
+				attendances = await _attendancesService.GeAllAttendances();
+			
+			else 
+				attendances = await _attendancesService.GeAttendancesBySearch(content);
+
+			return Ok(attendances);
 		}
 	}
 }

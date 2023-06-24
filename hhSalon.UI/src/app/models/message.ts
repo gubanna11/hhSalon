@@ -5,4 +5,5 @@ export interface Message{
     toUser:any;
     content: string;
     date: Date;
+    isRead: boolean;
 }

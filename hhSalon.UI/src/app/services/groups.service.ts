@@ -20,6 +20,12 @@ export class GroupsService {
     return this.http.get<Group>(`${environment.apiUrl}/${this.url}/${groupId}`);
   }
 
+
+  public getGroupsByWorkerId(workerId: string): Observable<Group[]>{
+    return this.http.get<Group[]>(`${environment.apiUrl}/${this.url}/worker/${workerId}`);
+  }
+
+
   public createGroup(group: Group): Observable<Group[]>{
     return this.http.post<Group[]>(
       `${environment.apiUrl}/${this.url}`,

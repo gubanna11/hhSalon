@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { AttendancesService } from 'src/app/services/attendances.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
@@ -14,6 +14,11 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
 
   workerId: string = "";
   workerName: string = "";
+
+  isPaid = false;
+  all = false;
+
+  @Output() attendanceToEdit: any;
 
   constructor(
     private attendanceService: AttendancesService,
@@ -41,7 +46,8 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
 
     this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
       result => {
-        this.attendances = result;          
+        this.attendances = result;  
+                
       }
     )    
   }
@@ -50,11 +56,79 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
     this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
       result => {this.attendances = result}
     )   
+    this.isPaid = false;
   }
 
   filterIsPaid(){
     this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
       result => this.attendances = result
     )   
+    this.isPaid = true;
+    
+  }
+
+  filterAll(){
+    this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
+      result => this.attendances = result
+    )   
+    this.all = true;
+    this.isPaid = false;
+  }
+
+  editAttendance(attendance:any){    
+    this.attendanceToEdit = attendance;
+  }
+
+
+  newAttendance(attendances:any){
+    this.attendanceToEdit = undefined;
+
+    if(attendances != undefined)
+      this.attendances = attendances;
+    
+  }
+
+
+  attendanceChanged(attendance:any){
+    this.attendanceService.updateAttendance(attendance).subscribe(
+      ()=>{
+        if(!this.isPaid && !this.all){
+          this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }else if (this.isPaid && !this.all){
+          this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+        else{
+          this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+      }
+    )    
+  }
+
+
+  deleteAttendance(id: number){
+    this.attendanceService.deleteAttendance(id).subscribe(
+      () => {
+        if(!this.isPaid && !this.all){
+          this.attendanceService.WorkerNotRenderedNotPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }else if (this.isPaid && !this.all){
+          this.attendanceService.WorkerNotRenderedIsPaidAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+        else{
+          this.attendanceService.WorkerNotRenderedAttendances(this.workerId).subscribe(
+            list => this.attendances = list
+          )
+        }
+      }
+    )
   }
 }

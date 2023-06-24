@@ -48,9 +48,9 @@ namespace hhSalonAPI.Controllers
 
 
 		[HttpGet("chat/messages")]
-		public async Task<ActionResult<List<Chat>>> MessagesOfUser(string user, string from)
+		public async Task<ActionResult<List<Chat>>> MessagesOfUser(string user, string other)
 		{
-			var messages = await _chatDataService.GetMessagesOfUser(user, from);
+			var messages = await _chatDataService.GetMessagesOfUser(user, other);
 			
 			return Ok(messages.ToList());			
 		}
@@ -60,7 +60,7 @@ namespace hhSalonAPI.Controllers
 		{
 			try
 			{
-				await _chatDataService.SaveMessage(message);
+				 await _chatDataService.SaveMessage(message);
 				return Ok();
 			}
 			catch(Exception ex)
@@ -68,6 +68,16 @@ namespace hhSalonAPI.Controllers
 				return BadRequest(ex.InnerException.Message);
 			}
 			
+		}
+
+
+
+		[HttpPut]
+		public async Task<ActionResult> UpdateMessage(Chat message)
+		{
+				await _chatDataService.UpdateMessage(message);
+				return Ok();			
+
 		}
 
 	}

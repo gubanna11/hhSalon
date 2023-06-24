@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Group } from 'src/app/models/group';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -9,14 +9,15 @@ import { SharedService } from 'src/app/services/shared.service';
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
 })
-export class GroupsListComponent {
+export class GroupsListComponent implements OnInit{
   groups:Group[] = [];
 
   constructor(private groupsService: GroupsService,
               private sharedService: SharedService,
-              private router: Router,
+              public auth: AuthService,
       ){
       }
+
  
   ngOnInit(): void {
     this.groupsService.getGroups().subscribe(
@@ -24,15 +25,15 @@ export class GroupsListComponent {
     );
   }
 
+
   deleteGroup(group: Group){
+
     this.groupsService
       .deleteGroup(group)
-      .subscribe((groups) => {
-        this.groups = groups;
-        this.sharedService.sendData(groups);
-        //this.router.navigate(['groups'])
-      });
+        .subscribe((groups) => {
+          this.groups = groups;
+          this.sharedService.sendData(groups);
+        });
   }
-
  
 }

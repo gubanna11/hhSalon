@@ -13,5 +13,7 @@ namespace hhSalon.Services.Services.Interfaces
 		IEnumerable<ChatItem> GetUserMessagesList(string userId);
 		Task<IEnumerable<Chat>> GetMessagesOfUser(string userId, string fromId);
 		Task SaveMessage(Chat message);
+
+		Task UpdateMessage(Chat message);
 	}
 }

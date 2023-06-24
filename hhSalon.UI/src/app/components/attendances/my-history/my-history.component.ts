@@ -16,10 +16,8 @@ export class MyHistoryComponent implements OnInit{
 
   constructor(
     private attendanceService: AttendancesService,
-    // private router: Router,
      private userStore: UserStoreService,
      private auth: AuthService,
-    // private usersService:  UsersService,
   ){
 
   }

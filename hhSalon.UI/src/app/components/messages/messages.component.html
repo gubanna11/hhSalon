@@ -1,14 +1,43 @@
-<div style=" height: 280px;
+<div style=" height: 400px;
 overflow-x: hidden;
 overflow-y: auto;
 direction:rtl;
 transform: rotate(180deg);
 text-align: left;">
-  <div style="  overflow: hidden;
-  transform: rotate(180deg);">
-    <div *ngFor="let message of messages">
-        <span>{{message.fromUser.userName}}: </span>
-        <span>{{message.content}}</span>
+  <div class="messages">
+    <div  *ngFor="let message of messages">
+      <div class="message"
+        [ngClass]="{'my-message' : message.fromId === userId, 'other-message' : message.fromId !== userId  }"
+      >
+
+            <div class="message-time__is-read">
+              <div class="message-time">
+                {{message.date | date}}
+                {{message.date | time}}
+              </div>
+
+              <div *ngIf="userId === message.fromId">  
+                <i *ngIf="message.isRead">
+                  <img src="assets/img/icons/check-all.svg" alt="read">
+                </i>
+                <i *ngIf="!message.isRead">
+                    <img src="assets/img/icons/check.svg" alt="unread">
+                </i>
+             </div>
+           </div>
+
+            <div class="message-user-content"
+             >
+              <div class="message-content"
+              [ngClass]="{'large' : message.content.length > 10 }"
+              >
+                 {{message.content}} 
+              </div>
+                <span>: {{message.fromUser.userName}} </span>                
+            </div>
+
+          
+      </div>
     </div>
   </div>
 </div>

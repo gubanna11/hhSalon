@@ -1,24 +1,33 @@
-<table>
+<div class="container container-content">
+    <p class="title" style="margin-bottom: 20px;">Workers</p>
+<table class="attendances-table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Surname</th>
-            <th>What</th>
-            <th>Edit</th>
-            <th>Delete</th>            
+            <th>What</th>           
+            <th *ngIf="role === 'Admin'">Edit</th>
+            <th *ngIf="role === 'Admin'">Delete</th>    
+            <th>Chat</th>      
         </tr>
     </thead>
     <tbody *ngFor="let worker of workers">
-        <tr>
+        <tr class="attendance-item">
             <td>{{worker.user.firstName}}</td>
             <td>{{worker.user.lastName}}</td>
-            <td *ngFor="let group of worker.workers_Groups">{{group.group.name}}</td>        
-            <td>
+            <td style="display: flex; flex-direction: column;">
+                <span *ngFor="let group of worker.workers_Groups">{{group.group.name}}</span>
+            </td>     
+            
+            <td *ngIf="role === 'Admin'">
                 <i  [routerLink]="['/workers/edit', worker.id]" class="bi bi-pencil-fill"></i>
             </td>
-            <td (click)="deleteWorker(worker.id)">
+            <td *ngIf="role === 'Admin'" (click)="deleteWorker(worker.id)">
                 <i class="bi bi-trash"></i>
             </td>
+            
+            <td><a [routerLink]="['/chat', worker.id]">Message</a></td>   
         </tr>
     </tbody>
 </table>
+</div>

@@ -6,12 +6,11 @@ namespace hhSalon.Services.Services.Interfaces
 {
     public interface IAttendancesService : IEntityBaseRepository<Attendance>
 	{
+		Task<IEnumerable<Attendance>> GeAllAttendances();
+		Task<IEnumerable<Attendance>> GeAttendancesBySearch(string content);
 
 		Task AddNewAttendanceAsync(NewAttendanceVM newAttendance);
 
-		//Task<Attendance> GetAttendanceById(int id);
-		//Task<IEnumerable<Attendance>> GetIsRenderedAttendances(); 
-		//Task<IEnumerable<Attendance>> GetNotRenderedAttendances();
 
 		// MY ATTENDANCES
 		Task<IEnumerable<Attendance>> MyIsRenderedAttendances(string userId); //
@@ -22,14 +21,13 @@ namespace hhSalon.Services.Services.Interfaces
 		//WORKER'S DATA
 		Task<IEnumerable<Attendance>> WorkerNotRenderedIsPaidAttendances(string workerId);
 		Task<IEnumerable<Attendance>> WorkerNotRenderedNotPaidAttendances(string workerId);
-		Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId);
+        Task<IEnumerable<Attendance>> WorkerNotRenderedAttendances(string workerId);
+        Task<IEnumerable<Attendance>> WorkerIsRenderedAttendances(string workerId);
 
 		Task<IEnumerable<TimeSpan>> GetFreeTimeSlots(string workerId, DateTime date);
 
-		//Task<IEnumerable<Attendance>> GeAllAttendances(string userId, string role);
 
-		//Task CompletePaymentAll(string userId);
-
-		//double GetTotal(string userId);
+		Task UpdateAttendances(List<Attendance> attendanceVM);
+		Task UpdateAttendance(Attendance attendanceVM);
 	}
 }

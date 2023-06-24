@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChildren } from '@angular/core';
 import {  ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Group } from 'src/app/models/group';
@@ -12,9 +12,11 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class GroupsMenuComponent {
   
-  groups: Group[] = [];
+  public groups: Group[] = [];
   subscription: Subscription | undefined;
   
+  @ViewChildren('link') menu_links!: QueryList<ElementRef>;
+
   constructor(private groupsService: GroupsService,
     private router:Router,
     private sharedService: SharedService,

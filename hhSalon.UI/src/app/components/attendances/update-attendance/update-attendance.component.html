@@ -1,0 +1,72 @@
+<div (click)="closeModal($event)" id="myModal" class="my-modal">
+    <div class="my-modal-content">
+        <span (click)="closeModal($event)" class="close">&times;</span>
+
+        <div class="attendance">
+            <div class="attendance-form__item">
+                <label for="group">Group</label>
+                <select (change)="groupChanged($event.target)" id="group" name="group" [(ngModel)] = "attendance.groupId">
+                    <option [value]="group.id" *ngFor="let group of groups">
+                        {{ group.name }}
+                    </option>
+                </select>
+            </div>
+    
+    
+    
+            <div class="attendance-form__item">
+                <label for="service">Service</label>
+    
+                <select (change)="serviceChanged($event.target)" name="service" [(ngModel)] = "attendance.serviceId">
+                    <option [value]="service.id" *ngFor="let service of services">
+                        {{ service.name }}
+                    </option>
+                </select>
+            </div>
+    
+    
+    
+            <div class="attendance-form__item">
+                <label for="date">Date</label>
+                <input [(ngModel)] = "attendance.date" name="date" type="date" id="date">        
+            </div>
+    
+            <div class="attendance-form__item">
+                <label for="time">Time</label>
+                <input id="time" type="time" [(ngModel)]="attendance.time">
+            </div>
+    
+            <div class="attendance-form__item">
+                <label for="paid">Paid</label>
+    
+                <select [value]="attendance.isPaid" name="paid" [(ngModel)] = "attendance.isPaid">
+                    <option value="Yes">
+                        Yes
+                    </option>
+                    <option value="No">
+                        No
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="attendance-form__item">
+                <label for="rendered">Rendered</label>
+    
+                <select [value]="attendance.isRendered" name="rendered" [(ngModel)] = "attendance.isRendered">
+                    <option value="Yes">
+                        Yes
+                    </option>
+                    <option value="No">
+                        No
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <p class="price">Price: {{attendance.price}}</p>
+                <button (click)="update(attendance)" class="btn" style="width:45%">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

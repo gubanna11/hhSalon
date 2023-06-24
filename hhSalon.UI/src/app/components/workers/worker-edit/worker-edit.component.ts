@@ -1,10 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgToastComponent, NgToastService } from 'ng-angular-popup';
 import { Days } from 'src/app/models/enums/Days';
 import { Group } from 'src/app/models/group';
+import { Schedule } from 'src/app/models/schedule';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
+import { ResetPasswordService } from 'src/app/services/reset-password.service';
 import { WorkersService } from 'src/app/services/workers.service';
+import * as toastr from 'toastr'; 
 
 @Component({
   selector: 'app-worker-edit',
@@ -22,8 +25,9 @@ export class WorkerEditComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private workersService: WorkersService,
-    private toast: NgToastService,
     private groupsService: GroupsService,
+    private resetService: ResetPasswordService,
+    public auth: AuthService,
     ){
 
   }
@@ -43,9 +47,6 @@ export class WorkerEditComponent implements OnInit{
           //       this.worker.schedules[i] = {day: this.Days[i], workerId: this.workerId};             
           // }
 
-       
-
-        //   console.log(this.worker);
           
         })
 
@@ -56,10 +57,16 @@ export class WorkerEditComponent implements OnInit{
   }
 
 
+  resetTime(schedule:Schedule){
+    let sch = this.worker.schedules.filter((s : any )=> s.day == schedule.day)[0];
+    sch.start = undefined;
+    sch.end = undefined;
+    
+  }
+
+
 
   Save(){
-    console.log(this.worker);
-    
   //   if(!(this.worker.address && this.worker.firstName && this.worker.lastName &&
   //       this.worker.gender && this.worker.groupsIds && this.worker.userName && this.worker.email))
   //     {
@@ -72,16 +79,29 @@ export class WorkerEditComponent implements OnInit{
     this.workersService.updateWorker(this.worker).subscribe(
       {
         next: res =>{
-          this.toast.success({detail: "SUCCESS", summary: res.message, duration: 5000});
-        
-          this.router.navigate(['/workers']);
+          toastr.success(res.message, 'SUCCESS', {timeOut: 5000});
         },
         error: (err) => {
           console.log(err.error.message);
           
-          this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+          toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
         }
       }
     )
    }
+
+
+   confirmToSend(){
+    //API
+      this.resetService.sendResetPasswordLink(this.worker.email).subscribe({
+        next:(res) => {
+            toastr.success(res.message,'Success', {timeOut: 3000});
+
+        },
+        error:(err)=>{
+            toastr.error(err.error.message, 'Error', {timeOut: 3000});
+        }
+      })
+    }
+
 }

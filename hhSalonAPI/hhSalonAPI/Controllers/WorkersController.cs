@@ -50,15 +50,16 @@ namespace hhSalonAPI.Controllers
 
 
 
-		[Authorize(Roles = UserRoles.Admin)]
+		[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Worker}")]
 		[HttpPost("schedule/create")]
 		public async Task<ActionResult> CreateWorkerSchedule([FromBody] List<Schedule> schedules)
 		{
 
-			if (schedules.Count == 0)
+			if (schedules.Count == 0 || (schedules.Where(s => (s.Start != TimeSpan.Zero && s.End == TimeSpan.Zero)
+				|| (s.Start == TimeSpan.Zero && s.End != TimeSpan.Zero)).Count() > 0) )
 				return BadRequest(new
 				{
-					Message = "Worker Schedule should have start and end time!",
+					Message = "Worker's schedule should have start and end time!",
 				});
 
 
@@ -66,18 +67,25 @@ namespace hhSalonAPI.Controllers
 
 			return Ok(new
 			{
-				Message = "Worker Schedule Updated!",
+				Message = "Worker's schedule was updated!",
 			});
 		}
 
 
 
-		[Authorize(Roles = UserRoles.Admin)]
+		[Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Worker}")]
 		[HttpPut]
 		public async Task<ActionResult> UpdateWorker(WorkerVM workerVM)
 		{
 			try
 			{
+				if (workerVM.Schedules.Where(s => (s.Start != TimeSpan.Zero && s.End == TimeSpan.Zero)
+				|| (s.Start == TimeSpan.Zero && s.End != TimeSpan.Zero)).Count() > 0)
+					return BadRequest(new
+					{
+						Message = "Worker's schedule should have start and end time!",
+					});
+
 				//await _workersService.UpdateWorkerInfo(workerVM);
 				await _workersService.UpdateWorkerAsync(workerVM);
 				
@@ -95,7 +103,7 @@ namespace hhSalonAPI.Controllers
 
 			return Ok(new
 			{
-				Message = "Worker Data Updated!",
+				Message = "Worker's data was updated!",
 			});
 		}
 

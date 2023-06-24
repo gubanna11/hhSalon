@@ -5,6 +5,7 @@ import { Group } from 'src/app/models/group';
 import { Service } from 'src/app/models/service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { ServicesService } from 'src/app/services/services.service';
+import * as toastr from 'toastr';
 
 @Component({
   selector: 'app-update-service',
@@ -12,7 +13,7 @@ import { ServicesService } from 'src/app/services/services.service';
   styleUrls: ['./update-service.component.scss']
 })
 export class UpdateServiceComponent implements OnInit{
-  @Input() service?: Service | null;
+  @Input() service!: Service;
   @Output() servicesUpdated = new EventEmitter<Service[]>();
   selectedGroupName?: string | null;
   groups: Group[] = [];
@@ -21,41 +22,45 @@ export class UpdateServiceComponent implements OnInit{
   constructor(private groupsService: GroupsService,
     private servicesService: ServicesService,
     private router: Router,
-    private toast: NgToastService,
     ){
-      this.groupsService.getGroups().subscribe( (groups) => this.groups = groups );
-
-    //this.groupsService.getGroupById(1).subscribe( (group) =>  this.selectedGroupName = group.name);
       
   }
   ngOnInit(): void {
-    let select: any  = document.getElementById('selectGroup');
-    
-    if(select != null){
-      for(let opt of select.options)
-        if(opt.value == this.service?.groupId)
-          opt.selected = true;
-    }
-
+    this.groupsService.getGroups().subscribe( (groups) => this.groups = groups );
   }
 
-  selectChanged(group?:any){  
-    this.selectedGroupName = group.options[group.selectedIndex].textContent; 
-  }
 
   updateService(service: Service){
+    let select  = document.getElementById('selectGroup') as HTMLSelectElement;
+
+       if(select){
+        this.selectedGroupName = select[select.selectedIndex].textContent;        
+    }
+
     this.servicesService.updateService(service).subscribe({
       next:(services) => {
         
         this.servicesUpdated.emit(services);
-
+        toastr.success('The service was updated!', 'SUCCESS', {timeOut: 5000});
         this.router.navigate([`services/${service.groupId}/${this.selectedGroupName}`])
 
       },
-      error:(err) => {               
-        this.toast.error({detail: "ERROR", summary: err.error.message, duration: 5000});
+      error:(err) => {     
+        toastr.error(err.error.message,'ERROR', {timeOut: 5000});
       }
   })
+   }
+
+
+   closeModal(event:any){
+    const modal = document.getElementById("myModal");
+    const closeBtn = document.getElementsByClassName('close')[0];
+    
+    if(modal && (event.target == modal || event.target == closeBtn))
+    {
+      this.servicesUpdated.emit();
+    }
+    
   }
 
 }

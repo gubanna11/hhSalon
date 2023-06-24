@@ -12,8 +12,6 @@ namespace hhSalonAPI.Domain.Concrete
         public DbSet<GroupOfServices> Groups { get; set; }
         public DbSet<ServiceGroup> Services_Groups { get; set; }
 
-        //public DbSet<Client> Clients { get; set; }
-
         public DbSet<Worker> Workers { get; set; }
 
         public DbSet<WorkerGroup> Workers_Groups { get; set; }
@@ -25,7 +23,7 @@ namespace hhSalonAPI.Domain.Concrete
         public DbSet<Schedule> Schedules { get; set; }
 
         public DbSet<Chat> Chats { get; set; }
-      
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,17 +43,11 @@ namespace hhSalonAPI.Domain.Concrete
 
 			modelBuilder.Entity<WorkerGroup>().HasOne(w => w.Group).WithMany(wg => wg.Workers_Groups);
 
-            
-            //modelBuilder.Entity<Worker>().HasMany(w => w.Schedules).WithOne(s => s.Worker);
 
-			
+            modelBuilder.Entity<Attendance>().HasOne(a => a.Worker).WithMany(a => a.Attendances).OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Schedule>().HasOne(s => s.Worker).WithMany(s => s.Schedules).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>().ToTable("users");
-
-
-
-            //modelBuilder.Entity<Chat>().HasKey( c => c.Id);
             
 
 

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Attendance } from '../models/attendance';
 
@@ -13,16 +12,8 @@ export class AttendancesService {
 
   constructor(private http: HttpClient) { }
 
-  // public getServices(groupId: number): Observable<Attendace[]>{
-  //   return this.http.get<Service[]>(`${environment.apiUrl}/${this.url}/${groupId}`);
-  // }
-
-  // public createAttendance(attendance: Attendance): Observable<Attendance[]>{
-  //  return this.http.post<Attendance[]>(`${environment.apiUrl}/${this.url}`, attendance);
-  // }
-
   public createAttendance(attendance: Attendance){
-    return this.http.post<Attendance[]>(`${environment.apiUrl}/${this.url}`, attendance);
+    return this.http.post<Attendance>(`${environment.apiUrl}/${this.url}`, attendance);
    }
 
 
@@ -55,17 +46,38 @@ export class AttendancesService {
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/worker-not-rendered-is-paid-attendances/${workerId}`);
   }
   
+  public WorkerNotRenderedAttendances(workerId: string){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/worker-not-rendered-attendances/${workerId}`);
+  }
 
+ 
+  
   public getFreeTimeSlots(workerId: any, date: any){
     return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/time-slots/${workerId}/${date}`);
   }
+
+ 
+  public updateAttendances(attendances: any[]){
+    return this.http.put(`${environment.apiUrl}/${this.url}/update-attendances`, attendances);
+  }
+
+  public updateAttendance(attendance: any){
+    return this.http.put(`${environment.apiUrl}/${this.url}`, attendance);
+  }
+
+
+  public deleteAttendance(id: number){
+    return this.http.delete(`${environment.apiUrl}/${this.url}/${id}`)
+  }
   
 
-  // public deleteService(service:Service): Observable<Service[]>{
-  //   return this.http.delete<Service[]>(`${environment.apiUrl}/${this.url}/${service.id}`);
-  // }
 
-  // public updateService(service:Service): Observable<Service[]>{
-  //   return this.http.put<Service[]>(`${environment.apiUrl}/${this.url}`, service);
-  // }
+
+  public getAllAttendances(){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}/all-attendances`);
+  }
+
+  public filterAttendances(content: string){
+    return this.http.get<any[]>(`${environment.apiUrl}/${this.url}?content=${content}`);
+  }
 }

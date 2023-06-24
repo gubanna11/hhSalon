@@ -1,0 +1,38 @@
+<div class="container container-content">
+    <p class="title" style="margin-bottom: 20px ;">Attendances</p>
+    <input (input)="search($event)" type="text" placeholder="Search" class="input-field" style="margin: 16px 0px 12px 0px">
+    <div>
+        <table class="attendances-table" > 
+            <thead> 
+                <tr>
+                    <th>Client</th>
+                    <th>Service</th>
+                    <th>Group</th>
+                    <th>Worker</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>IsPaid</th>
+                    <th>IsRendered</th>
+                    <th>Message to client</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let attendance of attendances">
+                <tr class="attendance-item" >
+                    <td>{{attendance.client.userName}}</td>
+                    <td>{{attendance.service.name}}</td>
+                    <td>{{attendance.group.name}}</td>
+                    <td>{{attendance.worker.user.firstName}}</td>
+                    <td>{{attendance.date | date}}</td>
+                    <td>{{attendance.time | timeString}}</td>
+                    <td>{{attendance.isPaid}}</td>
+                    <td>{{attendance.isRendered}}</td>
+
+                    <td><a [routerLink]="['/chat', attendance.client.id]">Message</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>

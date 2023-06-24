@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,10 @@ namespace hhSalon.Domain.Entities
 		public string Content { get; set; }
 
 		[Column("date")]
-
 		public DateTime? Date { get; set; }
+
+
+		[Column("is_read")]
+		public bool IsRead { get; set; }
 	}
 }

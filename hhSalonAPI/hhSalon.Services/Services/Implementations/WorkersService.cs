@@ -133,6 +133,13 @@ namespace hhSalon.Services.Services.Implementations
 
 		private async Task UpdateWorkerInfo(WorkerVM workerVM)
 		{
+			var count =  _context.Users.Where(u => u.Email == workerVM.Email).Count();
+
+			if (count > 1)
+			{
+				throw new Exception("This email is taken");
+			}
+
 			//var worker = await GetWorkerByIdAsync(workerVM.Id);
 			var worker = await _context.Workers.Where(w => w.Id == workerVM.Id).Include(w => w.User).FirstOrDefaultAsync();
 			//_context.Entry(worker).State = EntityState.Unchanged;

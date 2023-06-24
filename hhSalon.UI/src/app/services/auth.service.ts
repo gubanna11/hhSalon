@@ -1,24 +1,47 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { TokenApiModel } from '../models/token-api';
+import { UserStoreService } from './user-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit {
   private url = 'Auth';
   private userPayload: any;
 
+
+  ///////
+  role: string = '';
+  id: string = '';
+
   constructor(private http: HttpClient,
-    private router: Router) {
+    private router: Router,
+    private userStore: UserStoreService) {      
+      this.userPayload = this.decodedToken();   
       
-      this.userPayload = this.decodedToken();
-      console.log(this.userPayload);
-      
+      this.userStore.getRoleFromStore().subscribe(
+        roleValue => {
+          const roleFromToken = this.getRoleFromToken();
+          this.role = roleValue || roleFromToken;
+          console.log(this.role);
+          
+       })  
+
+       this.userStore.getIdFromStore().subscribe(
+        idValue => {
+          const idFromToken = this.getIdFromToken();
+          this.id = idValue || idFromToken;          
+       })  
      }
 
+
+  ngOnInit(): void {
+
+  }
   
 
   public signUp(userObj: any){
@@ -47,12 +70,21 @@ export class AuthService {
     localStorage.setItem('token', tokenValue);
   }
 
+  storeRefreshToken(tokenValue: string){
+    localStorage.setItem('refreshToken', tokenValue);
+  }
+
+
   getToken(){
     return localStorage.getItem('token');
   }
 
+  getRefreshToken(){
+    return localStorage.getItem('refreshToken');
+  }
+  
+
   isLoggedIn():boolean{
-    //if there is a token - true
     return !!localStorage.getItem('token');
   }
   
@@ -80,5 +112,9 @@ export class AuthService {
       return this.userPayload.nameid;
   }
 
+
+  renewToken(tokenApi: TokenApiModel){
+    return this.http.post<any>(`${environment.apiUrl}/${this.url}/refresh`, tokenApi);
+  }
   
 }

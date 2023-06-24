@@ -2,6 +2,8 @@
 using hhSalon.Domain.Entities;
 using hhSalon.Services.Services.Interfaces;
 using hhSalonAPI.Domain.Concrete;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace hhSalon.Services.Services.Implementations
 {
@@ -20,10 +22,23 @@ namespace hhSalon.Services.Services.Implementations
             if (dbGroup != null)
             {
                 dbGroup.Name = group.Name;
+
+                if (_context.Groups.Where(g => g.Name == group.Name).Count() > 1)
+                {
+                    throw new DbUpdateException("Group already exists!");
+                }               
+
                 dbGroup.ImgUrl = group.ImgUrl;
 
                 await _context.SaveChangesAsync();
             }
         }
-    }
+
+		public async Task<List<GroupOfServices>> GetGroupsByWorkerId(string workerId)
+        {
+            var groups = await _context.Workers_Groups.Where(wg => wg.WorkerId == workerId).Select(wg => wg.Group).ToListAsync();
+
+            return groups;
+		}
+	}
 }

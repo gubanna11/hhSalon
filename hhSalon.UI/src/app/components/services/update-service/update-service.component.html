@@ -1,23 +1,28 @@
-<div *ngIf="service">
-    <div>
-        <label for="name">Name </label>
-        <input [(ngModel)]="service.name" type="text">
-    </div>
-    <div>
-        <label for="price">Price </label>
-        <input [(ngModel)]="service.price" type="text">
-    </div>
+<div (click)="closeModal($event)" id="myModal" class="my-modal">
+    <div class="my-modal-content">
+        <span (click)="closeModal($event)" class="close">&times;</span>
+        <div class="service">
+            <div class="service__item">
+                <label for="name">Name </label>
+                <input [(ngModel)]="service.name" type="text">
+            </div>
+            <div class="service__item">
+                <label for="price">Price </label>
+                <input [(ngModel)]="service.price" type="text">
+            </div>
 
-    <div>
-        <label for="group">Group</label>
-        <select id="selectGroup" (change)="selectChanged($event.target)" [(ngModel)] = "service.groupId">
-            <option [value]="group.id" *ngFor="let group of groups">
-                {{ group.name }}
-            </option>
-        </select>
-    </div>
+            <div class="service__item">
+                <label for="group">Group</label>
+                <select id="selectGroup" [(ngModel)] = "service.groupId">
+                    <option [value]="group.id" *ngFor="let group of groups">
+                        {{ group.name }}
+                    </option>
+                </select>
+            </div>
 
-    <div>
-        <a (click)="updateService(service)">Save</a>
+            <div>
+                <a (click)="updateService(service)" class="btn" style="width:45%">Save</a>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,14 +1,34 @@
 <div class="container">
     
-<p>{{groupName}}</p>
-<br>
+    <p class="title">{{groupName}}</p>
+    
 
 <!-- UPDATE -->
-<app-update-service (servicesUpdated)="updatedServicesList($event)" [service]="serviceToEdit"></app-update-service>
+  
 
-<div *ngFor="let service of services">
-    <p>{{service.name}} <span style="padding:10px">-</span>  {{service.price}} </p>
-    <a (click)="updateService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Edit</a>
-    <a (click)="deleteService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Delete</a>
+    <div class="items">
+        <div class="item" *ngFor="let service of services">
+        
+            <div class="item-data">
+                <span class="item-name">{{service.name}} </span>
+                <span class="item-price">{{service.price}} </span>  
+            </div>
+    
+           <div *ngIf="role === 'Admin'" class="item-icons">
+                <div  (click)="updateService(service)">
+                    <i  class="bi bi-pencil-fill"></i>
+                </div>
+                
+                <div (click)="deleteService(service)">
+                    <i class="bi bi-trash"></i>
+                </div>
+           </div>
+            
+            <!-- <a (click)="updateService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Edit</a>
+            <a (click)="deleteService(service)" type="submit" style="cursor:pointer; background-color: antiquewhite;">Delete</a> -->
+        </div>
+    </div>
+
+    <app-update-service *ngIf="serviceToEdit" (servicesUpdated)="updatedServicesList($event)" [service]="serviceToEdit"></app-update-service>
 </div>
-</div>
+

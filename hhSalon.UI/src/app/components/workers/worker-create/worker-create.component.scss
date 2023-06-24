@@ -1,5 +1,9 @@
 @import "/src/app/components/sign-up/sign-up.component.scss";
 
+.signup{
+  padding: 20px 0px 0px 0px;
+}
+
 select[multiple] {
     background:none;
     width:200px;
@@ -28,4 +32,8 @@ select[multiple] {
     background-color: $beigeColor;
   }
 
+
+  input{
+    width: 200px;
+  }
   

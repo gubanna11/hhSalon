@@ -1,8 +1,10 @@
 import { Component,  OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Service } from 'src/app/models/service';
+import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { ServicesService } from 'src/app/services/services.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-services-list',
@@ -14,10 +16,13 @@ export class ServicesListComponent implements OnInit {
   services: Service[] = [];
 
   serviceToEdit?:Service | null;
-
+  role: string = '';
+  
   constructor(private servicesService: ServicesService,
     private route: ActivatedRoute,
-    private router: Router){
+    private router: Router,
+    private userStore: UserStoreService,
+    private auth: AuthService){
 
   }
 
@@ -34,19 +39,39 @@ export class ServicesListComponent implements OnInit {
 
        this.groupName = params['groupName'];
 
-       this.servicesService.getServices(groupId).subscribe(        
-        (services: Service[]) => this.services = services
+       this.servicesService.getServices(groupId).subscribe(        {
+          next:  (services: Service[]) => {
+            this.services = services
+          },
+          error: (err)=>{
+            this.services = [];
+          }
+       }
+       
       );
     })
+
+    this.userStore.getRoleFromStore().subscribe(
+      roleValue => {
+        const roleFromToken = this.auth.getRoleFromToken();
+        this.role = roleValue || roleFromToken;
+     })  
   }
 
 
   deleteService(service:Service){
-    this.servicesService.deleteService(service).subscribe(
-      (services:Service[]) => {
-        this.services = services;
-        //this.router.navigate([`services/${service.groupId}/${this.groupName}`])
-      }
+    this.servicesService.deleteService(service).subscribe({
+          next: (services:Service[]) => {
+            this.services = services;
+            //this.router.navigate([`services/${service.groupId}/${this.groupName}`])
+            },
+            error: (err) => {
+              console.log(err.error.message);
+              
+            }
+
+        }
+      
       );
   }
 
@@ -55,12 +80,17 @@ export class ServicesListComponent implements OnInit {
   }
 
   updatedServicesList(services: Service[]){
-    this.services = services;
+    console.log(services);
+    
+    if(services != undefined)
+      this.services = services;
     this.serviceToEdit = null;
 
-    this.route.params.subscribe(params => {
-      this.groupName = params['groupName'];      
-   })
+    
+
+  //   this.route.params.subscribe(params => {
+  //     this.groupName = params['groupName'];      
+  //  })
 
     //this.groupService.getGroupById(services[0].groupId).subscribe((group) => this.groupName = group.name);
 
