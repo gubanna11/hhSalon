@@ -89,8 +89,7 @@ export class LoginComponent implements OnInit {
             this.sharedService.sendData(true);
             this.router.navigate(["/"]);
           },
-          error:(err) => {
-            //alert(err?.error.message);       
+          error:(err) => {      
             console.log(err.error.message);
             toastr.error(err.error.message, 'ERROR', {timeOut: 5000});
           }
@@ -115,7 +114,6 @@ export class LoginComponent implements OnInit {
 
   confirmToSend(){
     if(this.checkValidEmail(this.resetPasswordEmail)){
-      console.log(this.resetPasswordEmail);
 
       //API
       this.resetService.sendResetPasswordLink(this.resetPasswordEmail).subscribe({

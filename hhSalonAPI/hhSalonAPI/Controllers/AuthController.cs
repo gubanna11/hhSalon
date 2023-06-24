@@ -49,8 +49,6 @@ namespace hhSalonAPI.Controllers
 			if (!PasswordHasher.VerifyPassword(userObj.Password, user.Password))
 				return BadRequest(new { Message = "Incorrect password!" });
 
-
-
 			//user.Token = CreateJwt(user);
 			//await _context.SaveChangesAsync();
 
@@ -85,9 +83,10 @@ namespace hhSalonAPI.Controllers
 				return BadRequest();
 			}
 
+            userObj.Id = Guid.NewGuid().ToString();
 
-			//double id
-			if (_context.Users.Where(u => u.Id == userObj.Id).Count() > 0)
+            //double id
+            if (_context.Users.Where(u => u.Id == userObj.Id).Count() > 0)
 				while (_context.Users.Where(u => u.Id == userObj.Id).Count() != 0)
 					userObj.Id = Guid.NewGuid().ToString();
 
@@ -113,14 +112,9 @@ namespace hhSalonAPI.Controllers
 
 			userObj.Token = "";
 
-			userObj.Id = Guid.NewGuid().ToString();
-
-
 			await _context.Users.AddAsync(userObj);
 			await _context.SaveChangesAsync();
 
-
-			//return Ok(_context.Users.ToList());
 			return Ok(new
 			{
 				Message = "User Registered!"
@@ -169,7 +163,6 @@ namespace hhSalonAPI.Controllers
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = identity,
-				//Expires = DateTime.Now.AddDays(1),
 				Expires = DateTime.Now.AddSeconds(10),
 				SigningCredentials = credentials
 			};
@@ -320,13 +313,10 @@ namespace hhSalonAPI.Controllers
 				});
 			}
 
-
             //check password
-
             var pass = CheckPasswordStrength(resetPasswordDto.NewPassword);
             if (!string.IsNullOrEmpty(pass))
                 return BadRequest(new { Message = pass });
-
 
 
             user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
@@ -342,8 +332,6 @@ namespace hhSalonAPI.Controllers
 
 
 
-
-
 		[HttpPost("worker-register")]
 		public async Task<IActionResult> RegisterWorker([FromBody] WorkerVM workerVM)
 		{
@@ -351,6 +339,7 @@ namespace hhSalonAPI.Controllers
 			{
 				return BadRequest();
 			}
+
 			workerVM.Id = Guid.NewGuid().ToString();
 
 			//double id

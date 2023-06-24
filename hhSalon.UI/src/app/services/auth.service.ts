@@ -85,11 +85,6 @@ export class AuthService implements OnInit {
   
 
   isLoggedIn():boolean{
-    //if there is a token - true
-    // if(this.userPayload)
-    //   if(new Date(this.userPayload.exp * 1000) <= new Date())
-    //     localStorage.removeItem('token');
-    
     return !!localStorage.getItem('token');
   }
   

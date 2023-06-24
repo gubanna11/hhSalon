@@ -72,7 +72,7 @@ export class WorkerNotRenderedAttendancesComponent implements OnInit{
       result => this.attendances = result
     )   
     this.all = true;
-    
+    this.isPaid = false;
   }
 
   editAttendance(attendance:any){    

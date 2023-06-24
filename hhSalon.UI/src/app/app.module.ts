@@ -29,7 +29,6 @@ import { WorkerScheduleComponent } from './components/workers/worker-schedule/wo
 import { WorkerCreateComponent } from './components/workers/worker-create/worker-create.component';
 
 
-import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
 import { TimeFromDatePipe } from './pipes/time.pipe';
 
 import { WorkersListComponent } from './components/workers/workers-list/workers-list.component';
@@ -72,7 +71,6 @@ import { ResetComponent } from './components/reset/reset.component';
     WorkerNotRenderedAttendancesComponent,
     WorkerScheduleComponent,
 
-    EnumToArrayPipe,
     TimeFromDatePipe,
 
     WorkersListComponent,

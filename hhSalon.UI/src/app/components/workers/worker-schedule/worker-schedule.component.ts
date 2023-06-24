@@ -32,11 +32,6 @@ export class WorkerScheduleComponent implements OnInit {
       
       const roleFromToken = this.auth.getRoleFromToken();
       let role = roleVal || roleFromToken;
-      
-      // if(role != 'Admin'){
-      //   this.toast.warning({detail: "Oooops..."});
-      //   this.router.navigate(['login']);
-      // }
     })
 
     const routeParams = this.route.snapshot.paramMap;
@@ -50,12 +45,6 @@ export class WorkerScheduleComponent implements OnInit {
   }
   
   createSchedule(schedules:Schedule[]){
-  
-    // schedules = schedules.filter(element => {
-    //   return (element.start != null && element.end != null);
-    // });
-    
-
     this.workersService.createWorkerSchedule(schedules) 
     .subscribe({
       next: (res) => {

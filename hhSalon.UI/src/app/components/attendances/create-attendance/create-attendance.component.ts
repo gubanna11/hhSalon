@@ -167,12 +167,7 @@ export class CreateAttendanceComponent implements OnInit {
         const idFromToken = this.auth.getIdFromToken();
         attendance.clientId = idValue || idFromToken;
       })
-
-      //const hoursA = document.forms[0]['time'].value.split(':')[0];
-      //const minutesA = document.forms[0]['time'].value.split(':')[1];
-      //attendance.time = ({hours: hoursA, minutes: minutesA});
-      
-      
+    
 
       this.attendancesService.createAttendance(attendance).subscribe(
         {
@@ -193,7 +188,7 @@ export class CreateAttendanceComponent implements OnInit {
   dateIsCorrect(){
     if(this.attendance.date != undefined)
     {
-      if(new Date(this.attendance.date) < new Date(Date.now())){
+      if(new Date(this.attendance.date).getTime() < (new Date(Date.now()).getTime())){
       
           toastr.error("You can't choose this date", 'Error', {timeOut: 2000});
           return false;
