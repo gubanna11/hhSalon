@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { ServicesService } from 'src/app/services/services.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { UsersService } from 'src/app/services/users.service';
 import { WorkersService } from 'src/app/services/workers.service';
 import * as toastr from 'toastr';
 
@@ -117,8 +116,7 @@ export class CreateAttendanceComponent implements OnInit {
             this.attendance.price = service.price;
   }
 
-  updateTime(){
-   
+  updateTime(){   
     if(this.attendance.date != undefined)
     {
       

@@ -1,4 +1,6 @@
-﻿using hhSalon.Domain.Entities;
+﻿using hhSalon.Domain.Abstract.Implementations;
+using hhSalon.Domain.Abstract.Interfaces;
+using hhSalon.Domain.Entities;
 using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.Services.Implementations;
 using hhSalon.Services.ViewModels;
@@ -22,6 +24,7 @@ namespace hhSalon.Tests.Controllers
 
         AppDbContext context;
         AttendancesController attendancesController;
+        IUnitOfWork unitOfWork;
 
         AttendancesService attendancesService;
 
@@ -29,11 +32,12 @@ namespace hhSalon.Tests.Controllers
         public void Setup()
         {
             context = new AppDbContext(dbContextOptions);
+            unitOfWork = new UnitOfWork(context);
             context.Database.EnsureCreated();
 
             SeedDatabase();
 
-            attendancesService = new AttendancesService(context);
+            attendancesService = new AttendancesService(unitOfWork);
             attendancesController = new AttendancesController(attendancesService);
         }
 

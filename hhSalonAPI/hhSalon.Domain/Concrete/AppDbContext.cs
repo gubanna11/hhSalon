@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hhSalonAPI.Domain.Concrete
 {
-	public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-		public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions options) : base(options) { }
 
-		public DbSet<Service> Services { get; set; }
+        public DbSet<Service> Services { get; set; }
         public DbSet<GroupOfServices> Groups { get; set; }
         public DbSet<ServiceGroup> Services_Groups { get; set; }
 
@@ -27,12 +27,12 @@ namespace hhSalonAPI.Domain.Concrete
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-			modelBuilder.ApplyConfiguration(new AttendanceConfiguration());
-			modelBuilder.ApplyConfiguration(new GroupOfServicesConfiguration());
+            modelBuilder.ApplyConfiguration(new AttendanceConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupOfServicesConfiguration());
             modelBuilder.ApplyConfiguration(new ScheduleConfiguration());
 
-			/**/
-			modelBuilder.Entity<ServiceGroup>().HasKey(sg => new { sg.ServiceId, sg.GroupId });
+            /**/
+            modelBuilder.Entity<ServiceGroup>().HasKey(sg => new { sg.ServiceId, sg.GroupId });
 
             modelBuilder.Entity<ServiceGroup>().HasOne(g => g.Group).WithMany(sg => sg.Services_Groups);
 
@@ -41,17 +41,16 @@ namespace hhSalonAPI.Domain.Concrete
             /**/
             modelBuilder.Entity<WorkerGroup>().HasKey(wg => new { wg.WorkerId, wg.GroupId });
 
-			modelBuilder.Entity<WorkerGroup>().HasOne(w => w.Group).WithMany(wg => wg.Workers_Groups);
+            modelBuilder.Entity<WorkerGroup>().HasOne(w => w.Group).WithMany(wg => wg.Workers_Groups);
 
 
             modelBuilder.Entity<Attendance>().HasOne(a => a.Worker).WithMany(a => a.Attendances).OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Schedule>().HasOne(s => s.Worker).WithMany(s => s.Schedules).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>().ToTable("users");
-            
 
 
-			base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
     }

@@ -38,7 +38,6 @@ import { MessagesComponent } from './components/messages/messages.component';
 import { ChatInputComponent } from './components/chat-input/chat-input.component';
 import { UpdateAttendanceComponent } from './components/attendances/update-attendance/update-attendance.component';
 import { TimeStringPipe } from './pipes/time-string.pipe';
-import { NgToastComponent, NgToastModule } from 'ng-angular-popup';
 //import * as toastr from 'toastr';
 import { UserEditComponent } from './components/users/user-edit/user-edit.component';
 import { AllAttendancesComponent } from './components/attendances/all-attendances/all-attendances.component';
@@ -92,7 +91,6 @@ import { ResetComponent } from './components/reset/reset.component';
     HttpClientModule,    
     FormsModule,    
     ReactiveFormsModule,    
-    NgToastModule
   ],
   providers: [SharedService, 
   {

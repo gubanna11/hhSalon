@@ -1,57 +1,45 @@
-﻿using hhSalon.Domain.Entities.Static;
-using hhSalon.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
-using hhSalonAPI.Domain.Concrete;
+﻿using hhSalon.Domain.Entities;
+using hhSalon.Domain.Entities.Static;
 using hhSalon.Services.Services.Interfaces;
-using hhSalon.Services.Services.Implementations;
-using hhSalon.Services.ViewModels;
+using hhSalonAPI.Domain.Concrete;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace hhSalonAPI.Controllers
 {
-	[Route("api/[controller]")]
-	//[Route("api/users")]
-	[ApiController]
-	public class UsersController : ControllerBase
-	{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
+    {
+        private readonly IUsersService _usersService;
+        public UsersController(IUsersService usersService)
+        {
+            _usersService = usersService;
+        }
 
-		private readonly AppDbContext _context;
-		private readonly IUsersService _usersService;
-		public UsersController(AppDbContext context, IUsersService usersService)
-		{
-			_context = context;
-			_usersService = usersService;
-		}
-
-		[Authorize(Roles = UserRoles.Admin)]
-		[HttpGet]
-		public async Task<ActionResult<User>> GetAllUser()
-		{
-			return Ok(await _usersService.GetAllUser());
-		}
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpGet]
+        public async Task<ActionResult<User>> GetAllUser()
+        {
+            return Ok(await _usersService.GetAllUser());
+        }
 
 
+        [HttpGet("{userId}")]
+        public ActionResult<User> GetUserById(string userId)
+        {
+            return Ok(_usersService.GetUserById(userId));
+        }
 
-		[HttpGet("{userId}")]
-		public ActionResult<User> GetUserById(string userId)
-		{
-			return Ok(_usersService.GetUserById(userId));
-		}
+        [HttpPut]
+        public async Task<ActionResult<User>> UpdateUser(User user)
+        {
+            await _usersService.UpdateUser(user);
 
-
-		[HttpPut]
-		public async Task<ActionResult<User>> UpdateUser(User user)
-		{
-			await _usersService.UpdateUser(user);
-
-			return Ok(new
-			{
-				Message = "User's data was updated!",
-			});
-		}
-
-	}
+            return Ok(new
+            {
+                Message = "User's data was updated!",
+            });
+        }
+    }
 }

@@ -11,7 +11,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using hhSalon.Domain.Migrations;
 using Microsoft.Extensions.Options;
 using hhSalon.Domain.Entities.Enums;
 

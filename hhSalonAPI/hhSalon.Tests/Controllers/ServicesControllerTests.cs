@@ -1,3 +1,5 @@
+using hhSalon.Domain.Abstract.Implementations;
+using hhSalon.Domain.Abstract.Interfaces;
 using hhSalon.Domain.Entities;
 using hhSalon.Services.Services.Implementations;
 using hhSalon.Services.ViewModels;
@@ -8,73 +10,75 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hhSalon.Tests.Controllers
 {
-	public class ServicesControllerTests
+    public class ServicesControllerTests
     {
-		private static DbContextOptions<AppDbContext> dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-					.UseInMemoryDatabase(databaseName: "ServicesControllerTest")
-					.Options;
+        private static DbContextOptions<AppDbContext> dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
+                    .UseInMemoryDatabase(databaseName: "ServicesControllerTest")
+                    .Options;
 
-		AppDbContext context;
-		ServicesController servicesController;
+        AppDbContext context;
+        ServicesController servicesController;
+        IUnitOfWork unitOfWork;
 
-		ServicesService servicesService;
+        ServicesService servicesService;
 
-		[OneTimeSetUp]
-		public void Setup()
-		{
-			context = new AppDbContext(dbContextOptions);
-			context.Database.EnsureCreated();
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            context = new AppDbContext(dbContextOptions);
+            unitOfWork = new UnitOfWork(context);
+            context.Database.EnsureCreated();
 
-			SeedDatabase();
+            SeedDatabase();
 
-			servicesService = new ServicesService(context);
-			servicesController = new ServicesController(servicesService);
-		}
+            servicesService = new ServicesService(unitOfWork);
+            servicesController = new ServicesController(servicesService);
+        }
 
-		[Test, Order(1)]
-		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnOk()
-		{
-			int id = 1;
-			IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
+        [Test, Order(1)]
+        public async Task ServicesController_GetServicesByGroupIdAsync_ReturnOk()
+        {
+            int id = 1;
+            IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
 
-			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
+            Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
             var actionResultData = (actionResult as OkObjectResult).Value as List<ServiceVM>;
 
-			Assert.That(actionResultData.First().Name, Is.EqualTo("Service 1"));
-			Assert.That(actionResultData.First().Id, Is.EqualTo(1));
-			Assert.That(actionResultData.Count, Is.EqualTo(3));
-		}
+            Assert.That(actionResultData.First().Name, Is.EqualTo("Service 1"));
+            Assert.That(actionResultData.First().Id, Is.EqualTo(1));
+            Assert.That(actionResultData.Count, Is.EqualTo(3));
+        }
 
 
-		[Test, Order(2)]
-		public async Task ServicesController_GetServicesByGroupIdAsync_ReturnNotFound()
-		{
-			int id = 1111;
-			IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
+        [Test, Order(2)]
+        public async Task ServicesController_GetServicesByGroupIdAsync_ReturnNotFound()
+        {
+            int id = 1111;
+            IActionResult actionResult = await servicesController.GetServicesVMsByGroupId(id);
 
-			Assert.That(actionResult, Is.TypeOf<NotFoundObjectResult>());
-		}
+            Assert.That(actionResult, Is.TypeOf<NotFoundObjectResult>());
+        }
 
 
-		[Test, Order(3)]
-		public async Task ServicesController_CreateService_ReturnOk()
-		{
-			ServiceVM serviceVM = new ServiceVM()
-			{
-				GroupId = 1,
-				Name = "Service 5",
-				Price = 5,
-			};
-			IActionResult actionResult = await servicesController.CreateService(serviceVM);
+        [Test, Order(3)]
+        public async Task ServicesController_CreateService_ReturnOk()
+        {
+            ServiceVM serviceVM = new ServiceVM()
+            {
+                GroupId = 1,
+                Name = "Service 6",
+                Price = 5,
+            };
+            IActionResult actionResult = await servicesController.CreateService(serviceVM);
 
-			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
+            Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
-			Assert.That(context.Services.Count, Is.EqualTo(5));
-			Assert.That(context.Services.Last().Name, Is.EqualTo("Service 5"));
-			Assert.That(context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == serviceVM.GroupId
-				&& s == context.Services.Last()).ToList().Count, Is.EqualTo(1));
-		}
+            Assert.That(context.Services.Count, Is.EqualTo(6));
+            Assert.That(context.Services.Last().Name, Is.EqualTo("Service 6"));
+            Assert.That(context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == serviceVM.GroupId
+                && s == context.Services.Last()).ToList().Count, Is.EqualTo(1));
+        }
 
 
         [Test, Order(4)]
@@ -91,137 +95,147 @@ namespace hhSalon.Tests.Controllers
             Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
         }
 
-
         [Test, Order(5)]
-		public async Task ServicesController_UpdateService_ReturnOk()
-		{
-			ServiceVM serviceVM = new ServiceVM()
-			{
-				Id = 5,
-				Name = "Service 5 updated",
-				Price = 5,
-				GroupId = 2,
-			};
-			IActionResult actionResult = await servicesController.UpdateService(serviceVM);
+        public async Task ServicesController_DeleteService_ReturnOk()
+        {
+            IActionResult actionResult = await servicesController.DeleteService(5);
 
-			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
+            Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
-			Assert.That(context.Services.Last().Name, Is.EqualTo("Service 5 updated"));
-			Assert.That(context.Services_Groups.Where(sg => sg.ServiceId == serviceVM.Id && sg.GroupId == serviceVM.GroupId).Count,
-				Is.EqualTo(1));
-		}
+            Assert.That(context.Services.Count, Is.EqualTo(5));
+            Assert.That(context.Services.Last().Name, Is.EqualTo("Service 6"));
+            Assert.That(context.Services.Last().Id, Is.EqualTo(6));
+        }
 
-		[Test, Order(6)]
-		public async Task ServicesController_UpdateService_ReturnBadRequest()
-		{
-			ServiceVM serviceVM = new ServiceVM()
-			{
-				Id = 999,
-				Name = "Service 5 updated",
-				Price = 5,
-				GroupId = 2,
-			};
-			IActionResult actionResult = await servicesController.UpdateService(serviceVM);
-
-			Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
-		}
-
-
-
-		[Test, Order(7)]
-		public async Task ServicesController_DeleteService_ReturnOk()
-		{
-			IActionResult actionResult = await servicesController.DeleteService(5);
-
-			Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
-
-			Assert.That(context.Services.Count, Is.EqualTo(4));
-			Assert.That(context.Services.Last().Name, Is.EqualTo("Service 4"));
-		}
-
-
-		[Test, Order(8)]
-		public async Task ServicesController_DeleteService_ReturnBadRequest()
-		{
-			int id = 999;
+        [Test, Order(6)]
+        public async Task ServicesController_DeleteService_ReturnBadRequest()
+        {
+            int id = 999;
 
             IActionResult actionResult = await servicesController.DeleteService(id);
 
-			Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
-		}
+            Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
+        }
 
+        [Test, Order(7)]
+        public async Task ServicesController_UpdateService_ReturnOk()
+        {
+            ServiceVM serviceVM = new ServiceVM()
+            {
+                Id = 1,
+                Name = "Service 1 updated",
+                Price = 5,
+                GroupId = 2,
+            };
 
+            IActionResult actionResult = await servicesController.UpdateService(serviceVM);
 
+            Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
 
-		[OneTimeTearDown]
-		public void ClearUp()
-		{
-			context.Database.EnsureDeleted();
-		}
+            Assert.That(context.Services.FirstOrDefault(s => s.Id == serviceVM.Id).Name, Is.EqualTo("Service 1 updated"));
+            Assert.That(context.Services_Groups.Where(sg => sg.ServiceId == serviceVM.Id && sg.GroupId == serviceVM.GroupId).Count,
+                Is.EqualTo(1));
+        }
 
-		private void SeedDatabase()
-		{
-			var services = new List<Service>
-			{
-				new Service()
-				{
-					Id = 1,
-					Name = "Service 1",
-					Price = 1
-				},
-				new Service()
-				{
-					Id = 2,
-					Name = "Service 2",
-					Price = 2
-				},
-				new Service()
-				{
-					 Id = 3,
-					Name = "Service 3",
-					Price = 3
-				},
-				new Service()
-				{
-					 Id = 4,
-					Name = "Service 4",
-					Price = 4
-				},
-			};
+        [Test, Order(8)]
+        public async Task ServicesController_UpdateService_ReturnBadRequest()
+        {
+            ServiceVM serviceVM = new ServiceVM()
+            {
+                Id = 999,
+                Name = "Service 5 updated",
+                Price = 5,
+                GroupId = 2,
+            };
+            IActionResult actionResult = await servicesController.UpdateService(serviceVM);
 
+            Assert.That(actionResult, Is.TypeOf<BadRequestObjectResult>());
+        }
 
-			var services_groups = new List<ServiceGroup>
-			{
-				new ServiceGroup()
-				{
-					ServiceId = 1,
-					GroupId = 1
-				},
-				new ServiceGroup()
-				{
-					ServiceId = 2,
-					GroupId = 3
-				},
-				new ServiceGroup()
-				{
-					ServiceId = 3,
-					GroupId = 1
-				},
-				new ServiceGroup()
-				{
-					ServiceId = 4,
-					GroupId = 1
-				}
-			};
+        [OneTimeTearDown]
+        public void ClearUp()
+        {
+            context.Database.EnsureDeleted();
+        }
 
-			context.Services.AddRange(services);
-			context.SaveChanges();
+        private void SeedDatabase()
+        {
+            var services = new List<Service>
+            {
+                new Service()
+                {
+                    Id = 1,
+                    Name = "Service 1",
+                    Price = 1
+                },
+                new Service()
+                {
+                    Id = 2,
+                    Name = "Service 2",
+                    Price = 2
+                },
+                new Service()
+                {
+                    Id = 3,
+                    Name = "Service 3",
+                    Price = 3
+                },
+                new Service()
+                {
+                    Id = 4,
+                    Name = "Service 4",
+                    Price = 4
+                },
+                new Service()
+                {
+                    Id = 5,
+                    Name = "Service 5",
+                    Price = 4
+                },
+            };
 
-			services.ForEach(s => context.Entry(s).State = EntityState.Detached);
+            var services_groups = new List<ServiceGroup>
+            {
+                new ServiceGroup()
+                {
+                    Id = 1,
+                    ServiceId = 1,
+                    GroupId = 1
+                },
+                new ServiceGroup()
+                {
+                    Id = 2,
+                    ServiceId = 2,
+                    GroupId = 3
+                },
+                new ServiceGroup()
+                {
+                    Id = 3,
+                    ServiceId = 3,
+                    GroupId = 1
+                },
+                new ServiceGroup()
+                {
+                    Id = 4,
+                    ServiceId = 4,
+                    GroupId = 1
+                },
+                new ServiceGroup()
+                {
+                    Id = 5,
+                    ServiceId = 5,
+                    GroupId = 3
+                }
+            };
 
-			context.Services_Groups.AddRange(services_groups);
-			context.SaveChanges();
-			//services.ForEach(s => context.Entry(s).State = EntityState.Detached);
-		}
-	}
+            context.Services.AddRange(services);
+            context.SaveChanges();
+
+            services.ForEach(s => context.Entry(s).State = EntityState.Detached);
+
+            context.Services_Groups.AddRange(services_groups);
+            context.SaveChanges();
+            //services.ForEach(s => context.Entry(s).State = EntityState.Detached);
+        }
+    }
 }

@@ -3,11 +3,6 @@ using hhSalon.Services.ViewModels;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace hhSalon.Services.Services.Implementations
 {

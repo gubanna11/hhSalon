@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, QueryList, ViewChild} from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 
 @Component({

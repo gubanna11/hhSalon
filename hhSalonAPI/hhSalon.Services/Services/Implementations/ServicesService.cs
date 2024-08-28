@@ -1,25 +1,30 @@
-﻿using hhSalon.Domain.Abstract;
+﻿using hhSalon.Domain.Abstract.Interfaces;
 using hhSalon.Domain.Entities;
 using hhSalon.Services.Services.Interfaces;
 using hhSalon.Services.ViewModels;
-using hhSalonAPI.Domain.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 namespace hhSalon.Services.Services.Implementations
 {
-    public class ServicesService : EntityBaseRepository<Service>, IServicesService
+    public class ServicesService : IServicesService
     {
-        private readonly AppDbContext _context;
-        public ServicesService(AppDbContext context) : base(context)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public ServicesService(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<ServiceVM>> GetServicesByGroupIdAsync(int groupId)
         {
-            var services = await _context.Services.Include(s => s.ServiceGroup).Where(s => s.ServiceGroup.GroupId == groupId).ToListAsync();
+            var services = await _unitOfWork
+                .GenericRepository<Service>()
+                .Set
+                .Include(s => s.ServiceGroup)
+                .Where(s => s.ServiceGroup.GroupId == groupId)
+                .ToListAsync();
 
-            if( services is null || services.Count == 0)
+            if (services is null || services.Count == 0)
             {
                 throw new Exception("Empty");
             }
@@ -38,15 +43,14 @@ namespace hhSalon.Services.Services.Implementations
                 servicesVM.Add(serviceVM);
             }
             return servicesVM;
-        
         }
 
 
         public async Task AddNewServiceAsync(ServiceVM newService)
         {
-            int count = _context.Services.Where(s => s.Name == newService.Name).Count();
+            int count = _unitOfWork.GenericRepository<Service>().Set.Where(s => s.Name == newService.Name).Count();
 
-            if(count > 0)
+            if (count > 0)
             {
                 throw new DbUpdateException("This Service already exists!");
             }
@@ -57,8 +61,8 @@ namespace hhSalon.Services.Services.Implementations
                 Price = newService.Price
             };
 
-            await _context.Services.AddAsync(service);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.GenericRepository<Service>().AddAsync(service);
+            await _unitOfWork.SaveChangesAsync();
 
             ServiceGroup serviceGroup = new ServiceGroup
             {
@@ -66,62 +70,87 @@ namespace hhSalon.Services.Services.Implementations
                 GroupId = newService.GroupId
             };
 
-            await _context.Services_Groups.AddAsync(serviceGroup);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.GenericRepository<ServiceGroup>().AddAsync(serviceGroup);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateServiceAsync(ServiceVM serviceVM)
         {
             //var service = await GetByIdAsync(serviceVM.Id);
-            var service = _context.Services.Where(s => s.Id == serviceVM.Id).Include(s => s.ServiceGroup).FirstOrDefault();
-            
+            var service = _unitOfWork
+                .GenericRepository<Service>()
+                .Set
+                .Where(s => s.Id == serviceVM.Id)
+                .Include(s => s.ServiceGroup)
+                .FirstOrDefault();
+
             if (service != null)
             {
-                
+
                 service.Name = serviceVM.Name;
                 service.Price = serviceVM.Price;
 
+                await _unitOfWork.SaveChangesAsync();
                 if (service.ServiceGroup.GroupId != serviceVM.GroupId)
                 {
-                    var service_group = _context.Services_Groups.Where(sg => sg.ServiceId == service.Id).FirstOrDefault();
-                    _context.Services_Groups.Remove(service_group);
+                    ServiceGroup serviceGroup = _unitOfWork
+                        .GenericRepository<ServiceGroup>()
+                        .Set
+                        .Where(sg => sg.ServiceId == service.Id)
+                        .FirstOrDefault();
 
-                    ServiceGroup newService_Group = new ServiceGroup()
-                    {
-                        ServiceId = service.Id,
-                        GroupId = serviceVM.GroupId
-                    };
+                     _unitOfWork.GenericRepository<ServiceGroup>().DeleteAsync(serviceGroup.Id);
 
-                    await _context.Services_Groups.AddAsync(newService_Group);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    ServiceGroup newServiceGroup = new ServiceGroup()
+                      {
+                          ServiceId = service.Id,
+                          GroupId = serviceVM.GroupId
+                      };
+
+                      await _unitOfWork.GenericRepository<ServiceGroup>().AddAsync(newServiceGroup);
+
                 }
 
-                await _context.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
             else
-                throw new NullReferenceException();           
+                throw new NullReferenceException();
         }
 
         public async Task<ServiceVM> GetServiceVMByIdAsync(int id)
         {
+            //var service = await _context.Services.Where(s => s.Id == id)
+            //	.Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
 
-			//var service = await _context.Services.Where(s => s.Id == id)
-			//	.Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
+            var service = await _unitOfWork
+                .GenericRepository<Service>()
+                .GetByIdAsync(id);
 
-
-			var service = await _context.Services.Where(s => s.Id == id).FirstOrDefaultAsync();
-
-            if(service == null)
+            if (service == null)
                 throw new Exception();
 
-			var groupId = await _context.Services_Groups.Where(sg => sg.ServiceId == id).Select(sg => sg.GroupId).FirstOrDefaultAsync();
-                        
+            var groupId = await _unitOfWork
+                .GenericRepository<ServiceGroup>()
+                .Set
+                .Where(sg => sg.ServiceId == id)
+                .Select(sg => sg.GroupId)
+                .FirstOrDefaultAsync();
+
 
             return new ServiceVM() { Id = id, Name = service.Name, Price = service.Price, GroupId = groupId };
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            await _unitOfWork.GenericRepository<Service>().DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-		//public async Task<Service> GetServiceByIdWithGroup(int id) =>
-  //          await _context.Services.Where(s => s.Id == id)
-		//        .Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
-	}
+
+        //public async Task<Service> GetServiceByIdWithGroup(int id) =>
+        //          await _context.Services.Where(s => s.Id == id)
+        //        .Include(s => s.Service_Group).ThenInclude(sg => sg.Group).FirstOrDefaultAsync();
+    }
 }

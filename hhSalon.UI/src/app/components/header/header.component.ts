@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
@@ -40,7 +39,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
               private auth: AuthService,
               private userStore: UserStoreService,
               public chatService: ChatService,
-              public toast: NgToastService,
               private usersService: UsersService
       ){}
 

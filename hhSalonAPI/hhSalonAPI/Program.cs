@@ -1,3 +1,5 @@
+using hhSalon.Domain.Abstract.Implementations;
+using hhSalon.Domain.Abstract.Interfaces;
 using hhSalon.Domain.Concrete;
 using hhSalon.Services.Services.Implementations;
 using hhSalon.Services.Services.Interfaces;
@@ -24,11 +26,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddEntityFrameworkMySql().AddDbContext<AppDbContext>(options => {
-	options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnectionString"), 
-		new MySqlServerVersion(new Version(8, 0, 11)))
-			.EnableSensitiveDataLogging();
+builder.Services.AddDbContext<AppDbContext>(options => {
+	options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+		//new MySqlServerVersion(new Version(8, 0, 20)));
+			//.EnableSensitiveDataLogging();
 });
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IGroupsService, GroupsService>();
 builder.Services.AddScoped<IServicesService, ServicesService>();
@@ -43,7 +47,11 @@ builder.Services.AddSignalR();
 builder.Services.AddCors(options => options.AddPolicy(name: "HHOrigins",
 		policy =>
 		{
-			policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+			policy
+			.WithOrigins("http://localhost:4200")
+			.AllowAnyMethod()
+			.AllowAnyHeader()
+			.AllowCredentials();
 			//policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 		}));
 

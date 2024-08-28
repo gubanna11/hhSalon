@@ -1,10 +1,10 @@
-﻿using hhSalon.Domain.Abstract;
+﻿using hhSalon.Domain.Abstract.Interfaces;
 using hhSalon.Domain.Entities;
 using hhSalon.Services.ViewModels;
 
 namespace hhSalon.Services.Services.Interfaces
 {
-    public interface IAttendancesService : IEntityBaseRepository<Attendance>
+    public interface IAttendancesService
 	{
 		Task<IEnumerable<Attendance>> GeAllAttendances();
 		Task<IEnumerable<Attendance>> GeAttendancesBySearch(string content);
@@ -29,5 +29,9 @@ namespace hhSalon.Services.Services.Interfaces
 
 		Task UpdateAttendances(List<Attendance> attendanceVM);
 		Task UpdateAttendance(Attendance attendanceVM);
-	}
+
+
+		Task DeleteAsync(int id);
+
+    }
 }

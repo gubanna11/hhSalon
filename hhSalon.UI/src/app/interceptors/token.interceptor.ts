@@ -8,7 +8,6 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
 import { UserStoreService } from '../services/user-store.service';
@@ -20,7 +19,6 @@ export class TokenInterceptor implements HttpInterceptor {
 
   constructor(
     private auth: AuthService,
-    private toast: NgToastService,
     private router: Router,
     private sharedService: SharedService,
     private userStore: UserStoreService

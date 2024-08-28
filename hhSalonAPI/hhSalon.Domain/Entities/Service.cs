@@ -6,12 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace hhSalon.Domain.Entities
 {
     [Index(propertyNames: nameof(Name), IsUnique = true)]
-    public class Service:IEntityBase
+    public class Service : EntityBase
     {
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Name is required")]
         [Column("name")]
         [StringLength(45)]

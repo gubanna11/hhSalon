@@ -1,13 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { LogLevel } from '@microsoft/signalr';
-import { NgToastService } from 'ng-angular-popup';
 import { AttendancesService } from 'src/app/services/attendances.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
 //import {render} from 'creditcardpayments/creditCardPayments';
-
-
 
 @Component({
   selector: 'app-my-not-rendered-attendances',

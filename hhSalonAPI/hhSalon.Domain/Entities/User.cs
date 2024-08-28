@@ -33,8 +33,6 @@ namespace hhSalon.Domain.Entities
         [Column("reset_password_expiry")]
         public DateTime ResetPasswordExpiry { get; set; }
 
-
-
 		public List<Attendance> Attendances { get; set; }
 	}
 }

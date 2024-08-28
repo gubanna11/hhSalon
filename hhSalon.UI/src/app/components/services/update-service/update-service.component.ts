@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import { Group } from 'src/app/models/group';
 import { Service } from 'src/app/models/service';
 import { GroupsService } from 'src/app/services/groups.service';

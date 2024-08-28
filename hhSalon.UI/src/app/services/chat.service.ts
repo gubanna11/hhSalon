@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { ChatItem } from '../models/chatItem';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { Message } from '../models/message';
-import { NgToastService } from 'ng-angular-popup';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router';
 import * as toastr from 'toastr';
@@ -34,7 +33,6 @@ export class ChatService {
 
 
   constructor(private http: HttpClient,
-     public toast: NgToastService,
     private usersService:UsersService,
     private router: Router
     ) {  
