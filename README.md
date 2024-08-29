@@ -1,4 +1,4 @@
-hhSalon is a salon management system for choosing services, scheduling appointments, paying and having a conversation with workers.
+hhSalon is a salon management system for choosing services, scheduling appointments, paying and communicating with workers.
 
 ## Main functionalities
 
